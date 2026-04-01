@@ -1,0 +1,1476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary:       #0f1923;
+      --primary-mid:   #1a2c3d;
+      --primary-light: #243d52;
+      --accent:        #c9a84c;
+      --accent-hover:  #dfc06a;
+      --accent-muted:  rgba(201,168,76,0.12);
+      --bg:            #f4f1ec;
+      --bg-warm:       #ede9e0;
+      --surface:       #ffffff;
+      --surface-2:     #faf9f7;
+      --border:        rgba(15,25,35,0.09);
+      --border-strong: rgba(15,25,35,0.15);
+      --text:          #0f1923;
+      --text-mid:      #3d4f5f;
+      --muted:         #7a8a97;
+      --success:       #065f46;
+      --success-bg:    #ecfdf5;
+      --success-border:#a7f3d0;
+      --error:         #991b1b;
+      --error-bg:      #fef2f2;
+      --error-border:  #fca5a5;
+      --sidebar-w:     260px;
+      --radius:        10px;
+      --radius-lg:     16px;
+      --radius-xl:     22px;
+      --shadow-sm:  0 1px 4px rgba(15,25,35,0.07);
+      --shadow-md:  0 4px 20px rgba(15,25,35,0.10);
+      --shadow-lg:  0 12px 48px rgba(15,25,35,0.14);
+      --font:       'Outfit', sans-serif;
+      --font-d:     'Cormorant Garamond', Georgia, serif;
+    }
+
+    body { font-family: var(--font); background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    /* ── LOGIN ──────────────────────────────────── */
+    .login-screen {
+      display: flex; align-items: center; justify-content: center;
+      min-height: 100vh; position: relative; overflow: hidden;
+      background: var(--primary);
+    }
+    .login-bg {
+      position: absolute; inset: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 70% 60% at 80% 30%, rgba(201,168,76,0.07) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 80% at 10% 80%, rgba(30,52,72,0.6) 0%, transparent 70%);
+    }
+    .login-bg-grid {
+      position: absolute; inset: 0; opacity: 0.03;
+      background-image:
+        linear-gradient(rgba(255,255,255,1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+    .login-wrap {
+      position: relative; z-index: 2;
+      display: grid; grid-template-columns: 1fr 1fr;
+      width: min(900px, 95vw); border-radius: var(--radius-xl);
+      overflow: hidden; box-shadow: var(--shadow-lg);
+    }
+    .login-panel {
+      background: var(--surface); padding: 3.5rem;
+      display: flex; flex-direction: column; justify-content: center;
+    }
+    .login-brand { font-family: var(--font-d); font-size: 1.6rem; font-weight: 500; color: var(--primary); margin-bottom: 0.4rem; }
+    .login-tagline { font-size: 0.875rem; color: var(--muted); margin-bottom: 2.5rem; font-weight: 300; }
+    .login-panel h2 { font-size: 1.1rem; font-weight: 600; color: var(--text); margin-bottom: 1.75rem; }
+    .login-side {
+      background: var(--primary-mid); padding: 3.5rem;
+      display: flex; flex-direction: column; justify-content: center;
+      position: relative; overflow: hidden;
+    }
+    .login-side::before { content: ''; position: absolute; top: -80px; right: -80px; width: 300px; height: 300px; border-radius: 50%; background: rgba(201,168,76,0.06); }
+    .login-side__title { font-family: var(--font-d); font-size: 2.2rem; font-weight: 500; color: #fff; line-height: 1.2; margin-bottom: 1.5rem; }
+    .login-side__title em { font-style: italic; color: var(--accent); }
+    .login-side__list { list-style: none; display: flex; flex-direction: column; gap: 0.9rem; }
+    .login-side__list li { display: flex; align-items: center; gap: 0.75rem; font-size: 0.875rem; color: rgba(255,255,255,0.65); font-weight: 300; }
+    .login-side__list li::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+    @media (max-width: 640px) { .login-wrap { grid-template-columns: 1fr; } .login-side { display: none; } .login-panel { padding: 2.5rem; } }
+
+    /* ── DASHBOARD ──────────────────────────────── */
+    .dashboard { display: none; }
+    .sidebar {
+      position: fixed; top: 0; left: 0; bottom: 0; width: var(--sidebar-w);
+      background: var(--primary); display: flex; flex-direction: column;
+      z-index: 100; box-shadow: 2px 0 20px rgba(15,25,35,0.15);
+    }
+    .sidebar__top { padding: 1.75rem 1.5rem 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.07); }
+    .sidebar__brand { font-family: var(--font-d); font-size: 1.35rem; font-weight: 500; color: #fff; letter-spacing: 0.01em; }
+    .sidebar__sub { font-size: 0.7rem; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 0.12em; margin-top: 0.2rem; }
+    .sidebar__section-label { font-size: 0.64rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255,255,255,0.25); padding: 1.25rem 1.5rem 0.5rem; }
+    .sidebar__nav { padding: 0 0.75rem; flex: 1; }
+    .nav-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.7rem 0.85rem; border-radius: var(--radius); cursor: pointer; font-size: 0.875rem; color: rgba(255,255,255,0.55); margin-bottom: 0.15rem; transition: color 0.2s, background 0.2s; user-select: none; }
+    .nav-item__icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.06); font-size: 0.9rem; flex-shrink: 0; transition: background 0.2s; }
+    .nav-item:hover { color: rgba(255,255,255,0.85); }
+    .nav-item:hover .nav-item__icon { background: rgba(255,255,255,0.1); }
+    .nav-item.active { color: #fff; }
+    .nav-item.active .nav-item__icon { background: var(--accent); }
+    .sidebar__footer { padding: 1rem 0.75rem 1.5rem; border-top: 1px solid rgba(255,255,255,0.07); }
+    .sidebar__logout { width: 100%; display: flex; align-items: center; gap: 0.75rem; padding: 0.7rem 0.85rem; border-radius: var(--radius); background: none; border: none; cursor: pointer; font-family: var(--font); font-size: 0.875rem; color: rgba(255,255,255,0.4); transition: color 0.2s, background 0.2s; }
+    .sidebar__logout:hover { color: rgba(255,255,255,0.8); background: rgba(255,255,255,0.06); }
+    .sidebar__logout-icon { width: 32px; height: 32px; border-radius: 8px; background: rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: center; font-size: 0.85rem; }
+
+    .main { margin-left: var(--sidebar-w); min-height: 100vh; }
+    .topbar { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 2.5rem; height: 64px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; box-shadow: var(--shadow-sm); }
+    .topbar__title { font-size: 1.1rem; font-weight: 600; color: var(--text); }
+    .topbar__breadcrumb { font-size: 0.78rem; color: var(--muted); margin-top: 0.1rem; }
+    .topbar__right { display: flex; align-items: center; gap: 1rem; }
+    .topbar__badge { background: var(--accent-muted); color: var(--accent); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.05em; padding: 0.3rem 0.75rem; border-radius: 999px; }
+    .main__content { padding: 2.5rem; }
+
+    /* ── TABS ───────────────────────────────────── */
+    .tab-panel { display: none; animation: fadeIn 0.2s ease; }
+    .tab-panel.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+    /* ── CARDS ──────────────────────────────────── */
+    .card { background: var(--surface); border-radius: var(--radius-lg); border: 1px solid var(--border); padding: 1.75rem; margin-bottom: 1.5rem; box-shadow: var(--shadow-sm); }
+    .card__header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; padding-bottom: 1.25rem; border-bottom: 1px solid var(--border); }
+    .card__title { font-size: 0.95rem; font-weight: 600; color: var(--text); }
+    .card__subtitle { font-size: 0.78rem; color: var(--muted); margin-top: 0.2rem; }
+
+    /* ── STATS ──────────────────────────────────── */
+    .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin-bottom: 1.5rem; }
+    .stat-card { background: var(--surface); border-radius: var(--radius-lg); border: 1px solid var(--border); padding: 1.5rem; box-shadow: var(--shadow-sm); display: flex; align-items: center; gap: 1.25rem; }
+    .stat-card__icon { width: 48px; height: 48px; border-radius: 12px; background: var(--accent-muted); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
+    .stat-card__num { font-family: var(--font-d); font-size: 2rem; font-weight: 500; color: var(--primary); line-height: 1; }
+    .stat-card__label { font-size: 0.78rem; color: var(--muted); margin-top: 0.25rem; }
+
+    /* ── FORMS ──────────────────────────────────── */
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem; }
+    .form-group { margin-bottom: 0; }
+    .form-group.full-width { grid-column: 1/-1; }
+
+    label { display: block; font-size: 0.72rem; font-weight: 600; color: var(--muted); margin-bottom: 0.4rem; text-transform: uppercase; letter-spacing: 0.08em; }
+    input[type="text"], input[type="email"], input[type="number"],
+    input[type="url"], input[type="password"], textarea, select {
+      width: 100%; border: 1.5px solid var(--border-strong); border-radius: var(--radius);
+      padding: 0.68rem 0.95rem; font-family: var(--font); font-size: 0.9rem;
+      color: var(--text); background: var(--surface-2);
+      transition: border-color 0.2s, box-shadow 0.2s; appearance: none;
+    }
+    input:focus, textarea:focus, select:focus {
+      outline: none; border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(201,168,76,0.12); background: var(--surface);
+    }
+    textarea { resize: vertical; min-height: 90px; }
+
+    .color-field { display: flex; align-items: center; gap: 0.75rem; }
+    .color-field input[type="color"] { width: 44px; height: 40px; padding: 2px; border: 1.5px solid var(--border-strong); border-radius: var(--radius); cursor: pointer; background: none; flex-shrink: 0; }
+    .color-field input[type="text"] { flex: 1; font-family: monospace; font-size: 0.85rem; }
+
+    /* ── Platform checkboxes ───────────────── */
+    .platform-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 0.5rem; margin-top: 0.65rem;
+    }
+    .platform-option {
+      display: flex; align-items: center; gap: 0.5rem;
+      padding: 0.55rem 0.85rem; border-radius: var(--radius);
+      border: 1.5px solid var(--border-strong);
+      background: var(--surface-2); cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      font-size: 0.82rem; font-weight: 400; color: var(--text-mid);
+      user-select: none;
+    }
+    .platform-option:hover { border-color: var(--accent); background: var(--accent-muted); color: var(--text); }
+    .platform-option input[type="checkbox"] { width: 14px; height: 14px; accent-color: var(--accent); cursor: pointer; flex-shrink: 0; margin: 0; padding: 0; }
+    .platform-option.checked { border-color: var(--accent); background: var(--accent-muted); color: var(--primary); font-weight: 500; }
+
+    /* ── BUTTONS ────────────────────────────────── */
+    .btn { display: inline-flex; align-items: center; gap: 0.4rem; border: none; cursor: pointer; font-family: var(--font); font-weight: 500; border-radius: var(--radius); transition: all 0.2s; font-size: 0.875rem; white-space: nowrap; }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn--primary { background: var(--primary); color: #fff; padding: 0.68rem 1.5rem; }
+    .btn--primary:hover:not(:disabled) { background: var(--primary-mid); }
+    .btn--accent { background: var(--accent); color: var(--primary); padding: 0.68rem 1.5rem; font-weight: 600; }
+    .btn--accent:hover:not(:disabled) { background: var(--accent-hover); }
+    .btn--sm { padding: 0.4rem 0.85rem; font-size: 0.8rem; }
+    .btn--ghost { background: transparent; color: var(--text-mid); border: 1.5px solid var(--border-strong); padding: 0.4rem 0.85rem; }
+    .btn--ghost:hover { border-color: var(--primary); color: var(--primary); }
+    .btn--danger { background: var(--error-bg); color: var(--error); }
+    .btn--danger:hover { background: #fca5a5; }
+
+    /* ── ALERTS ─────────────────────────────────── */
+    .alert { padding: 0.85rem 1.1rem; border-radius: var(--radius); margin-bottom: 1.25rem; font-size: 0.875rem; font-weight: 500; display: flex; align-items: center; gap: 0.6rem; }
+    .alert--success { background: var(--success-bg); color: var(--success); border: 1px solid var(--success-border); }
+    .alert--error { background: var(--error-bg); color: var(--error); border: 1px solid var(--error-border); }
+
+    /* ── TABLES ─────────────────────────────────── */
+    .data-table { width: 100%; border-collapse: collapse; }
+    .data-table th { text-align: left; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); padding: 0.6rem 1rem; background: var(--bg); border-bottom: 2px solid var(--border); }
+    .data-table td { padding: 0.9rem 1rem; border-bottom: 1px solid var(--border); vertical-align: middle; font-size: 0.875rem; }
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table tbody tr { transition: background 0.15s; }
+    .data-table tbody tr:hover td { background: var(--surface-2); }
+
+    .prop-thumb { width: 48px; height: 38px; object-fit: cover; border-radius: 6px; border: 1px solid var(--border); }
+    .badge { display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.68rem; font-weight: 600; padding: 0.25rem 0.65rem; border-radius: 999px; }
+    .badge::before { content: ''; width: 5px; height: 5px; border-radius: 50%; }
+    .badge--green { background: var(--success-bg); color: var(--success); }
+    .badge--green::before { background: var(--success); }
+    .badge--red { background: var(--error-bg); color: var(--error); }
+    .badge--red::before { background: var(--error); }
+
+    .status-pill { display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.7rem; font-weight: 600; padding: 0.25rem 0.7rem; border-radius: 999px; text-transform: capitalize; }
+    .status-pill::before { content: ''; width: 5px; height: 5px; border-radius: 50%; }
+    .status-pill.confirmed { background: #d1fae5; color: #065f46; }
+    .status-pill.confirmed::before { background: #059669; }
+    .status-pill.pending { background: #fef3c7; color: #92400e; }
+    .status-pill.pending::before { background: #d97706; }
+    .status-pill.cancelled { background: var(--error-bg); color: var(--error); }
+    .status-pill.cancelled::before { background: var(--error); }
+
+    /* ── CURRENCY ───────────────────────────────── */
+    .currency-symbol { display: inline-block; font-weight: 600; color: var(--accent); font-size: 0.85rem; margin-right: 0.1rem; }
+
+    /* ── CHIPS ──────────────────────────────────── */
+    .amenity-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.65rem; }
+    .chip { display: inline-flex; align-items: center; gap: 0.35rem; background: var(--accent-muted); border: 1px solid rgba(201,168,76,0.25); color: var(--text); border-radius: 999px; padding: 0.25rem 0.75rem; font-size: 0.78rem; }
+    .chip__remove { cursor: pointer; color: var(--muted); font-size: 0.85rem; line-height: 1; transition: color 0.15s; }
+    .chip__remove:hover { color: var(--error); }
+
+    /* ── SPINNER ────────────────────────────────── */
+    .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.65s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .section-actions { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
+
+    /* ═══════════════════════════════════════════════
+       MULTI-IMAGE MANAGER
+    ═══════════════════════════════════════════════ */
+    .img-manager { display: flex; flex-direction: column; gap: 0; }
+    .img-manager__empty {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 2.5rem 1rem; border: 2px dashed var(--border-strong);
+      border-radius: var(--radius-lg); color: var(--muted); gap: 0.5rem;
+      background: var(--surface-2); font-size: 0.875rem;
+    }
+    .img-manager__empty-icon { font-size: 2rem; opacity: 0.5; }
+
+    .img-row {
+      display: grid;
+      grid-template-columns: 28px 72px 1fr auto auto;
+      align-items: center; gap: 0.75rem;
+      padding: 0.8rem 0.9rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface-2);
+      margin-bottom: 0.5rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .img-row:hover { border-color: var(--accent); box-shadow: var(--shadow-sm); }
+
+    .img-row__index {
+      font-size: 0.72rem; font-weight: 700; color: var(--muted);
+      text-align: center; letter-spacing: 0.05em;
+    }
+    .img-row__thumb {
+      width: 72px; height: 52px; border-radius: 6px; object-fit: cover;
+      border: 1px solid var(--border); background: var(--bg-warm);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; color: var(--muted); overflow: hidden; flex-shrink: 0;
+    }
+    .img-row__thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .img-row__thumb--placeholder::after { content: '📸'; }
+
+    .img-row__title { min-width: 0; }
+    .img-row__title input {
+      width: 100%; border: 1.5px solid var(--border-strong); border-radius: 8px;
+      padding: 0.5rem 0.75rem; font-family: var(--font); font-size: 0.85rem;
+      color: var(--text); background: var(--surface);
+      transition: border-color 0.2s; margin: 0;
+    }
+    .img-row__title input:focus { border-color: var(--accent); outline: none; box-shadow: 0 0 0 3px rgba(201,168,76,0.12); }
+
+    .img-row__actions { display: flex; align-items: center; gap: 0.4rem; flex-shrink: 0; }
+    .img-row__upload-btn {
+      display: inline-flex; align-items: center; gap: 0.3rem;
+      padding: 0.42rem 0.75rem; font-size: 0.78rem; font-weight: 500;
+      border: 1.5px solid var(--border-strong); border-radius: 8px;
+      background: var(--surface); color: var(--text-mid); cursor: pointer;
+      font-family: var(--font); transition: border-color 0.2s, background 0.2s;
+      white-space: nowrap;
+    }
+    .img-row__upload-btn:hover { border-color: var(--accent); background: var(--accent-muted); color: var(--primary); }
+    .img-row__upload-btn.has-image { border-color: var(--accent); background: var(--accent-muted); color: var(--primary); }
+
+    .img-row__del {
+      width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center;
+      justify-content: center; border: 1.5px solid var(--border-strong);
+      background: var(--surface); color: var(--muted); cursor: pointer;
+      transition: border-color 0.2s, background 0.2s, color 0.2s; font-size: 0.9rem;
+    }
+    .img-row__del:hover { border-color: var(--error-border); background: var(--error-bg); color: var(--error); }
+
+    .img-manager__add {
+      display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+      padding: 0.7rem 1rem; border: 2px dashed var(--border-strong);
+      border-radius: var(--radius); background: var(--surface-2);
+      color: var(--text-mid); font-size: 0.85rem; font-weight: 500;
+      cursor: pointer; transition: border-color 0.2s, background 0.2s, color 0.2s;
+      font-family: var(--font); margin-top: 0.25rem;
+    }
+    .img-manager__add:hover { border-color: var(--accent); background: var(--accent-muted); color: var(--primary); }
+
+    /* ═══════════════════════════════════════════════
+       UPLOAD LOADING MODAL
+    ═══════════════════════════════════════════════ */
+    .upload-modal {
+      display: none; position: fixed; inset: 0; z-index: 9000;
+      background: rgba(10, 18, 28, 0.72); backdrop-filter: blur(8px);
+      align-items: center; justify-content: center;
+    }
+    .upload-modal.is-open { display: flex; }
+    .upload-modal__box {
+      background: var(--surface); border-radius: var(--radius-xl);
+      padding: 2.5rem 2.75rem; width: min(380px, 92vw);
+      box-shadow: var(--shadow-lg); text-align: center;
+      animation: modalPop 0.25s cubic-bezier(0.34,1.56,0.64,1) both;
+    }
+    @keyframes modalPop {
+      from { opacity: 0; transform: scale(0.88) translateY(20px); }
+      to   { opacity: 1; transform: none; }
+    }
+    .upload-modal__spinner {
+      width: 52px; height: 52px; margin: 0 auto 1.25rem;
+      border: 3px solid var(--border-strong);
+      border-top-color: var(--accent);
+      border-radius: 50%; animation: spin 0.8s linear infinite;
+    }
+    .upload-modal__title {
+      font-size: 1rem; font-weight: 600; color: var(--text); margin-bottom: 0.35rem;
+    }
+    .upload-modal__filename {
+      font-size: 0.78rem; color: var(--muted); margin-bottom: 1.5rem;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%;
+    }
+    .upload-modal__bar-track {
+      height: 5px; background: var(--border-strong); border-radius: 999px; overflow: hidden;
+    }
+    .upload-modal__bar-fill {
+      height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-hover));
+      border-radius: 999px; width: 0%; transition: width 0.3s ease;
+      animation: progressAnim 2.2s ease-in-out infinite;
+    }
+    @keyframes progressAnim {
+      0%   { width: 0%; margin-left: 0; }
+      50%  { width: 75%; margin-left: 0; }
+      100% { width: 20%; margin-left: 80%; }
+    }
+    .upload-modal__hint { font-size: 0.72rem; color: var(--muted); margin-top: 1rem; }
+
+    /* ═══════════════════════════════════════════════
+       RICH TEXT EDITOR
+    ═══════════════════════════════════════════════ */
+    .rte-wrap {
+      border: 1.5px solid var(--border-strong); border-radius: var(--radius);
+      background: var(--surface-2); transition: border-color 0.2s, box-shadow 0.2s;
+      overflow: hidden;
+    }
+    .rte-wrap:focus-within {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(201,168,76,0.12);
+      background: var(--surface);
+    }
+    .rte-toolbar {
+      display: flex; align-items: center; gap: 0.1rem; flex-wrap: wrap;
+      padding: 0.5rem 0.65rem; background: var(--bg);
+      border-bottom: 1px solid var(--border); user-select: none;
+    }
+    .rte-sep {
+      width: 1px; height: 20px; background: var(--border-strong);
+      margin: 0 0.25rem; flex-shrink: 0;
+    }
+    .rte-btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 30px; height: 28px; border-radius: 6px; border: none;
+      background: transparent; cursor: pointer; font-family: var(--font-d);
+      font-size: 0.92rem; font-weight: 600; color: var(--text-mid);
+      transition: background 0.15s, color 0.15s;
+    }
+    .rte-btn:hover { background: var(--bg-warm); color: var(--text); }
+    .rte-btn.active { background: var(--accent-muted); color: var(--primary); }
+    .rte-btn--text { font-family: var(--font); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em; width: auto; padding: 0 0.5rem; }
+
+    .rte-body {
+      min-height: 140px; max-height: 340px; overflow-y: auto;
+      padding: 0.85rem 1rem; outline: none; font-size: 0.9rem;
+      line-height: 1.7; color: var(--text); font-family: var(--font);
+    }
+    .rte-body:empty::before {
+      content: attr(data-placeholder); color: var(--muted); pointer-events: none;
+    }
+    .rte-body h2 { font-family: var(--font-d); font-size: 1.35rem; font-weight: 600; margin: 0.75rem 0 0.35rem; color: var(--primary); }
+    .rte-body h3 { font-family: var(--font-d); font-size: 1.1rem; font-weight: 600; margin: 0.6rem 0 0.3rem; color: var(--primary); }
+    .rte-body p  { margin: 0 0 0.65rem; }
+    .rte-body ul, .rte-body ol { padding-left: 1.5rem; margin: 0.4rem 0 0.65rem; }
+    .rte-body li { margin-bottom: 0.2rem; }
+
+    .rte-footer {
+      padding: 0.35rem 0.85rem; border-top: 1px solid var(--border);
+      background: var(--bg); display: flex; align-items: center; justify-content: flex-end;
+    }
+    .rte-charcount { font-size: 0.68rem; color: var(--muted); letter-spacing: 0.04em; }
+
+    /* ── OLD upload zone (still used indirectly) ── */
+    #upload-input { display: none; }
+
+    /* ── RESPONSIVE ─────────────────────────────── */
+    @media (max-width: 768px) {
+      .sidebar { transform: translateX(-100%); transition: transform 0.3s; }
+      .main { margin-left: 0; }
+      .stats-row { grid-template-columns: 1fr; }
+      .form-grid { grid-template-columns: 1fr; }
+      .form-group.full-width { grid-column: auto; }
+      .topbar { padding: 0 1.25rem; }
+      .main__content { padding: 1.5rem; }
+      .img-row { grid-template-columns: 24px 56px 1fr; }
+      .img-row__actions { grid-column: 1/-1; justify-content: flex-end; padding-left: 80px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── UPLOAD LOADING MODAL ─────────────────────────────────── -->
+<div class="upload-modal" id="upload-loading-modal">
+  <div class="upload-modal__box">
+    <div class="upload-modal__spinner"></div>
+    <div class="upload-modal__title">Uploading Image…</div>
+    <div class="upload-modal__filename" id="upload-modal-filename">—</div>
+    <div class="upload-modal__bar-track">
+      <div class="upload-modal__bar-fill" id="upload-modal-bar"></div>
+    </div>
+    <div class="upload-modal__hint">Please wait, do not close this page</div>
+  </div>
+</div>
+
+<!-- ── LOGIN ─────────────────────────────────────────────────── -->
+<div class="login-screen" id="login-screen">
+  <div class="login-bg"></div>
+  <div class="login-bg-grid"></div>
+  <div class="login-wrap">
+    <div class="login-panel">
+      <div class="login-brand" id="login-brand">Admin</div>
+      <p class="login-tagline">Booking Dashboard — Sign in to continue</p>
+      <h2>Welcome back</h2>
+      <div id="login-alert" class="alert alert--error" style="display:none"></div>
+      <div class="form-group" style="margin-bottom:1rem">
+        <label for="auth-user">Username</label>
+        <input type="text" id="auth-user" autocomplete="username" placeholder="Enter username" />
+      </div>
+      <div class="form-group" style="margin-bottom:1.5rem">
+        <label for="auth-pass">Password</label>
+        <input type="password" id="auth-pass" autocomplete="current-password" placeholder="••••••••" />
+      </div>
+      <button class="btn btn--primary" id="login-btn" style="width:100%;padding:.85rem;font-size:.95rem;border-radius:999px">Sign In →</button>
+    </div>
+    <div class="login-side">
+      <h2 class="login-side__title">Manage your<br><em>properties</em><br>with ease</h2>
+      <ul class="login-side__list">
+        <li>Add and edit property listings</li>
+        <li>Track all bookings in real time</li>
+        <li>Upload multiple photos per property</li>
+        <li>Customise site branding and copy</li>
+        <li>Set currency and listing platforms per property</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ── DASHBOARD ─────────────────────────────────────────────── -->
+<div class="dashboard" id="dashboard">
+
+  <aside class="sidebar">
+    <div class="sidebar__top">
+      <div class="sidebar__brand">Admin</div>
+      <div class="sidebar__sub">Booking Dashboard</div>
+    </div>
+    <div class="sidebar__section-label">Menu</div>
+    <div class="sidebar__nav">
+      <div class="nav-item active" data-tab="settings">
+        <span class="nav-item__icon">🎨</span>General Settings
+      </div>
+      <div class="nav-item" data-tab="properties">
+        <span class="nav-item__icon">🏠</span>Properties
+      </div>
+      <div class="nav-item" data-tab="bookings">
+        <span class="nav-item__icon">📋</span>Bookings
+      </div>
+    </div>
+    <div class="sidebar__footer">
+      <button class="sidebar__logout" id="logout-btn">
+        <span class="sidebar__logout-icon">←</span>Sign Out
+      </button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div>
+        <div class="topbar__title" id="dashboard-tab-title">General Settings</div>
+        <div class="topbar__breadcrumb" id="dashboard-tab-sub">Manage branding and site configuration</div>
+      </div>
+      <div class="topbar__right"><span class="topbar__badge">Admin</span></div>
+    </div>
+
+    <div class="main__content">
+
+      <!-- ────────────────── SETTINGS TAB ── -->
+      <div class="tab-panel active" id="tab-settings">
+        <div id="settings-alert" style="display:none"></div>
+        <div class="stats-row" id="settings-stats">
+          <div class="stat-card">
+            <div class="stat-card__icon">🏠</div>
+            <div><div class="stat-card__num" id="stat-props">—</div><div class="stat-card__label">Properties Listed</div></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card__icon">📋</div>
+            <div><div class="stat-card__num" id="stat-bookings">—</div><div class="stat-card__label">Total Bookings</div></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card__icon">✅</div>
+            <div><div class="stat-card__num" id="stat-confirmed">—</div><div class="stat-card__label">Confirmed</div></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card__header">
+            <div>
+              <div class="card__title">Branding &amp; Copy</div>
+              <div class="card__subtitle">Changes are reflected immediately on the public site</div>
+            </div>
+          </div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Business Name</label>
+              <input type="text" id="cfg-business-name" placeholder="My Stays" />
+            </div>
+            <div class="form-group">
+              <label>Contact Email</label>
+              <input type="email" id="cfg-contact-email" placeholder="hello@example.com" />
+            </div>
+            <div class="form-group">
+              <label>Hero Headline</label>
+              <input type="text" id="cfg-hero-text" placeholder="Find Your Perfect Stay" />
+            </div>
+            <div class="form-group">
+              <label>Hero Subtext</label>
+              <input type="text" id="cfg-hero-subtext" placeholder="Discover handpicked properties…" />
+            </div>
+            <div class="form-group">
+              <label>Footer Text</label>
+              <input type="text" id="cfg-footer-text" placeholder="© 2025. All rights reserved." />
+            </div>
+            <div class="form-group">
+              <label>Logo URL <span style="font-weight:300;text-transform:none;letter-spacing:0">(optional)</span></label>
+              <input type="url" id="cfg-logo-url" placeholder="https://…" />
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card__header">
+            <div>
+              <div class="card__title">Brand Colours</div>
+              <div class="card__subtitle">All four colours update the public site on save</div>
+            </div>
+          </div>
+          <div id="colour-preview" style="display:flex;border-radius:var(--radius);overflow:hidden;height:48px;margin-bottom:1.5rem;border:1px solid var(--border)">
+            <div id="preview-primary" style="flex:1;transition:background .3s"></div>
+            <div id="preview-accent"  style="flex:1;transition:background .3s"></div>
+            <div id="preview-bg"      style="flex:1;transition:background .3s"></div>
+            <div id="preview-surface" style="flex:1;transition:background .3s;border-left:1px solid var(--border)"></div>
+          </div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Primary Colour <span style="font-weight:300;text-transform:none;letter-spacing:0;margin-left:.4rem">Navbar, buttons, headings</span></label>
+              <div class="color-field">
+                <input type="color" id="cfg-primary-color-picker" />
+                <input type="text"  id="cfg-primary-color" maxlength="7" placeholder="#0f1923" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Accent Colour <span style="font-weight:300;text-transform:none;letter-spacing:0;margin-left:.4rem">CTAs, highlights, links</span></label>
+              <div class="color-field">
+                <input type="color" id="cfg-accent-color-picker" />
+                <input type="text"  id="cfg-accent-color" maxlength="7" placeholder="#c9a84c" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Background Colour <span style="font-weight:300;text-transform:none;letter-spacing:0;margin-left:.4rem">Page background</span></label>
+              <div class="color-field">
+                <input type="color" id="cfg-bg-color-picker" />
+                <input type="text"  id="cfg-bg-color" maxlength="7" placeholder="#f7f4ef" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Surface Colour <span style="font-weight:300;text-transform:none;letter-spacing:0;margin-left:.4rem">Cards &amp; panels</span></label>
+              <div class="color-field">
+                <input type="color" id="cfg-surface-color-picker" />
+                <input type="text"  id="cfg-surface-color" maxlength="7" placeholder="#ffffff" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card__header">
+            <div>
+              <div class="card__title">Hero Background</div>
+              <div class="card__subtitle">Customise the main background of the public landing page</div>
+            </div>
+          </div>
+          <div class="form-grid">
+            <div class="form-group full-width">
+              <label>Background Type</label>
+              <select id="cfg-hero-bg-type" onchange="toggleHeroBgFields()">
+                <option value="animated-gradient">Animated Gradient (Default)</option>
+                <option value="solid-color">Solid Colour</option>
+                <option value="image">Static Image</option>
+                <option value="video">Short Video (MP4)</option>
+              </select>
+            </div>
+
+            <div class="form-group full-width" id="hero-bg-color-group" style="display:none;">
+              <label>Solid Colour Background</label>
+              <div class="color-field">
+                <input type="color" id="cfg-hero-bg-color-picker" />
+                <input type="text" id="cfg-hero-bg-color" maxlength="7" placeholder="#0f1923" />
+              </div>
+            </div>
+
+            <div class="form-group full-width" id="hero-bg-media-group" style="display:none;">
+              <label id="hero-bg-media-label">Media URL</label>
+              <input type="url" id="cfg-hero-bg-media-url" placeholder="https://..." />
+            </div>
+          </div>
+        </div>
+
+        <div class="section-actions">
+          <button class="btn btn--accent" id="save-settings-btn">Save Settings</button>
+          <a href="/" target="_blank" class="btn btn--ghost">View Public Site ↗</a>
+        </div>
+      </div>
+
+      <!-- ────────────────── PROPERTIES TAB ── -->
+      <div class="tab-panel" id="tab-properties">
+        <div class="card">
+          <div class="card__header">
+            <div>
+              <div class="card__title" id="prop-form-title">Add New Property</div>
+              <div class="card__subtitle">Fill in the details below and upload images</div>
+            </div>
+            <button class="btn btn--ghost btn--sm" id="clear-prop-form-btn">Clear Form</button>
+          </div>
+
+          <div id="prop-alert" style="display:none"></div>
+          <input type="hidden" id="prop-id" />
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Property Name *</label>
+              <input type="text" id="prop-name" placeholder="e.g. Beachfront Villa Lagos" />
+            </div>
+            <div class="form-group">
+              <label>Location</label>
+              <input type="text" id="prop-location" placeholder="e.g. Lekki, Lagos" />
+            </div>
+            <div class="form-group">
+              <label>Price Per Night *</label>
+              <input type="number" id="prop-price" min="0" step="500" placeholder="150000" />
+            </div>
+            <div class="form-group">
+              <label>Max Guests</label>
+              <input type="number" id="prop-max-guests" min="1" value="2" />
+            </div>
+
+            <div class="form-group">
+              <label>Currency</label>
+              <select id="prop-currency">
+                <option value="NGN">₦ NGN — Nigerian Naira</option>
+                <option value="USD">$ USD — US Dollar</option>
+                <option value="EUR">€ EUR — Euro</option>
+                <option value="GBP">£ GBP — British Pound</option>
+                <option value="GHS">₵ GHS — Ghanaian Cedi</option>
+                <option value="KES">KSh KES — Kenyan Shilling</option>
+                <option value="ZAR">R ZAR — South African Rand</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Availability</label>
+              <select id="prop-available">
+                <option value="true">Live — visible to guests</option>
+                <option value="false">Hidden — not visible</option>
+              </select>
+            </div>
+
+            <!-- ── RICH TEXT DESCRIPTION ── -->
+            <div class="form-group full-width">
+              <label>Description</label>
+              <div class="rte-wrap" id="rte-wrap">
+                <div class="rte-toolbar" id="rte-toolbar">
+                  <button type="button" class="rte-btn" id="rte-bold"      onclick="rteCmd('bold')"          title="Bold"><b>B</b></button>
+                  <button type="button" class="rte-btn" id="rte-italic"    onclick="rteCmd('italic')"        title="Italic"><em>I</em></button>
+                  <button type="button" class="rte-btn" id="rte-underline" onclick="rteCmd('underline')"     title="Underline"><u>U</u></button>
+                  <div class="rte-sep"></div>
+                  <button type="button" class="rte-btn rte-btn--text" onclick="rteBlock('H2')"  title="Heading 2">H2</button>
+                  <button type="button" class="rte-btn rte-btn--text" onclick="rteBlock('H3')"  title="Heading 3">H3</button>
+                  <button type="button" class="rte-btn rte-btn--text" onclick="rteBlock('P')"   title="Paragraph">¶</button>
+                  <div class="rte-sep"></div>
+                  <button type="button" class="rte-btn" onclick="rteCmd('insertUnorderedList')" title="Bullet list" style="font-size:.8rem">• List</button>
+                  <button type="button" class="rte-btn" onclick="rteCmd('insertOrderedList')"   title="Numbered list" style="font-size:.8rem">1. List</button>
+                  <div class="rte-sep"></div>
+                  <button type="button" class="rte-btn" onclick="rteClear()" title="Clear formatting" style="font-size:.72rem;width:auto;padding:0 .5rem">✕ Clear</button>
+                </div>
+                <div
+                  class="rte-body"
+                  id="rte-body"
+                  contenteditable="true"
+                  data-placeholder="Describe the property, surroundings, and what makes it special…"
+                  oninput="updateRteButtons(); updateRteCharCount()"
+                  onkeyup="updateRteButtons()"
+                  onmouseup="updateRteButtons()"
+                  onselectionchange="updateRteButtons()"
+                ></div>
+                <div class="rte-footer">
+                  <span class="rte-charcount" id="rte-charcount">0 characters</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- ── MULTI IMAGE MANAGER ── -->
+            <div class="form-group full-width">
+              <label>Property Images</label>
+              <div class="img-manager" id="img-manager">
+                <!-- rows injected by JS -->
+              </div>
+              <button type="button" class="img-manager__add" id="img-add-btn">
+                ＋ Add Image
+              </button>
+              <!-- hidden file inputs injected per-row -->
+            </div>
+
+            <div class="form-group full-width">
+              <label>Amenities</label>
+              <div style="display:flex;gap:.6rem">
+                <input type="text" id="amenity-input" placeholder="e.g. WiFi, Pool, AC, Parking…" style="flex:1" />
+                <button type="button" class="btn btn--ghost" id="add-amenity-btn">+ Add</button>
+              </div>
+              <div class="amenity-chips" id="amenity-chips"></div>
+            </div>
+
+            <div class="form-group full-width">
+              <label>Listed On <span style="font-weight:300;text-transform:none;letter-spacing:0;margin-left:.4rem">Tick all platforms where this property is also listed</span></label>
+              <div class="platform-grid" id="platform-grid"></div>
+            </div>
+
+          </div>
+
+          <div class="section-actions" style="margin-top:1.5rem">
+            <button class="btn btn--accent" id="save-property-btn">Save Property</button>
+            <button class="btn btn--ghost" id="clear-prop-form-btn2">Cancel</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card__header">
+            <div>
+              <div class="card__title">All Properties</div>
+              <div class="card__subtitle">Click Edit to modify a listing</div>
+            </div>
+            <button class="btn btn--ghost btn--sm" onclick="loadProperties()">↻ Refresh</button>
+          </div>
+          <div style="overflow-x:auto">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Images</th>
+                  <th>Name</th>
+                  <th>Location</th>
+                  <th>Price / night</th>
+                  <th>Platforms</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="properties-tbody">
+                <tr><td colspan="7" style="text-align:center;color:var(--muted);padding:3rem">Loading…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ────────────────── BOOKINGS TAB ── -->
+      <div class="tab-panel" id="tab-bookings">
+        <div class="card">
+          <div class="card__header">
+            <div>
+              <div class="card__title">All Bookings</div>
+              <div class="card__subtitle">Filter by status or refresh to see latest</div>
+            </div>
+            <div style="display:flex;gap:.6rem;align-items:center">
+              <select id="bookings-filter-status" style="font-size:.82rem;padding:.4rem .8rem;width:auto;border-radius:999px">
+                <option value="">All statuses</option>
+                <option value="pending">Pending</option>
+                <option value="confirmed">Confirmed</option>
+                <option value="cancelled">Cancelled</option>
+              </select>
+              <button class="btn btn--ghost btn--sm" id="refresh-bookings-btn">↻ Refresh</button>
+            </div>
+          </div>
+          <div style="overflow-x:auto">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Guest</th>
+                  <th>Property</th>
+                  <th>Check-in</th>
+                  <th>Check-out</th>
+                  <th>Total</th>
+                  <th>Status</th>
+                  <th>Ref</th>
+                </tr>
+              </thead>
+              <tbody id="bookings-tbody">
+                <tr><td colspan="7" style="text-align:center;color:var(--muted);padding:3rem">Loading…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<script>
+const TOKEN_KEY = "admin_jwt";
+function getToken() { return sessionStorage.getItem(TOKEN_KEY); }
+function authHeaders() { return { "Authorization": `Bearer ${getToken()}`, "Content-Type": "application/json" }; }
+
+const TAB_META = {
+  settings:   { title: "General Settings",   sub: "Manage branding and site configuration" },
+  properties: { title: "Property Manager",   sub: "Add, edit and manage listings" },
+  bookings:   { title: "Bookings",            sub: "View and filter all guest bookings" },
+};
+
+const CURRENCY_SYMBOLS = { NGN: '₦', USD: '$', EUR: '€', GBP: '£', GHS: '₵', KES: 'KSh', ZAR: 'R' };
+function fmtPrice(amount, currency = 'NGN') {
+  const sym = CURRENCY_SYMBOLS[currency] || (currency + ' ');
+  return sym + Number(amount).toLocaleString();
+}
+function escapeHtml(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+const PLATFORMS = ["Airbnb","Booking.com","Expedia","VRBO","Hotels.ng","Jumia Travel","Tripadvisor","Agoda"];
+
+function buildPlatformGrid() {
+  const grid = document.getElementById("platform-grid");
+  grid.innerHTML = PLATFORMS.map(p => `
+    <label class="platform-option" id="plat-label-${CSS.escape(p)}">
+      <input type="checkbox" class="platform-cb" value="${p}" onchange="syncPlatformLabel(this)" />
+      ${p}
+    </label>
+  `).join("");
+}
+function syncPlatformLabel(cb) {
+  cb.closest(".platform-option").classList.toggle("checked", cb.checked);
+}
+function getSelectedPlatforms() {
+  return [...document.querySelectorAll(".platform-cb:checked")].map(c => c.value);
+}
+function setSelectedPlatforms(arr = []) {
+  document.querySelectorAll(".platform-cb").forEach(cb => {
+    cb.checked = arr.includes(cb.value);
+    syncPlatformLabel(cb);
+  });
+}
+
+/* ═══════════════════════════════════════════════
+   UPLOAD LOADING MODAL
+═══════════════════════════════════════════════ */
+function showUploadModal(filename) {
+  document.getElementById('upload-modal-filename').textContent = filename || 'Uploading…';
+  document.getElementById('upload-loading-modal').classList.add('is-open');
+}
+function hideUploadModal() {
+  document.getElementById('upload-loading-modal').classList.remove('is-open');
+}
+
+/* ═══════════════════════════════════════════════
+   MULTI-IMAGE MANAGER
+═══════════════════════════════════════════════ */
+let propImages  = [];   // [{uid, title, url}]
+let imgCounter  = 0;
+
+function renderImageRows() {
+  const mgr = document.getElementById('img-manager');
+
+  if (!propImages.length) {
+    mgr.innerHTML = `
+      <div class="img-manager__empty" id="img-empty">
+        <div class="img-manager__empty-icon">📷</div>
+        <span>No images added yet — click "Add Image" below</span>
+      </div>`;
+    return;
+  }
+
+  mgr.innerHTML = propImages.map((img, idx) => {
+    const hasUrl = !!img.url;
+    const thumbHtml = hasUrl
+      ? `<img src="${escapeHtml(img.url)}" alt="" />`
+      : '';
+    return `
+      <div class="img-row" data-uid="${img.uid}">
+        <div class="img-row__index">${idx + 1}</div>
+        <div class="img-row__thumb ${hasUrl ? '' : 'img-row__thumb--placeholder'}" id="thumb-${img.uid}">
+          ${thumbHtml}
+        </div>
+        <div class="img-row__title">
+          <input
+            type="text"
+            placeholder="Image title (e.g. Living Room)"
+            value="${escapeHtml(img.title)}"
+            oninput="updateImageTitle('${img.uid}', this.value)"
+          />
+        </div>
+        <div class="img-row__actions">
+          <button
+            type="button"
+            class="img-row__upload-btn ${hasUrl ? 'has-image' : ''}"
+            onclick="triggerImageUpload('${img.uid}')"
+          >${hasUrl ? '↺ Replace' : '⬆ Upload'}</button>
+          <button
+            type="button"
+            class="img-row__del"
+            onclick="deleteImageRow('${img.uid}')"
+            title="Delete image"
+          >🗑</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function addImageRow() {
+  const uid = 'img_' + (++imgCounter);
+  propImages.push({ uid, title: '', url: '' });
+  renderImageRows();
+  // Focus the new row's title input
+  const rows = document.querySelectorAll('.img-row');
+  if (rows.length) {
+    const last = rows[rows.length - 1];
+    const input = last.querySelector('input[type="text"]');
+    if (input) input.focus();
+  }
+}
+
+function updateImageTitle(uid, val) {
+  const img = propImages.find(i => i.uid === uid);
+  if (img) img.title = val;
+}
+
+function deleteImageRow(uid) {
+  propImages = propImages.filter(i => i.uid !== uid);
+  renderImageRows();
+}
+
+function triggerImageUpload(uid) {
+  // Create / reuse a hidden file input for this uid
+  let input = document.getElementById('file-input-' + uid);
+  if (!input) {
+    input = document.createElement('input');
+    input.type = 'file';
+    input.id   = 'file-input-' + uid;
+    input.accept = 'image/jpeg,image/png,image/webp';
+    input.style.display = 'none';
+    input.addEventListener('change', e => handleRowUpload(uid, e.target.files[0]));
+    document.body.appendChild(input);
+  }
+  input.value = ''; // reset so same file can be re-chosen
+  input.click();
+}
+
+async function handleRowUpload(uid, file) {
+  if (!file) return;
+  const img = propImages.find(i => i.uid === uid);
+  if (!img) return;
+
+  showUploadModal(file.name);
+
+  const form = new FormData();
+  form.append("file", file);
+
+  try {
+    const res = await fetch("/admin/upload-image", {
+      method: "POST",
+      headers: { "Authorization": `Bearer ${getToken()}` },
+      body: form,
+    });
+    if (!res.ok) throw new Error("Upload failed");
+    const { url } = await res.json();
+    img.url = url;
+    // Auto-fill title from filename if empty
+    if (!img.title) img.title = file.name.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ');
+    renderImageRows();
+  } catch {
+    alert('Upload failed — please try again.');
+  } finally {
+    hideUploadModal();
+  }
+}
+
+function clearImageRows() {
+  propImages = [];
+  imgCounter = 0;
+  renderImageRows();
+}
+
+/* ═══════════════════════════════════════════════
+   RICH TEXT EDITOR
+═══════════════════════════════════════════════ */
+function rteCmd(cmd) {
+  document.getElementById('rte-body').focus();
+  document.execCommand(cmd, false, null);
+  updateRteButtons();
+  updateRteCharCount();
+}
+
+function rteBlock(tag) {
+  document.getElementById('rte-body').focus();
+  document.execCommand('formatBlock', false, tag);
+  updateRteButtons();
+}
+
+function rteClear() {
+  document.getElementById('rte-body').focus();
+  document.execCommand('removeFormat', false, null);
+  document.execCommand('formatBlock', false, 'p');
+  updateRteButtons();
+}
+
+function getRteHtml() {
+  const body = document.getElementById('rte-body');
+  const html = body.innerHTML.trim();
+  // Return null if essentially empty
+  if (!html || html === '<br>' || html === '<p><br></p>') return null;
+  return html;
+}
+
+function setRteHtml(html) {
+  const body = document.getElementById('rte-body');
+  body.innerHTML = html || '';
+  updateRteButtons();
+  updateRteCharCount();
+}
+
+function updateRteButtons() {
+  ['bold','italic','underline'].forEach(cmd => {
+    const btn = document.getElementById('rte-' + cmd);
+    if (btn) btn.classList.toggle('active', document.queryCommandState(cmd));
+  });
+}
+
+function updateRteCharCount() {
+  const body = document.getElementById('rte-body');
+  const text = body.innerText || body.textContent || '';
+  const count = text.replace(/\s+/g,'').length;
+  document.getElementById('rte-charcount').textContent = count.toLocaleString() + ' character' + (count !== 1 ? 's' : '');
+}
+
+// Strip formatting on paste — plain text only
+document.addEventListener('DOMContentLoaded', () => {
+  const body = document.getElementById('rte-body');
+  if (body) {
+    body.addEventListener('paste', e => {
+      e.preventDefault();
+      const text = (e.clipboardData || window.clipboardData).getData('text/plain');
+      document.execCommand('insertText', false, text);
+    });
+  }
+});
+
+/* ── Login ──────────────────────────────────────── */
+async function login() {
+  const btn = document.getElementById("login-btn");
+  const alertEl = document.getElementById("login-alert");
+  btn.innerHTML = '<span class="spinner"></span> Signing in…'; btn.disabled = true;
+  alertEl.style.display = "none";
+  try {
+    const res = await fetch("/admin/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        username: document.getElementById("auth-user").value,
+        password: document.getElementById("auth-pass").value,
+      }),
+    });
+    if (!res.ok) throw new Error("Invalid credentials. Please try again.");
+    const { access_token } = await res.json();
+    sessionStorage.setItem(TOKEN_KEY, access_token);
+    showDashboard();
+  } catch (e) {
+    alertEl.textContent = e.message;
+    alertEl.style.display = "flex";
+  } finally {
+    btn.innerHTML = "Sign In →"; btn.disabled = false;
+  }
+}
+
+function showDashboard() {
+  document.getElementById("login-screen").style.display = "none";
+  document.getElementById("dashboard").style.display = "block";
+  loadSettings();
+  loadProperties();
+  loadBookings();
+  updateStats();
+}
+function logout() { sessionStorage.removeItem(TOKEN_KEY); location.reload(); }
+
+/* ── Stats ──────────────────────────────────────── */
+async function updateStats() {
+  try {
+    const [propsRes, bookRes] = await Promise.all([
+      fetch("/admin/properties", { headers: authHeaders() }),
+      fetch("/admin/bookings",   { headers: authHeaders() }),
+    ]);
+    const props    = await propsRes.json();
+    const bookings = await bookRes.json();
+    document.getElementById("stat-props").textContent     = props.length;
+    document.getElementById("stat-bookings").textContent  = bookings.length;
+    document.getElementById("stat-confirmed").textContent = bookings.filter(b => b.status === "confirmed").length;
+  } catch {}
+}
+
+/* ── Tab navigation ─────────────────────────────── */
+document.querySelectorAll(".nav-item[data-tab]").forEach(item => {
+  item.addEventListener("click", () => {
+    document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
+    document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
+    item.classList.add("active");
+    document.getElementById(`tab-${item.dataset.tab}`).classList.add("active");
+    const meta = TAB_META[item.dataset.tab];
+    document.getElementById("dashboard-tab-title").textContent = meta.title;
+    document.getElementById("dashboard-tab-sub").textContent   = meta.sub;
+  });
+});
+
+/* ── Alerts ─────────────────────────────────────── */
+function showAlert(id, msg, type = "success") {
+  const el = document.getElementById(id);
+  el.className = `alert alert--${type}`;
+  el.innerHTML = (type === "success" ? "✓ " : "⚠ ") + msg;
+  el.style.display = "flex";
+  setTimeout(() => el.style.display = "none", 4000);
+}
+
+/* ── Colour pickers ─────────────────────────────── */
+function updateColourPreview() {
+  const vals = {
+    primary: document.getElementById("cfg-primary-color").value || "#0f1923",
+    accent:  document.getElementById("cfg-accent-color").value  || "#c9a84c",
+    bg:      document.getElementById("cfg-bg-color").value      || "#f7f4ef",
+    surface: document.getElementById("cfg-surface-color").value || "#ffffff",
+  };
+  document.getElementById("preview-primary").style.background = vals.primary;
+  document.getElementById("preview-accent").style.background  = vals.accent;
+  document.getElementById("preview-bg").style.background      = vals.bg;
+  document.getElementById("preview-surface").style.background = vals.surface;
+}
+["primary", "accent", "bg", "surface"].forEach(key => {
+  const picker = document.getElementById(`cfg-${key}-color-picker`);
+  const text   = document.getElementById(`cfg-${key}-color`);
+  picker.addEventListener("input", () => { text.value = picker.value; updateColourPreview(); });
+  text.addEventListener("input", () => {
+    if (/^#[0-9a-f]{6}$/i.test(text.value)) { picker.value = text.value; updateColourPreview(); }
+  });
+});
+
+/* ── Hero Background Toggle ─────────────────────── */
+function toggleHeroBgFields() {
+  const type = document.getElementById("cfg-hero-bg-type").value;
+  document.getElementById("hero-bg-color-group").style.display = type === 'solid-color' ? 'block' : 'none';
+  document.getElementById("hero-bg-media-group").style.display = (type === 'image' || type === 'video') ? 'block' : 'none';
+
+  if (type === 'image') document.getElementById("hero-bg-media-label").textContent = "Image URL";
+  if (type === 'video') document.getElementById("hero-bg-media-label").textContent = "Video URL (MP4)";
+}
+
+// Sync the hex input and the color picker for the custom background color
+document.getElementById("cfg-hero-bg-color-picker").addEventListener("input", function() {
+  document.getElementById("cfg-hero-bg-color").value = this.value;
+});
+document.getElementById("cfg-hero-bg-color").addEventListener("input", function() {
+  if (/^#[0-9a-f]{6}$/i.test(this.value)) {
+    document.getElementById("cfg-hero-bg-color-picker").value = this.value;
+  }
+});
+
+/* ── Settings ───────────────────────────────────── */
+async function loadSettings() {
+  const res = await fetch("/admin/config", { headers: authHeaders() });
+  const cfg = await res.json();
+  document.getElementById("cfg-business-name").value = cfg.business_name || "";
+  document.getElementById("cfg-contact-email").value = cfg.contact_email || "";
+  document.getElementById("cfg-hero-text").value     = cfg.hero_text     || "";
+  document.getElementById("cfg-hero-subtext").value  = cfg.hero_subtext  || "";
+  document.getElementById("cfg-footer-text").value   = cfg.footer_text   || "";
+  document.getElementById("cfg-logo-url").value      = cfg.logo_url      || "";
+  document.getElementById("cfg-primary-color").value        = cfg.primary_color || "#0f1923";
+  document.getElementById("cfg-accent-color").value         = cfg.accent_color  || "#c9a84c";
+  document.getElementById("cfg-bg-color").value             = cfg.bg_color      || "#f7f4ef";
+  document.getElementById("cfg-surface-color").value        = cfg.surface_color || "#ffffff";
+  document.getElementById("cfg-primary-color-picker").value = cfg.primary_color || "#0f1923";
+  document.getElementById("cfg-accent-color-picker").value  = cfg.accent_color  || "#c9a84c";
+  document.getElementById("cfg-bg-color-picker").value      = cfg.bg_color      || "#f7f4ef";
+  document.getElementById("cfg-surface-color-picker").value = cfg.surface_color || "#ffffff";
+  document.getElementById("cfg-hero-bg-type").value = cfg.hero_bg_type || "animated-gradient";
+  document.getElementById("cfg-hero-bg-color").value = cfg.hero_bg_color || "#0f1923";
+  document.getElementById("cfg-hero-bg-color-picker").value = cfg.hero_bg_color || "#0f1923";
+  document.getElementById("cfg-hero-bg-media-url").value = cfg.hero_bg_media_url || "";
+  updateColourPreview();
+  const brand = document.getElementById("login-brand");
+  if (brand) brand.textContent = cfg.business_name || "Admin";
+  const sidebarBrand = document.querySelector(".sidebar__brand");
+  if (sidebarBrand) sidebarBrand.textContent = cfg.business_name || "Admin";
+}
+
+async function saveSettings() {
+  const btn = document.getElementById("save-settings-btn");
+  btn.innerHTML = '<span class="spinner"></span> Saving…'; btn.disabled = true;
+  try {
+    const res = await fetch("/admin/config", {
+      method: "PUT", headers: authHeaders(),
+      body: JSON.stringify({
+        business_name: document.getElementById("cfg-business-name").value,
+        contact_email: document.getElementById("cfg-contact-email").value,
+        hero_text:     document.getElementById("cfg-hero-text").value,
+        hero_subtext:  document.getElementById("cfg-hero-subtext").value,
+        footer_text:   document.getElementById("cfg-footer-text").value,
+        logo_url:      document.getElementById("cfg-logo-url").value || null,
+        primary_color: document.getElementById("cfg-primary-color").value,
+        accent_color:  document.getElementById("cfg-accent-color").value,
+        bg_color:      document.getElementById("cfg-bg-color").value,
+        surface_color: document.getElementById("cfg-surface-color").value,
+        hero_bg_type: document.getElementById("cfg-hero-bg-type").value,
+        hero_bg_color: document.getElementById("cfg-hero-bg-color").value,
+        hero_bg_media_url: document.getElementById("cfg-hero-bg-media-url").value
+      }),
+    });
+    if (!res.ok) throw new Error("Save failed");
+    showAlert("settings-alert", "Settings saved! Changes are live on the public site.");
+  } catch (e) {
+    showAlert("settings-alert", e.message, "error");
+  } finally {
+    btn.innerHTML = "Save Settings"; btn.disabled = false;
+  }
+}
+
+/* ── Properties ─────────────────────────────────── */
+let amenities = [];
+
+function renderAmenityChips() {
+  document.getElementById("amenity-chips").innerHTML = amenities
+    .map((a, i) => `<span class="chip">${a}<span class="chip__remove" data-idx="${i}">×</span></span>`)
+    .join("");
+  document.querySelectorAll(".chip__remove").forEach(el => {
+    el.addEventListener("click", () => { amenities.splice(+el.dataset.idx, 1); renderAmenityChips(); });
+  });
+}
+
+function clearPropertyForm() {
+  document.getElementById("prop-id").value          = "";
+  document.getElementById("prop-name").value        = "";
+  document.getElementById("prop-location").value    = "";
+  document.getElementById("prop-price").value       = "";
+  document.getElementById("prop-max-guests").value  = "2";
+  document.getElementById("prop-available").value   = "true";
+  document.getElementById("prop-currency").value    = "NGN";
+  setSelectedPlatforms([]);
+  setRteHtml('');
+  clearImageRows();
+  document.getElementById("prop-form-title").textContent = "Add New Property";
+  amenities = []; renderAmenityChips();
+}
+
+function getPropImages(prop) {
+  if (prop.images && prop.images.length) return prop.images;
+  if (prop.image_url) return [{ title: 'Main Image', url: prop.image_url }];
+  return [];
+}
+
+function fillPropertyForm(prop) {
+  document.getElementById("prop-id").value          = prop.id;
+  document.getElementById("prop-name").value        = prop.name;
+  document.getElementById("prop-location").value    = prop.location || "";
+  document.getElementById("prop-price").value       = prop.price_per_night;
+  document.getElementById("prop-max-guests").value  = prop.max_guests;
+  document.getElementById("prop-available").value   = String(prop.is_available);
+  document.getElementById("prop-currency").value    = prop.currency || "NGN";
+  setSelectedPlatforms(prop.featured_on || []);
+  setRteHtml(prop.description || '');
+  document.getElementById("prop-form-title").textContent = "Editing: " + prop.name;
+  amenities = prop.amenities || []; renderAmenityChips();
+
+  // Populate image rows
+  const imgs = getPropImages(prop);
+  propImages = imgs.map((img, i) => ({ uid: 'img_' + (++imgCounter), title: img.title || '', url: img.url || '' }));
+  renderImageRows();
+
+  document.querySelector(".nav-item[data-tab='properties']").click();
+  document.getElementById("tab-properties").scrollIntoView({ behavior: "smooth" });
+}
+
+async function loadProperties() {
+  const tbody = document.getElementById("properties-tbody");
+  const res = await fetch("/admin/properties", { headers: authHeaders() });
+  const props = await res.json();
+  if (!props.length) {
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:3rem">No properties yet. Add one above.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = props.map(p => {
+    const currency = p.currency || 'NGN';
+    const priceStr = fmtPrice(p.price_per_night, currency);
+    const platforms = (p.featured_on || []);
+    const platformStr = platforms.length
+      ? platforms.slice(0, 2).join(', ') + (platforms.length > 2 ? ` +${platforms.length - 2}` : '')
+      : '<span style="color:var(--muted)">—</span>';
+    const imgs = getPropImages(p);
+    const thumbSrc = imgs.length ? imgs[0].url : '';
+    const imgCount = imgs.length;
+    return `
+      <tr>
+        <td>
+          <div style="display:flex;align-items:center;gap:.5rem">
+            ${thumbSrc ? `<img src="${escapeHtml(thumbSrc)}" class="prop-thumb" onerror="this.style.display='none'" />` : '<div style="width:48px;height:38px;background:var(--bg-warm);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.8rem;color:var(--muted)">📷</div>'}
+            ${imgCount > 1 ? `<span style="font-size:.72rem;color:var(--muted);font-weight:600">+${imgCount - 1}</span>` : ''}
+          </div>
+        </td>
+        <td><strong style="font-size:.9rem">${escapeHtml(p.name)}</strong></td>
+        <td style="color:var(--muted)">${p.location ? escapeHtml(p.location) : "–"}</td>
+        <td style="font-weight:600">${priceStr}</td>
+        <td style="font-size:.8rem;color:var(--text-mid)">${platformStr}</td>
+        <td><span class="badge ${p.is_available ? 'badge--green' : 'badge--red'}">${p.is_available ? 'Live' : 'Hidden'}</span></td>
+        <td>
+          <div style="display:flex;gap:.4rem">
+            <button class="btn btn--ghost btn--sm" onclick='fillPropertyForm(${JSON.stringify(p).replace(/'/g, "&#39;")})'>Edit</button>
+            <button class="btn btn--danger btn--sm" onclick="hideProperty('${p.id}')">Hide</button>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join("");
+}
+
+async function hideProperty(id) {
+  if (!confirm("Hide this property from the public site?")) return;
+  await fetch(`/admin/properties/${id}`, { method: "DELETE", headers: authHeaders() });
+  loadProperties();
+}
+
+async function saveProperty() {
+  const btn = document.getElementById("save-property-btn");
+  btn.innerHTML = '<span class="spinner"></span> Saving…'; btn.disabled = true;
+  const id = document.getElementById("prop-id").value;
+  const featuredOn = getSelectedPlatforms();
+  const descHtml = getRteHtml();
+
+  // Build images array — only rows that have a URL
+  const images = propImages
+    .filter(img => img.url)
+    .map(img => ({ title: img.title || 'Image', url: img.url }));
+
+  const payload = {
+      name:            document.getElementById("prop-name").value,
+      location:        document.getElementById("prop-location").value || null,
+      price_per_night: parseFloat(document.getElementById("prop-price").value),
+      max_guests:      parseInt(document.getElementById("prop-max-guests").value),
+      description:     descHtml,
+      image_url:       images.length ? images[0].url : null,  // backwards compat
+      images:          images,           // ← always an array, never null
+      is_available:    document.getElementById("prop-available").value === "true",
+      amenities:       amenities,        // ← always an array
+      currency:        document.getElementById("prop-currency").value,
+      featured_on:     featuredOn,       // ← always an array
+  };
+  try {
+    const url    = id ? `/admin/properties/${id}` : "/admin/properties";
+    const method = id ? "PUT" : "POST";
+    const res = await fetch(url, { method, headers: authHeaders(), body: JSON.stringify(payload) });
+    if (!res.ok) { const e = await res.json(); throw new Error(e.detail || "Save failed"); }
+    showAlert("prop-alert", id ? "Property updated successfully!" : "Property created and is now live!");
+    clearPropertyForm(); loadProperties(); updateStats();
+  } catch (e) {
+    showAlert("prop-alert", e.message, "error");
+  } finally {
+    btn.innerHTML = "Save Property"; btn.disabled = false;
+  }
+}
+
+/* ── Bookings ───────────────────────────────────── */
+async function loadBookings() {
+  const status = document.getElementById("bookings-filter-status").value;
+  const url = "/admin/bookings" + (status ? `?status=${status}` : "");
+  const res = await fetch(url, { headers: authHeaders() });
+  const bookings = await res.json();
+  const tbody = document.getElementById("bookings-tbody");
+  if (!bookings.length) {
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:3rem">No bookings found.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = bookings.map(b => {
+    const currency = b.properties?.currency || 'NGN';
+    return `
+      <tr>
+        <td>
+          <strong style="font-size:.875rem">${escapeHtml(b.guest_name)}</strong><br>
+          <small style="color:var(--muted);font-size:.78rem">${escapeHtml(b.guest_email)}</small>
+        </td>
+        <td style="font-size:.875rem">${b.properties?.name ? escapeHtml(b.properties.name) : "–"}</td>
+        <td style="font-size:.875rem">${b.check_in}</td>
+        <td style="font-size:.875rem">${b.check_out}</td>
+        <td style="font-weight:600;font-size:.875rem">${fmtPrice(b.total_price, currency)}</td>
+        <td><span class="status-pill ${b.status}">${b.status}</span></td>
+        <td><code style="font-size:.72rem;color:var(--muted)">${(b.payment_ref || "–").slice(0, 14)}</code></td>
+      </tr>
+    `;
+  }).join("");
+}
+
+/* ── Event bindings ─────────────────────────────── */
+document.getElementById("login-btn").addEventListener("click", login);
+document.getElementById("auth-pass").addEventListener("keydown", e => e.key === "Enter" && login());
+document.getElementById("logout-btn").addEventListener("click", logout);
+document.getElementById("save-settings-btn").addEventListener("click", saveSettings);
+document.getElementById("save-property-btn").addEventListener("click", saveProperty);
+document.getElementById("clear-prop-form-btn").addEventListener("click", clearPropertyForm);
+document.getElementById("clear-prop-form-btn2").addEventListener("click", clearPropertyForm);
+document.getElementById("refresh-bookings-btn").addEventListener("click", loadBookings);
+document.getElementById("bookings-filter-status").addEventListener("change", loadBookings);
+document.getElementById("img-add-btn").addEventListener("click", addImageRow);
+
+document.getElementById("add-amenity-btn").addEventListener("click", () => {
+  const input = document.getElementById("amenity-input");
+  const val = input.value.trim();
+  if (val && !amenities.includes(val)) { amenities.push(val); renderAmenityChips(); }
+  input.value = "";
+});
+document.getElementById("amenity-input").addEventListener("keydown", e => {
+  if (e.key === "Enter") { e.preventDefault(); document.getElementById("add-amenity-btn").click(); }
+});
+
+/* ── Init ───────────────────────────────────────── */
+buildPlatformGrid();
+renderImageRows();  // show empty state
+if (getToken()) showDashboard();
+</script>
+</body>
+</html>

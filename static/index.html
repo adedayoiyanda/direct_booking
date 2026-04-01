@@ -1,0 +1,1627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Loading…</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <script src="https://js.paystack.co/v2/inline.js"></script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary:       var(--color-primary,       #0f1923);
+      --primary-hover: var(--color-primary-hover, #1a2c3d);
+      --accent:        var(--color-accent,        #c9a84c);
+      --accent-hover:  var(--color-accent-hover,  #dfc06a);
+      --bg:            var(--color-bg,            #f7f4ef);
+      --surface:       var(--color-surface,       #ffffff);
+      --primary-light: #1e3448;
+      --accent-muted:  rgba(201,168,76,0.15);
+      --bg-warm:       #ede9e0;
+      --border:        rgba(15,25,35,0.1);
+      --border-strong: rgba(15,25,35,0.18);
+      --text:          #0f1923;
+      --text-mid:      #3d4f5f;
+      --muted:         #7a8a97;
+      --font-display:  'Cormorant Garamond', Georgia, serif;
+      --font-body:     'Outfit', sans-serif;
+      --radius-sm: 6px; --radius-md: 14px; --radius-lg: 22px; --radius-xl: 32px;
+      --shadow-sm: 0 1px 4px rgba(15,25,35,.07);
+      --shadow-md: 0 6px 24px rgba(15,25,35,.10);
+      --shadow-lg: 0 16px 56px rgba(15,25,35,.14);
+      --shadow-xl: 0 32px 80px rgba(15,25,35,.18);
+      --ease:     cubic-bezier(.4,0,.2,1);
+      --ease-out: cubic-bezier(.0,0,.2,1);
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-body); background: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; }
+    img { display: block; max-width: 100%; }
+    a   { color: inherit; text-decoration: none; }
+    .container { width: min(1200px, 100% - 3rem); margin-inline: auto; }
+
+    /* ── PAGE SECTIONS ───────────────────────────── */
+    .page-view { display: none; }
+    .page-view.active { display: block; animation: pageIn .25s var(--ease-out); }
+    @keyframes pageIn { from { opacity:.7; transform:translateY(8px); } to { opacity:1; transform:none; } }
+
+    /* ── NAVBAR ──────────────────────────────────── */
+    .navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      transition: background .4s var(--ease), backdrop-filter .4s, box-shadow .4s;
+    }
+    .navbar.scrolled {
+      background: rgba(15,25,35,.96); backdrop-filter: blur(16px);
+      box-shadow: 0 1px 0 rgba(255,255,255,.06);
+    }
+    .navbar__inner { display: flex; align-items: center; justify-content: space-between; height: 72px; }
+    .navbar__brand {
+      font-family: var(--font-display); font-size: 1.5rem; font-weight: 600;
+      color: #fff; letter-spacing: .02em; display: flex; align-items: center; gap: .5rem;
+      cursor: pointer; border: none; background: none;
+    }
+    .navbar__logo { height: 32px; width: auto; border-radius: 4px; display: none; }
+    .navbar__nav { display: flex; align-items: center; gap: .1rem; }
+    .navbar__nav a {
+      color: rgba(255,255,255,.75); font-size: .875rem; font-weight: 400;
+      padding: .4rem .85rem; border-radius: 999px;
+      transition: color .2s, background .2s; letter-spacing: .01em; cursor: pointer;
+    }
+    .navbar__nav a:hover, .navbar__nav a.active { color: #fff; background: rgba(255,255,255,.1); }
+    .navbar__cta { background: var(--accent) !important; color: var(--primary) !important; font-weight: 600 !important; }
+    .navbar__cta:hover { background: var(--accent-hover) !important; }
+    .nav-desktop { display: flex; align-items: center; gap: .1rem; }
+    @media (max-width: 900px) { .nav-desktop { display: none; } }
+
+    /* ── HERO ────────────────────────────────────── */
+    .hero {
+      min-height: 100vh; background: var(--primary);
+      display: flex; flex-direction: column; justify-content: flex-end;
+      position: relative; overflow: hidden;
+    }
+    .hero__bg {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 20% 50%, rgba(30,52,72,.9) 0%, transparent 70%),
+                  radial-gradient(ellipse 60% 80% at 80% 20%, rgba(201,168,76,.12) 0%, transparent 60%),
+                  linear-gradient(160deg, #0f1923 0%, #1a2c3d 40%, #0f1923 100%);
+      animation: heroPulse 10s ease-in-out infinite alternate;
+    }
+    @keyframes heroPulse { from { opacity:.85; } to { opacity:1; } }
+    .hero__grid {
+      position: absolute; inset: 0; opacity: .035;
+      background-image: linear-gradient(rgba(255,255,255,1) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px);
+      background-size: 80px 80px;
+    }
+    .hero__glow {
+      position: absolute; width: 600px; height: 600px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(201,168,76,.08) 0%, transparent 70%);
+      top: 10%; right: -100px; animation: glowDrift 12s ease-in-out infinite alternate;
+    }
+    @keyframes glowDrift { from { transform: translate(0,0); } to { transform: translate(-40px,60px); } }
+    .hero__content { position: relative; z-index: 2; padding: 0 0 8vh; }
+    .hero__eyebrow {
+      display: inline-flex; align-items: center; gap: .5rem;
+      color: var(--accent); font-size: .78rem; font-weight: 500;
+      letter-spacing: .2em; text-transform: uppercase; margin-bottom: 1.5rem;
+    }
+    .hero__eyebrow::before { content: ''; display: block; width: 28px; height: 1px; background: var(--accent); }
+    .hero__title {
+      font-family: var(--font-display); font-size: clamp(3rem,7vw,6rem);
+      font-weight: 500; line-height: 1.05; color: #fff; letter-spacing: -.01em; margin-bottom: 1.5rem;
+    }
+    .hero__title em { font-style: italic; color: var(--accent); }
+    .hero__subtitle { font-size: clamp(1rem,1.5vw,1.15rem); color: rgba(255,255,255,.6); max-width: 480px; line-height: 1.7; font-weight: 300; margin-bottom: 3rem; }
+    .hero__actions { display: flex; align-items: center; gap: 1.25rem; flex-wrap: wrap; }
+    .hero__cta {
+      display: inline-flex; align-items: center; gap: .6rem;
+      background: var(--accent); color: var(--primary); font-weight: 600; font-size: .9rem;
+      letter-spacing: .03em; padding: .9rem 2rem; border-radius: 999px; border: none; cursor: pointer;
+      font-family: var(--font-body); transition: background .25s, transform .25s, box-shadow .25s;
+      box-shadow: 0 8px 32px rgba(201,168,76,.3);
+    }
+    .hero__cta:hover { background: var(--accent-hover); transform: translateY(-2px); box-shadow: 0 12px 40px rgba(201,168,76,.4); }
+    .hero__cta-arrow { font-size: 1.1rem; transition: transform .2s; }
+    .hero__cta:hover .hero__cta-arrow { transform: translateX(4px); }
+    .hero__link { color: rgba(255,255,255,.6); font-size: .875rem; border-bottom: 1px solid rgba(255,255,255,.25); padding-bottom: 1px; cursor: pointer; transition: color .2s, border-color .2s; }
+    .hero__link:hover { color: #fff; border-color: rgba(255,255,255,.6); }
+    .hero__scroll {
+      position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: .5rem;
+      color: rgba(255,255,255,.35); font-size: .7rem; letter-spacing: .15em; text-transform: uppercase;
+      animation: scrollBounce 2.5s ease-in-out infinite;
+    }
+    .hero__scroll-line { width: 1px; height: 40px; background: linear-gradient(to bottom, rgba(255,255,255,.4), transparent); }
+    @keyframes scrollBounce { 0%,100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(6px); } }
+    .hero__stats {
+      position: absolute; bottom: 0; right: 0; display: flex; align-items: stretch;
+      background: rgba(255,255,255,.04); backdrop-filter: blur(12px);
+      border-top: 1px solid rgba(255,255,255,.08); border-left: 1px solid rgba(255,255,255,.08);
+      border-top-left-radius: var(--radius-lg); overflow: hidden;
+    }
+    .hero__stat { padding: 1.25rem 2rem; border-right: 1px solid rgba(255,255,255,.08); text-align: center; }
+    .hero__stat:last-child { border-right: none; }
+    .hero__stat-num { font-family: var(--font-display); font-size: 1.8rem; color: var(--accent); line-height: 1; }
+    .hero__stat-label { font-size: .72rem; color: rgba(255,255,255,.5); text-transform: uppercase; letter-spacing: .1em; margin-top: .3rem; }
+
+    /* ── SUCCESS BANNER ──────────────────────────── */
+    #success-banner {
+      background: linear-gradient(135deg, #ecfdf5, #d1fae5); color: #065f46;
+      border: 1px solid #a7f3d0; border-radius: var(--radius-md); padding: 1.25rem 1.75rem;
+      margin: 2rem 0; font-weight: 500; display: flex; align-items: center; gap: .75rem; box-shadow: var(--shadow-sm);
+    }
+    #success-banner::before { content: '✓'; font-size: 1.2rem; }
+
+    /* ── SECTION ─────────────────────────────────── */
+    .section { padding: 6rem 0; }
+    .section--alt { background: var(--bg-warm); }
+    .section__header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 3.5rem; gap: 1rem; flex-wrap: wrap; }
+    .section__label { font-size: .72rem; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; color: var(--accent); margin-bottom: .6rem; display: flex; align-items: center; gap: .5rem; }
+    .section__label::before { content: ''; display: block; width: 20px; height: 1px; background: var(--accent); }
+    .section__title { font-family: var(--font-display); font-size: clamp(2rem,4vw,3rem); font-weight: 500; color: var(--primary); line-height: 1.15; }
+    .section__title em { font-style: italic; }
+    .section__subtitle { color: var(--muted); font-size: .95rem; max-width: 380px; font-weight: 300; }
+
+    /* ── PROPERTY GRID ───────────────────────────── */
+    #properties-grid, .featured-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 2rem;
+    }
+
+    /* ── PROPERTY CARD ───────────────────────────── */
+    .property-card {
+      background: var(--surface); border-radius: var(--radius-lg); overflow: hidden;
+      box-shadow: var(--shadow-sm); border: 1px solid var(--border);
+      transition: transform .35s var(--ease), box-shadow .35s var(--ease);
+      opacity: 0; transform: translateY(24px); cursor: pointer;
+    }
+    .property-card.animate-in { animation: cardReveal .55s var(--ease-out) forwards; }
+    @keyframes cardReveal { to { opacity: 1; transform: translateY(0); } }
+    .property-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-xl); }
+    .property-card__image-wrap { position: relative; aspect-ratio: 16/11; overflow: hidden; }
+    .property-card__image { width: 100%; height: 100%; object-fit: cover; transition: transform .6s var(--ease); }
+    .property-card:hover .property-card__image { transform: scale(1.06); }
+    .property-card__badges { position: absolute; top: 1rem; left: 1rem; display: flex; gap: .4rem; flex-wrap: wrap; }
+    .property-card__badge { background: rgba(15,25,35,.75); backdrop-filter: blur(8px); color: #fff; font-size: .68rem; font-weight: 500; padding: .3rem .7rem; border-radius: 999px; letter-spacing: .05em; }
+    .property-card__badge--accent { background: var(--accent); color: var(--primary); }
+    .property-card__location { position: absolute; bottom: 1rem; left: 1rem; background: rgba(15,25,35,.7); backdrop-filter: blur(8px); color: rgba(255,255,255,.9); font-size: .75rem; padding: .3rem .75rem; border-radius: 999px; display: flex; align-items: center; gap: .3rem; }
+    .property-card__location::before { content: '📍'; font-size: .7rem; }
+    .property-card__body { padding: 1.5rem; }
+    .property-card__meta { display: flex; align-items: center; justify-content: space-between; margin-bottom: .6rem; }
+    .property-card__type { font-size: .7rem; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); }
+    .property-card__name { font-family: var(--font-display); font-size: 1.35rem; font-weight: 500; color: var(--primary); margin-bottom: .5rem; line-height: 1.25; }
+    .property-card__desc { font-size: .855rem; color: var(--muted); font-weight: 300; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.6; margin-bottom: 1rem; }
+    .property-card__amenities { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: 1.25rem; }
+    .amenity-tag { font-size: .7rem; font-weight: 400; background: var(--bg); color: var(--text-mid); border: 1px solid var(--border); padding: .2rem .65rem; border-radius: 999px; }
+    .property-card__footer { display: flex; align-items: center; justify-content: space-between; padding-top: 1.1rem; border-top: 1px solid var(--border); gap: .75rem; }
+    .property-card__price { display: flex; align-items: baseline; gap: .3rem; }
+    .property-card__price-amount { font-family: var(--font-display); font-size: 1.45rem; font-weight: 500; color: var(--primary); }
+    .property-card__price-unit { font-size: .78rem; color: var(--muted); }
+    .property-card__guests { font-size: .78rem; color: var(--muted); }
+
+    /* ── SKELETON ────────────────────────────────── */
+    .skeleton-card { background: var(--surface); border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--border); min-height: 380px; position: relative; }
+    .skeleton-card::after { content: ''; display: block; position: absolute; inset: 0; background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,.5) 50%, transparent 100%); background-size: 200% 100%; animation: shimmer 1.6s ease infinite; }
+    @keyframes shimmer { from { background-position: -200% 0; } to { background-position: 200% 0; } }
+
+    /* ── BUTTONS ─────────────────────────────────── */
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: .4rem; border: none; cursor: pointer; font-family: var(--font-body); font-weight: 500; border-radius: 999px; transition: all .25s var(--ease); white-space: nowrap; }
+    .btn:disabled { opacity: .55; cursor: not-allowed; }
+    .btn--primary { background: var(--primary); color: #fff; padding: .7rem 1.5rem; font-size: .875rem; }
+    .btn--primary:hover:not(:disabled) { background: var(--primary-light); transform: translateY(-1px); }
+    .btn--accent { background: var(--accent); color: var(--primary); padding: .85rem 2.25rem; font-size: .95rem; font-weight: 600; box-shadow: 0 6px 24px rgba(201,168,76,.25); }
+    .btn--accent:hover:not(:disabled) { background: var(--accent-hover); transform: translateY(-2px); box-shadow: 0 10px 32px rgba(201,168,76,.35); }
+    .btn--outline { background: transparent; color: var(--primary); border: 1.5px solid var(--border-strong); padding: .7rem 1.5rem; font-size: .875rem; }
+    .btn--outline:hover:not(:disabled) { border-color: var(--primary); }
+
+    /* ── FEATURES GRID ───────────────────────────── */
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1.5rem; }
+    .feature-card { padding: 2rem; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface); transition: border-color .3s, transform .3s; }
+    .feature-card:hover { border-color: var(--accent); transform: translateY(-4px); }
+    .feature-card__icon { font-size: 1.75rem; margin-bottom: 1rem; width: 52px; height: 52px; display: flex; align-items: center; justify-content: center; background: var(--accent-muted); border-radius: var(--radius-sm); }
+    .feature-card__title { font-family: var(--font-display); font-size: 1.2rem; font-weight: 500; color: var(--primary); margin-bottom: .5rem; }
+    .feature-card__desc { font-size: .855rem; color: var(--muted); font-weight: 300; line-height: 1.65; }
+
+    /* ── LANDING PAGE HERO ───────────────────────── */
+    .lp-hero { background: var(--primary); min-height: 60vh; display: flex; align-items: center; position: relative; overflow: hidden; padding: 8rem 0 5rem; }
+    .lp-hero__grid { position: absolute; inset: 0; opacity: .04; background-image: linear-gradient(rgba(255,255,255,1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px); background-size: 60px 60px; }
+    .lp-hero__glow { position: absolute; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(201,168,76,.1) 0%, transparent 70%); right: -100px; top: 50%; transform: translateY(-50%); }
+    .lp-hero__content { position: relative; z-index: 2; }
+    .lp-eyebrow { display: inline-flex; align-items: center; gap: .5rem; color: var(--accent); font-size: .78rem; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; margin-bottom: 1.5rem; }
+    .lp-eyebrow::before { content: ''; width: 28px; height: 1px; background: var(--accent); display: block; }
+    .lp-title { font-family: var(--font-display); font-size: clamp(2.5rem,5vw,4.5rem); font-weight: 500; line-height: 1.1; color: #fff; margin-bottom: 1.5rem; }
+    .lp-title em { font-style: italic; color: var(--accent); }
+    .lp-subtitle { color: rgba(255,255,255,.65); font-size: 1.05rem; max-width: 520px; font-weight: 300; line-height: 1.7; margin-bottom: 2.5rem; }
+    .lp-actions { display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; }
+    .lp-cta { display: inline-flex; align-items: center; gap: .5rem; background: var(--accent); color: var(--primary); font-weight: 600; font-size: .9rem; padding: .9rem 2rem; border-radius: 999px; transition: all .25s; font-family: var(--font-body); border: none; cursor: pointer; box-shadow: 0 6px 24px rgba(201,168,76,.3); }
+    .lp-cta:hover { background: var(--accent-hover); transform: translateY(-2px); }
+    .lp-link { color: rgba(255,255,255,.65); font-size: .9rem; border-bottom: 1px solid rgba(255,255,255,.3); padding-bottom: 2px; cursor: pointer; transition: color .2s; }
+    .lp-link:hover { color: #fff; }
+    .benefit-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 3rem; }
+    .benefit-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 2rem; transition: border-color .3s, transform .3s; }
+    .benefit-card:hover { border-color: var(--accent); transform: translateY(-4px); }
+    .benefit-card__num { font-family: var(--font-display); font-size: 2rem; color: var(--accent); font-weight: 500; margin-bottom: .75rem; }
+    .benefit-card__title { font-size: 1rem; font-weight: 600; margin-bottom: .5rem; }
+    .benefit-card__desc { font-size: .855rem; color: var(--muted); line-height: 1.65; }
+    .lp-form { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 2.5rem; }
+    .lp-form h3 { font-family: var(--font-display); font-size: 1.5rem; margin-bottom: 1.5rem; }
+    .lp-input { width: 100%; border: 1.5px solid var(--border-strong); border-radius: var(--radius-md); padding: .72rem 1rem; font-family: var(--font-body); font-size: .925rem; color: var(--text); background: var(--bg); transition: border-color .2s; margin-bottom: 1rem; appearance: none; }
+    .lp-input:focus { outline: none; border-color: var(--accent); background: var(--surface); }
+    .lp-textarea { min-height: 90px; resize: vertical; }
+    .lp-label { display: block; font-size: .72rem; font-weight: 600; color: var(--muted); margin-bottom: .4rem; text-transform: uppercase; letter-spacing: .08em; }
+    .form-alert { padding: .75rem 1rem; border-radius: 8px; margin-bottom: 1rem; font-size: .875rem; display: none; }
+
+    /* ── FAQ / SUPPORT ───────────────────────────── */
+    .faq-item { border-bottom: 1px solid var(--border); overflow: hidden; }
+    .faq-question { display: flex; justify-content: space-between; align-items: center; padding: 1.25rem 0; cursor: pointer; font-weight: 500; font-size: 1rem; transition: color .2s; }
+    .faq-question:hover { color: var(--accent); }
+    .faq-icon { width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid var(--border-strong); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; transition: transform .3s, background .2s; color: var(--muted); }
+    .faq-item.open .faq-icon { transform: rotate(45deg); background: var(--accent-muted); color: var(--accent); }
+    .faq-answer { max-height: 0; overflow: hidden; transition: max-height .35s var(--ease); font-size: .9rem; color: var(--muted); line-height: 1.75; }
+    .faq-item.open .faq-answer { max-height: 200px; padding-bottom: 1.25rem; }
+
+    /* ── EMPTY STATE ─────────────────────────────── */
+    .empty-state { grid-column: 1/-1; text-align: center; padding: 5rem 2rem; color: var(--muted); }
+    .empty-state__icon { font-size: 3rem; margin-bottom: 1rem; opacity: .4; }
+
+    /* ── MODALS (shared) ─────────────────────────── */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; z-index: 500;
+      background: rgba(10,16,24,.65); backdrop-filter: blur(6px);
+      align-items: center; justify-content: center; padding: 1rem;
+    }
+    .modal-overlay.is-open { display: flex; }
+    @keyframes modalIn { from { opacity:0; transform:scale(.95) translateY(16px); } to { opacity:1; transform:none; } }
+
+    /* ── BOOKING MODAL ───────────────────────────── */
+    .booking-modal__content {
+      background: var(--surface); border-radius: var(--radius-xl);
+      width: min(540px, 100%); max-height: 90vh; overflow-y: auto;
+      box-shadow: var(--shadow-xl); animation: modalIn .3s var(--ease-out);
+    }
+    .modal__header { padding: 2rem 2rem 0; display: flex; align-items: flex-start; justify-content: space-between; }
+    .modal__title { font-family: var(--font-display); font-size: 1.75rem; font-weight: 500; color: var(--primary); line-height: 1.2; }
+    .modal__subtitle { font-size: .875rem; color: var(--muted); margin-top: .3rem; }
+    .modal__close { background: var(--bg); border: none; cursor: pointer; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; color: var(--muted); flex-shrink: 0; transition: background .2s, color .2s; }
+    .modal__close:hover { background: var(--bg-warm); color: var(--text); }
+    .modal__body { padding: 1.75rem 2rem 2rem; }
+    .form-group { margin-bottom: 1.1rem; }
+    .form-group label { display: block; font-size: .72rem; font-weight: 600; color: var(--muted); margin-bottom: .4rem; text-transform: uppercase; letter-spacing: .08em; }
+    .form-group input, .form-group select { width: 100%; border: 1.5px solid var(--border-strong); border-radius: var(--radius-md); padding: .72rem 1rem; font-family: var(--font-body); font-size: .925rem; color: var(--text); background: var(--bg); transition: border-color .2s, box-shadow .2s; appearance: none; }
+    .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(15,25,35,.08); }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .modal__price-card { background: var(--primary); color: #fff; border-radius: var(--radius-md); padding: 1.25rem 1.5rem; margin: 1.25rem 0; display: flex; align-items: center; justify-content: space-between; }
+    .modal__price-label { font-size: .8rem; color: rgba(255,255,255,.55); margin-bottom: .2rem; }
+    .modal__price-display { font-size: .85rem; color: rgba(255,255,255,.7); }
+    .modal__total { font-family: var(--font-display); font-size: 2rem; font-weight: 500; color: var(--accent); }
+    .modal__total-sub { font-size: .7rem; color: rgba(255,255,255,.4); margin-top: .2rem; }
+
+    /* ── AVAIL STATUS ────────────────────────────── */
+    .avail-status { padding: .6rem 1rem; border-radius: var(--radius-sm); font-size: .82rem; font-weight: 500; display: none; align-items: center; gap: .5rem; margin-bottom: .75rem; }
+    .avail-status.show { display: flex; }
+    .avail-status.available { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
+    .avail-status.unavailable { background: #fef2f2; color: #991b1b; border: 1px solid #fca5a5; }
+    .avail-status.checking { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+
+    /* ═══════════════════════════════════════════════
+       DETAIL MODAL — IMAGE CAROUSEL
+    ═══════════════════════════════════════════════ */
+    .detail-overlay {
+      display: none; position: fixed; inset: 0; z-index: 600;
+      background: rgba(10,16,24,.7); backdrop-filter: blur(8px);
+      overflow-y: auto; padding: 5rem 1rem 2rem;
+    }
+    .detail-overlay.is-open { display: flex; justify-content: center; align-items: flex-start; }
+    .detail-panel {
+      background: var(--surface); border-radius: var(--radius-xl);
+      width: min(1020px, 100%); box-shadow: var(--shadow-xl);
+      animation: modalIn .4s var(--ease-out); overflow: hidden;
+    }
+
+    /* Carousel container replaces old .detail-hero */
+    .detail-carousel {
+      position: relative; 
+      height: 500px; /* <-- Increased from 380px */
+      overflow: hidden;
+      background: #1a2c3d;
+    }
+
+    .detail-carousel__img {
+      width: 100%; height: 100%; object-fit: cover;
+      display: block;
+      transition: opacity 0.2s ease;
+    }
+    .detail-carousel__img.is-fading { opacity: 0; }
+
+    /* Prev / next arrows */
+/* Prev / next arrows */
+    .carousel-arrow {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      width: 44px; height: 44px; border-radius: 50%;
+      background: rgba(255,255,255,.92); backdrop-filter: blur(8px);
+      border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem; color: var(--primary); /* Increased size for visibility */
+      transition: background .2s, transform .2s, opacity .2s;
+      z-index: 5; 
+      opacity: 0.85; /* CHANGED: Always visible so users know they can click */
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15); /* Added shadow to stand out against white images */
+    }
+    .carousel-arrow:hover { background: #fff; transform: translateY(-50%) scale(1.08); opacity: 1; }
+    .carousel-arrow--prev { left: 1rem; }
+    .carousel-arrow--next { right: 1rem; }
+    .carousel-arrow.is-edge { opacity: 0.25 !important; pointer-events: none; }
+
+    /* Dot indicators */
+    .carousel-dots {
+      position: absolute; bottom: 1rem; left: 50%; transform: translateX(-50%);
+      display: flex; gap: 6px; z-index: 5;
+    }
+    .carousel-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: rgba(255,255,255,.45); border: none; cursor: pointer;
+      padding: 0; transition: background .2s, transform .2s;
+    }
+    .carousel-dot.active {
+      background: #fff; transform: scale(1.3);
+    }
+
+    /* Image info overlay */
+    .carousel-info {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 2rem 1.25rem 0.85rem;
+      background: linear-gradient(to top, rgba(10,18,28,.65) 0%, transparent 100%);
+      display: flex; align-items: flex-end; justify-content: space-between;
+      pointer-events: none; z-index: 4;
+    }
+    .carousel-info__title {
+      color: rgba(255,255,255,.9); font-size: .8rem; font-weight: 500;
+      letter-spacing: .04em; text-shadow: 0 1px 4px rgba(0,0,0,.5);
+    }
+    .carousel-info__counter {
+      color: rgba(255,255,255,.65); font-size: .72rem; font-weight: 500;
+      background: rgba(0,0,0,.35); padding: .2rem .55rem; border-radius: 999px;
+      letter-spacing: .06em;
+    }
+
+    /* Close button */
+    .detail-close {
+      position: absolute; top: 1.25rem; right: 1.25rem; width: 40px; height: 40px;
+      border-radius: 50%; background: rgba(255,255,255,.92); backdrop-filter: blur(8px);
+      border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; color: var(--text); transition: background .2s, transform .2s; z-index: 10;
+    }
+    .detail-close:hover { background: #fff; transform: scale(1.05); }
+
+    /* ── Rest of detail modal ────────────────────── */
+    .detail-body { display: grid; grid-template-columns: 1fr 340px; gap: 2.5rem; padding: 2.5rem; }
+    .detail-name { font-family: var(--font-display); font-size: 2.2rem; font-weight: 500; color: var(--primary); line-height: 1.1; margin-bottom: .5rem; }
+    .detail-location { display: flex; align-items: center; gap: .4rem; color: var(--muted); font-size: .9rem; margin-bottom: 1.25rem; }
+
+    /* ── FORMATTED DESCRIPTION ───────────────────── */
+    .detail-desc {
+      font-size: .95rem; color: var(--text-mid); line-height: 1.8;
+      margin-bottom: 1.75rem; font-weight: 300;
+    }
+    .detail-desc h2 {
+      font-family: var(--font-display); font-size: 1.5rem; font-weight: 600;
+      color: var(--primary); margin: 1.1rem 0 0.4rem; line-height: 1.2;
+    }
+    .detail-desc h3 {
+      font-family: var(--font-display); font-size: 1.2rem; font-weight: 600;
+      color: var(--primary); margin: 0.9rem 0 0.35rem; line-height: 1.2;
+    }
+    .detail-desc p { margin-bottom: 0.65rem; }
+    .detail-desc p:last-child { margin-bottom: 0; }
+    .detail-desc ul, .detail-desc ol { padding-left: 1.4rem; margin: 0.4rem 0 0.75rem; }
+    .detail-desc li { margin-bottom: 0.25rem; line-height: 1.7; }
+    .detail-desc strong, .detail-desc b { font-weight: 600; color: var(--text); }
+    .detail-desc em { font-style: italic; }
+    .detail-desc u { text-decoration: underline; text-underline-offset: 2px; }
+
+    .detail-section-label { font-size: .72rem; font-weight: 600; text-transform: uppercase; letter-spacing: .12em; color: var(--muted); margin-bottom: .75rem; display: flex; align-items: center; gap: .5rem; }
+    .detail-section-label::before { content: ''; width: 16px; height: 1px; background: var(--accent); display: block; }
+    .detail-amenities { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1.75rem; }
+    .detail-amenity { background: #ecfdf5; border: 1px solid #bbf7d0; color: #065f46; padding: .35rem .85rem; border-radius: 999px; font-size: .8rem; display: flex; align-items: center; gap: .4rem; }
+    .detail-amenity::before { content: '✓'; font-size: .75rem; }
+    .featured-badges { display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: 1.75rem; }
+    .featured-badge { background: var(--bg); border: 1.5px solid var(--border-strong); padding: .3rem .85rem; border-radius: var(--radius-sm); font-size: .8rem; font-weight: 500; color: var(--text-mid); }
+
+    /* ── CALENDAR ────────────────────────────────── */
+    .cal-wrapper { margin-bottom: 1.75rem; }
+    .cal-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: .75rem; }
+    .cal-btn { width: 32px; height: 32px; border-radius: 8px; border: 1.5px solid var(--border-strong); background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: .9rem; transition: background .2s, border-color .2s; color: var(--text-mid); }
+    .cal-btn:hover { background: var(--bg-warm); border-color: var(--accent); }
+    .cal-month { font-size: .9rem; font-weight: 500; }
+    .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+    .cal-head { text-align: center; font-size: .65rem; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); padding: .3rem; }
+    .cal-day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: .8rem; border-radius: 8px; }
+    .cal-day.today { background: var(--primary); color: #fff; font-weight: 600; }
+    .cal-day.avail { color: var(--text); cursor: default; }
+    .cal-day.avail:hover { background: var(--accent-muted); }
+    .cal-day.booked { background: rgba(239,68,68,.1); color: #dc2626; text-decoration: line-through; }
+    .cal-day.past { color: #d1d5db; }
+    .cal-legend { display: flex; gap: 1.25rem; margin-top: .75rem; font-size: .75rem; color: var(--muted); }
+    .cal-legend-item { display: flex; align-items: center; gap: .4rem; }
+    .cal-dot { width: 10px; height: 10px; border-radius: 3px; }
+
+    /* ── GOOGLE MAP ──────────────────────────────── */
+    .map-wrap { border-radius: var(--radius-lg); overflow: hidden; height: 250px; border: 1px solid var(--border); background: var(--bg-warm); margin-bottom: 1.75rem; }
+    .map-wrap iframe { width: 100%; height: 100%; border: none; }
+    .map-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: .5rem; color: var(--muted); font-size: .9rem; }
+
+    /* ── SIMILAR PROPERTIES ──────────────────────── */
+    .similar-section { margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--border); }
+    .similar-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: .75rem; }
+    .similar-card { border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; cursor: pointer; transition: transform .25s, box-shadow .25s; }
+    .similar-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+    .similar-card__img { height: 110px; overflow: hidden; background: var(--bg-warm); }
+    .similar-card__img img { width: 100%; height: 100%; object-fit: cover; }
+    .similar-card__info { padding: .75rem; }
+    .similar-card__name { font-weight: 500; font-size: .85rem; margin-bottom: .25rem; line-height: 1.3; }
+    .similar-card__price { font-size: .78rem; color: var(--muted); }
+
+    /* ── BOOKING SIDEBAR ─────────────────────────── */
+    .booking-card { border: 2px solid var(--border-strong); border-radius: var(--radius-lg); padding: 1.5rem; position: sticky; top: 1.5rem; }
+    .booking-card__price { font-family: var(--font-display); font-size: 1.8rem; font-weight: 500; color: var(--primary); margin-bottom: .15rem; }
+    .booking-card__sub { font-size: .8rem; color: var(--muted); margin-bottom: 1.5rem; }
+    .bc-divider { border: none; border-top: 1px solid var(--border); margin: 1rem 0; }
+    .price-breakdown { background: var(--bg); border-radius: var(--radius-sm); padding: 1rem; margin-bottom: 1rem; display: none; }
+    .price-breakdown.show { display: block; }
+    .price-row { display: flex; justify-content: space-between; font-size: .85rem; margin-bottom: .4rem; color: var(--muted); }
+    .price-row.total { font-weight: 600; color: var(--text); border-top: 1px solid var(--border); padding-top: .5rem; margin-top: .25rem; margin-bottom: 0; }
+
+    /* ── TOAST ───────────────────────────────────── */
+    .toast { position: fixed; bottom: 2rem; right: 2rem; z-index: 9999; padding: 1rem 1.5rem; border-radius: var(--radius-md); box-shadow: var(--shadow-lg); font-size: .875rem; font-weight: 500; max-width: 380px; min-width: 240px; opacity: 0; transform: translateY(12px); transition: opacity .3s, transform .3s; background: var(--primary); color: #fff; display: flex; align-items: center; gap: .75rem; pointer-events: none; }
+    .toast.show { opacity: 1; transform: translateY(0); pointer-events: all; }
+    .toast.warn  { background: #78350f; }
+    .toast.error { background: #7f1d1d; }
+
+    /* ── FOOTER ──────────────────────────────────── */
+    footer { background: var(--primary); color: rgba(255,255,255,.55); }
+    .footer__main { padding: 4rem 0 3rem; display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 3rem; }
+    .footer__brand { font-family: var(--font-display); font-size: 1.4rem; color: #fff; margin-bottom: .75rem; }
+    .footer__tagline { font-size: .855rem; line-height: 1.65; max-width: 240px; }
+    .footer__heading { font-size: .72rem; font-weight: 600; letter-spacing: .15em; text-transform: uppercase; color: rgba(255,255,255,.35); margin-bottom: 1rem; }
+    .footer__links { display: flex; flex-direction: column; gap: .5rem; }
+    .footer__links a, .footer__links span { font-size: .875rem; transition: color .2s; cursor: pointer; }
+    .footer__links a:hover, .footer__links span:hover { color: var(--accent); }
+    .footer__bottom { border-top: 1px solid rgba(255,255,255,.07); padding: 1.5rem 0; display: flex; align-items: center; justify-content: space-between; font-size: .8rem; flex-wrap: wrap; gap: 1rem; }
+    .footer__accent { color: var(--accent); }
+
+    /* ── RESPONSIVE ──────────────────────────────── */
+    @media (max-width: 768px) {
+      .hero__stats { display: none; }
+      #properties-grid, .featured-grid { grid-template-columns: 1fr; }
+      .section__header { flex-direction: column; align-items: flex-start; }
+      .footer__main { grid-template-columns: 1fr; gap: 2rem; }
+      .footer__bottom { flex-direction: column; text-align: center; }
+      .form-row { grid-template-columns: 1fr; }
+      .features-grid { grid-template-columns: 1fr; }
+      .hero__title { font-size: 2.6rem; }
+      .detail-body { grid-template-columns: 1fr; }
+      .detail-overlay { padding: 2rem .5rem; }
+      .detail-carousel { height: 320px; } /* <-- Increased from 220px */
+      .similar-grid { grid-template-columns: 1fr; }
+      .lp-hero { padding: 6rem 0 3rem; }
+    }
+    @media (min-width: 769px) and (max-width: 1024px) {
+      #properties-grid, .featured-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer__main { grid-template-columns: 1fr 1fr; }
+      .detail-body { grid-template-columns: 1fr 300px; }
+      .similar-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAVBAR ──────────────────────────────────────────────────── -->
+<nav class="navbar" id="main-nav">
+  <div class="container navbar__inner">
+    <button class="navbar__brand" onclick="showPage('home')">
+      <img data-config="logo_url" class="navbar__logo" alt="Logo"
+           onload="this.style.display='block';this.nextElementSibling.style.display='none'"
+           onerror="this.style.display='none'" />
+      <span data-config="business_name">…</span>
+    </button>
+    <nav class="nav-desktop navbar__nav">
+      <a id="nav-home"       onclick="showPage('home')"       class="active">Home</a>
+      <a id="nav-properties" onclick="showPage('properties')">Properties</a>
+      <a id="nav-landlords"  onclick="showPage('landlords')">Landlords</a>
+      <a id="nav-corporate"  onclick="showPage('corporate')">Corporate</a>
+      <a id="nav-support"    onclick="showPage('support')">Support</a>
+      <a onclick="showPage('properties')" class="navbar__cta">Book a Stay</a>
+    </nav>
+    <a onclick="showPage('properties')" class="navbar__cta" style="display:none" id="mobile-cta">Book a Stay</a>
+  </div>
+</nav>
+
+<!-- ════════════════════════════════════════════
+     HOME PAGE
+════════════════════════════════════════════ -->
+<div id="page-home" class="page-view active">
+  <section class="hero">
+    <div class="hero__bg" id="hero-bg-container"></div>
+    <div class="hero__grid"></div>
+    <div class="hero__glow"></div>
+    <div class="hero__content container">
+      <p class="hero__eyebrow">Premium Stays</p>
+      <h1 class="hero__title" data-config="hero_text">Find Your<br><em>Perfect Stay</em></h1>
+      <p class="hero__subtitle" data-config="hero_subtext">Handpicked villas, apartments and houses for unforgettable experiences.</p>
+      <div class="hero__actions">
+        <button class="hero__cta" onclick="showPage('properties')">Explore Properties <span class="hero__cta-arrow">→</span></button>
+        <span class="hero__link" onclick="showPage('support')">How it works</span>
+      </div>
+    </div>
+    <div class="hero__stats">
+      <div class="hero__stat"><div class="hero__stat-num" id="stat-properties">—</div><div class="hero__stat-label">Properties</div></div>
+      <div class="hero__stat"><div class="hero__stat-num">100%</div><div class="hero__stat-label">Verified</div></div>
+      <div class="hero__stat"><div class="hero__stat-num">24/7</div><div class="hero__stat-label">Support</div></div>
+    </div>
+    <div class="hero__scroll" aria-hidden="true"><div class="hero__scroll-line"></div><span>Scroll</span></div>
+  </section>
+
+  <div class="container"><div id="success-banner" hidden></div></div>
+
+  <section class="section section--alt">
+    <div class="container">
+      <div class="section__header">
+        <div><p class="section__label">Why Choose Us</p><h2 class="section__title">A Better Way<br><em>To Stay</em></h2></div>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card"><div class="feature-card__icon">🏡</div><h3 class="feature-card__title">Curated Properties</h3><p class="feature-card__desc">Every listing is personally verified and selected for quality, comfort, and value.</p></div>
+        <div class="feature-card"><div class="feature-card__icon">⚡</div><h3 class="feature-card__title">Instant Booking</h3><p class="feature-card__desc">Book and confirm your stay in minutes. No waiting, no back-and-forth messages.</p></div>
+        <div class="feature-card"><div class="feature-card__icon">🔒</div><h3 class="feature-card__title">Secure Payments</h3><p class="feature-card__desc">Pay safely via Paystack with full encryption. Your data and money are always protected.</p></div>
+        <div class="feature-card"><div class="feature-card__icon">💬</div><h3 class="feature-card__title">Dedicated Support</h3><p class="feature-card__desc">Our team is available around the clock to help with any questions or requests.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section__header">
+        <div><p class="section__label">Available Now</p><h2 class="section__title">Featured <em>Properties</em></h2></div>
+        <button class="btn btn--outline" onclick="showPage('properties')">View All →</button>
+      </div>
+      <div class="featured-grid" id="featured-grid"><div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div></div>
+    </div>
+  </section>
+</div>
+
+<!-- ════════════════════════════════════════════
+     PROPERTIES PAGE
+════════════════════════════════════════════ -->
+<div id="page-properties" class="page-view" style="padding-top:72px">
+  <section class="section">
+    <div class="container">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:2.5rem;flex-wrap:wrap;gap:1.5rem">
+        <div><p class="section__label">Browse Listings</p><h2 class="section__title">All <em>Properties</em></h2></div>
+        <div style="display:flex;gap:.75rem;flex-wrap:wrap;align-items:center">
+          <input type="text" id="filter-location" placeholder="Filter by location…" oninput="filterProperties()"
+            style="padding:.55rem 1rem;border:1.5px solid var(--border-strong);border-radius:999px;font-family:var(--font-body);font-size:.85rem;background:var(--surface);color:var(--text);outline:none;min-width:180px" />
+          <select id="filter-sort" onchange="filterProperties()"
+            style="padding:.55rem 1rem;border:1.5px solid var(--border-strong);border-radius:999px;font-family:var(--font-body);font-size:.85rem;background:var(--surface);color:var(--text);outline:none;cursor:pointer">
+            <option value="">Sort: Default</option>
+            <option value="asc">Price: Low → High</option>
+            <option value="desc">Price: High → Low</option>
+          </select>
+        </div>
+      </div>
+      <div id="properties-grid"><div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div></div>
+    </div>
+  </section>
+</div>
+
+<!-- ════════════════════════════════════════════
+     LANDLORDS PAGE
+════════════════════════════════════════════ -->
+<div id="page-landlords" class="page-view">
+  <div class="lp-hero">
+    <div class="lp-hero__grid"></div><div class="lp-hero__glow"></div>
+    <div class="container lp-hero__content">
+      <p class="lp-eyebrow">For Property Owners</p>
+      <h1 class="lp-title">Turn Your Property<br>Into <em>Passive Income</em></h1>
+      <p class="lp-subtitle">List your apartment, villa, or house with us and earn premium returns. We handle everything — from marketing to guest management.</p>
+      <div class="lp-actions">
+        <button class="lp-cta" onclick="document.getElementById('ll-form').scrollIntoView({behavior:'smooth'})">List My Property →</button>
+        <span class="lp-link" onclick="showPage('support')">Learn more</span>
+      </div>
+    </div>
+  </div>
+  <section class="section">
+    <div class="container">
+      <div class="section__header">
+        <div><p class="section__label">Why Partner With Us</p><h2 class="section__title">Earn More,<br><em>Stress Less</em></h2></div>
+        <p class="section__subtitle">We handle all guest-facing operations so you collect the returns.</p>
+      </div>
+      <div class="benefit-grid">
+        <div class="benefit-card"><div class="benefit-card__num">01</div><div class="benefit-card__title">Professional Marketing</div><p class="benefit-card__desc">Listed on our platform and promoted across major booking channels — Airbnb, Booking.com, and more.</p></div>
+        <div class="benefit-card"><div class="benefit-card__num">02</div><div class="benefit-card__title">Verified Guests Only</div><p class="benefit-card__desc">We screen all guests thoroughly. Your property is treated with respect every single time.</p></div>
+        <div class="benefit-card"><div class="benefit-card__num">03</div><div class="benefit-card__title">Transparent Reporting</div><p class="benefit-card__desc">Real-time occupancy and revenue reports. Know exactly how your property is performing.</p></div>
+        <div class="benefit-card"><div class="benefit-card__num">04</div><div class="benefit-card__title">Guaranteed Maintenance</div><p class="benefit-card__desc">Our team handles cleaning, minor repairs, and routine maintenance so your investment is protected.</p></div>
+      </div>
+    </div>
+  </section>
+  <section class="section section--alt" id="ll-form">
+    <div class="container" style="display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center">
+      <div>
+        <p class="section__label">Get Started</p>
+        <h2 class="section__title" style="margin-bottom:1rem">Ready to <em>List?</em></h2>
+        <p style="color:var(--muted);font-size:.95rem;line-height:1.75;max-width:400px">Fill in the form and one of our property managers will contact you within 24 hours with a tailored proposal.</p>
+      </div>
+      <div class="lp-form">
+        <h3>Property Enquiry</h3>
+        <div id="ll-alert" class="form-alert"></div>
+        <label class="lp-label">Full Name *</label>
+        <input type="text" class="lp-input" id="ll-name" placeholder="Your name" />
+        <label class="lp-label">Email Address *</label>
+        <input type="email" class="lp-input" id="ll-email" placeholder="you@email.com" />
+        <label class="lp-label">Phone Number</label>
+        <input type="tel" class="lp-input" id="ll-phone" placeholder="+234 800 000 0000" />
+        <label class="lp-label">Property Location *</label>
+        <input type="text" class="lp-input" id="ll-location" placeholder="e.g. Lekki Phase 1, Lagos" />
+        <label class="lp-label">Tell Us About Your Property</label>
+        <textarea class="lp-input lp-textarea" id="ll-message" placeholder="No. of bedrooms, property type, current status…"></textarea>
+        <button class="btn btn--accent" onclick="submitLandlordEnquiry()" style="width:100%;border-radius:var(--radius-md)">Submit Enquiry →</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ════════════════════════════════════════════
+     CORPORATE PAGE
+════════════════════════════════════════════ -->
+<div id="page-corporate" class="page-view">
+  <div class="lp-hero">
+    <div class="lp-hero__grid"></div><div class="lp-hero__glow"></div>
+    <div class="container lp-hero__content">
+      <p class="lp-eyebrow">Corporate Stays</p>
+      <h1 class="lp-title">Premium Housing<br>For <em>Teams &amp; Business</em></h1>
+      <p class="lp-subtitle">Whether it's team relocation, project-based accommodation, or executive housing — we have flexible solutions built for corporates.</p>
+      <div class="lp-actions">
+        <button class="lp-cta" onclick="document.getElementById('corp-form').scrollIntoView({behavior:'smooth'})">Get a Proposal →</button>
+        <span class="lp-link" onclick="showPage('properties')">Browse Properties</span>
+      </div>
+    </div>
+  </div>
+  <section class="section">
+    <div class="container">
+      <div class="section__header">
+        <div><p class="section__label">What We Offer</p><h2 class="section__title">Built For<br><em>Business Needs</em></h2></div>
+        <p class="section__subtitle">Flexible terms, corporate billing, and dedicated account management.</p>
+      </div>
+      <div class="benefit-grid">
+        <div class="benefit-card"><div class="benefit-card__num">01</div><div class="benefit-card__title">Team Relocation</div><p class="benefit-card__desc">Moving employees to a new city? We handle accommodation for entire teams with coordinated check-ins and billing.</p></div>
+        <div class="benefit-card"><div class="benefit-card__num">02</div><div class="benefit-card__title">Project Stays</div><p class="benefit-card__desc">Short-term accommodation for project teams. Weekly, monthly or custom durations with full servicing included.</p></div>
+        <div class="benefit-card"><div class="benefit-card__num">03</div><div class="benefit-card__title">Executive Housing</div><p class="benefit-card__desc">Premium apartments and villas for C-suite visitors. Concierge services available on request.</p></div>
+        <div class="benefit-card"><div class="benefit-card__num">04</div><div class="benefit-card__title">Corporate Billing</div><p class="benefit-card__desc">Invoice-based payments, corporate rate cards, and dedicated account managers for large accounts.</p></div>
+      </div>
+    </div>
+  </section>
+  <section class="section section--alt" id="corp-form">
+    <div class="container" style="display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center">
+      <div>
+        <p class="section__label">Corporate Enquiries</p>
+        <h2 class="section__title" style="margin-bottom:1rem">Let's <em>Talk</em></h2>
+        <p style="color:var(--muted);font-size:.95rem;line-height:1.75;max-width:400px">Tell us about your requirements and we'll put together a tailored proposal within 24 hours.</p>
+      </div>
+      <div class="lp-form">
+        <h3>Corporate Enquiry</h3>
+        <div id="corp-alert" class="form-alert"></div>
+        <label class="lp-label">Company Name *</label>
+        <input type="text" class="lp-input" id="corp-company" placeholder="Acme Corp Ltd" />
+        <label class="lp-label">Contact Name *</label>
+        <input type="text" class="lp-input" id="corp-name" placeholder="Your name" />
+        <label class="lp-label">Business Email *</label>
+        <input type="email" class="lp-input" id="corp-email" placeholder="you@company.com" />
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem">
+          <div><label class="lp-label">No. of People</label><input type="number" class="lp-input" id="corp-headcount" placeholder="10" min="1" /></div>
+          <div><label class="lp-label">Duration</label>
+            <select class="lp-input" id="corp-duration" style="height:44px"><option>1–4 weeks</option><option>1–3 months</option><option>3–6 months</option><option>6+ months</option></select>
+          </div>
+        </div>
+        <label class="lp-label">Requirements</label>
+        <textarea class="lp-input lp-textarea" id="corp-message" placeholder="Location preference, budget range, amenities needed…"></textarea>
+        <button class="btn btn--accent" onclick="submitCorporateEnquiry()" style="width:100%;border-radius:var(--radius-md)">Send Proposal Request →</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ════════════════════════════════════════════
+     SUPPORT PAGE
+════════════════════════════════════════════ -->
+<div id="page-support" class="page-view" style="padding-top:72px">
+  <section class="section">
+    <div class="container">
+      <div style="max-width:800px">
+        <p class="section__label">Help Centre</p>
+        <h2 class="section__title" style="margin-bottom:3rem">Frequently Asked<br><em>Questions</em></h2>
+        <div id="faq-list">
+          <div class="faq-item"><div class="faq-question" onclick="toggleFaq(this)">How do I book a property?<span class="faq-icon">+</span></div><div class="faq-answer">Click any property to open its full details. Choose your dates, verify availability, then click "Book Now". You'll complete payment securely via Paystack.</div></div>
+          <div class="faq-item"><div class="faq-question" onclick="toggleFaq(this)">How do I check if my dates are available?<span class="faq-icon">+</span></div><div class="faq-answer">Every property detail page shows an availability calendar with booked dates highlighted in red. You can also enter your dates directly in the booking card to get an instant availability check.</div></div>
+          <div class="faq-item"><div class="faq-question" onclick="toggleFaq(this)">What payment methods are accepted?<span class="faq-icon">+</span></div><div class="faq-answer">We accept all major debit and credit cards (Visa, Mastercard, Verve), bank transfers, and USSD payments — all powered securely by Paystack.</div></div>
+          <div class="faq-item"><div class="faq-question" onclick="toggleFaq(this)">What happens after I pay?<span class="faq-icon">+</span></div><div class="faq-answer">You receive an immediate confirmation email with stay details and check-in instructions. Your booking status updates to "Confirmed" once payment clears.</div></div>
+          <div class="faq-item"><div class="faq-question" onclick="toggleFaq(this)">Can I cancel or modify my booking?<span class="faq-icon">+</span></div><div class="faq-answer">Cancellation policies vary by property. Please contact us directly and we'll do our best to accommodate your request.</div></div>
+          <div class="faq-item"><div class="faq-question" onclick="toggleFaq(this)">I'm a property owner — how do I list?<span class="faq-icon">+</span></div><div class="faq-answer">Visit the Landlords section in the menu and fill out the enquiry form. Our team will contact you within 24 hours.</div></div>
+          <div class="faq-item"><div class="faq-question" onclick="toggleFaq(this)">Do you offer corporate accommodation?<span class="faq-icon">+</span></div><div class="faq-answer">Yes! Visit the Corporate section for team stays, executive housing, and project-based accommodation with flexible billing options.</div></div>
+        </div>
+        <div style="margin-top:3rem;padding:2rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg)">
+          <p style="font-size:.85rem;color:var(--muted);margin-bottom:.75rem">Still have questions?</p>
+          <p style="font-weight:500;margin-bottom:.5rem">Get in touch with our team</p>
+          <a id="support-contact-email" style="color:var(--accent);font-size:.9rem">hello@example.com</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ════════════════════════════════════════════
+     FOOTER
+════════════════════════════════════════════ -->
+<footer>
+  <div class="container">
+    <div class="footer__main">
+      <div>
+        <div class="footer__brand" data-config="business_name">Stays</div>
+        <p class="footer__tagline">Premium short-let properties curated for discerning travellers.</p>
+      </div>
+      <div>
+        <p class="footer__heading">Navigate</p>
+        <div class="footer__links">
+          <span onclick="showPage('home')">Home</span>
+          <span onclick="showPage('properties')">Properties</span>
+          <span onclick="showPage('support')">Support</span>
+        </div>
+      </div>
+      <div>
+        <p class="footer__heading">For Owners</p>
+        <div class="footer__links">
+          <span onclick="showPage('landlords')">List Your Property</span>
+          <span onclick="showPage('corporate')">Corporate Stays</span>
+        </div>
+      </div>
+      <div>
+        <p class="footer__heading">Contact</p>
+        <div class="footer__links">
+          <a id="footer-email" data-config-href="contact_email">hello@example.com</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span data-config="footer_text">© 2025. All rights reserved.</span>
+      <span>Made with <span class="footer__accent">♥</span> for travellers</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ════════════════════════════════════════════
+     PROPERTY DETAIL MODAL
+════════════════════════════════════════════ -->
+<div id="detail-overlay" class="detail-overlay" role="dialog" aria-modal="true">
+  <div class="detail-panel">
+
+    <!-- ── IMAGE CAROUSEL ─────────────────────── -->
+    <div class="detail-carousel" id="detail-carousel">
+      <img id="detail-img" class="detail-carousel__img" src="" alt="" />
+
+      <button class="carousel-arrow carousel-arrow--prev" id="carousel-prev" aria-label="Previous image" onclick="navigateCarousel(-1)">‹</button>
+      <button class="carousel-arrow carousel-arrow--next" id="carousel-next" aria-label="Next image"     onclick="navigateCarousel(1)">›</button>
+
+      <div class="carousel-dots" id="carousel-dots"></div>
+
+      <div class="carousel-info">
+        <span class="carousel-info__title"  id="carousel-img-title"></span>
+        <span class="carousel-info__counter" id="carousel-counter"></span>
+      </div>
+
+      <button class="detail-close" onclick="closeDetail()" aria-label="Close">✕</button>
+    </div>
+
+    <div class="detail-body">
+      <!-- Main info -->
+      <div>
+        <h2 class="detail-name" id="detail-name"></h2>
+        <div class="detail-location"><span>📍</span><span id="detail-loc"></span></div>
+        <div class="detail-desc" id="detail-desc"></div>
+
+        <div id="detail-amenities-wrap">
+          <div class="detail-section-label">Amenities</div>
+          <div class="detail-amenities" id="detail-amenities"></div>
+        </div>
+
+        <div id="detail-featured-wrap" style="display:none;margin-bottom:1.75rem">
+          <div class="detail-section-label">Also Listed On</div>
+          <div class="featured-badges" id="detail-featured"></div>
+        </div>
+
+        <!-- Availability Calendar -->
+        <div class="cal-wrapper">
+          <div class="detail-section-label">Availability Calendar</div>
+          <div class="cal-nav">
+            <button class="cal-btn" onclick="calShift(-1)">‹</button>
+            <span class="cal-month" id="cal-label"></span>
+            <button class="cal-btn" onclick="calShift(1)">›</button>
+          </div>
+          <div class="cal-grid" id="cal-grid"></div>
+          <div class="cal-legend">
+            <div class="cal-legend-item"><div class="cal-dot" style="background:var(--primary)"></div> Today</div>
+            <div class="cal-legend-item"><div class="cal-dot" style="background:rgba(239,68,68,.15);border:1px solid #fca5a5"></div> Booked</div>
+            <div class="cal-legend-item"><div class="cal-dot" style="background:var(--bg-warm);border:1px solid var(--border)"></div> Available</div>
+          </div>
+        </div>
+
+        <!-- Google Map -->
+        <div>
+          <div class="detail-section-label">Location Map</div>
+          <div class="map-wrap" id="map-wrap"></div>
+        </div>
+
+        <!-- Similar properties -->
+        <div class="similar-section" id="similar-section">
+          <div class="detail-section-label">Similar Properties</div>
+          <div class="similar-grid" id="similar-grid"></div>
+        </div>
+      </div>
+
+      <!-- Booking sidebar -->
+      <div class="booking-sidebar">
+        <div class="booking-card">
+          <div class="booking-card__price" id="sidebar-price"></div>
+          <div class="booking-card__sub">per night · <span id="sidebar-guests"></span></div>
+          <hr class="bc-divider" />
+          <div class="form-group">
+            <label for="sb-checkin">Check-in</label>
+            <input type="date" id="sb-checkin" oninput="onSidebarDateChange()" />
+          </div>
+          <div class="form-group">
+            <label for="sb-checkout">Check-out</label>
+            <input type="date" id="sb-checkout" oninput="onSidebarDateChange()" />
+          </div>
+          <div class="avail-status" id="sb-avail"></div>
+          <div class="price-breakdown" id="sb-breakdown">
+            <div class="price-row"><span id="sb-pb-label"></span><span id="sb-pb-sub"></span></div>
+            <div class="price-row total"><span>Total</span><span id="sb-pb-total"></span></div>
+          </div>
+          <button class="btn btn--accent" id="sb-book-btn" onclick="openBookingFromDetail()" style="width:100%;border-radius:var(--radius-md)">Book Now →</button>
+          <p style="margin-top:1rem;font-size:.72rem;color:var(--muted);text-align:center">Free cancellation · Secured by Paystack</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     BOOKING MODAL
+════════════════════════════════════════════ -->
+<div id="booking-overlay" class="modal-overlay" role="dialog" aria-modal="true">
+  <div class="booking-modal__content">
+    <div class="modal__header">
+      <div>
+        <h2 class="modal__title">Book Your Stay</h2>
+        <p class="modal__subtitle" id="modal-prop-name"></p>
+      </div>
+      <button class="modal__close" id="booking-close-btn" aria-label="Close booking form">✕</button>
+    </div>
+    <div class="modal__body">
+      <div class="avail-status" id="booking-avail"></div>
+      <form id="booking-form" novalidate>
+        <div class="form-row">
+          <div class="form-group"><label for="f-checkin">Check-in</label><input type="date" id="f-checkin" required /></div>
+          <div class="form-group"><label for="f-checkout">Check-out</label><input type="date" id="f-checkout" required /></div>
+        </div>
+        <div class="form-group">
+          <label for="f-guests">Guests</label>
+          <select id="f-guests">
+            <option value="1">1 guest</option><option value="2" selected>2 guests</option>
+            <option value="3">3 guests</option><option value="4">4 guests</option><option value="5">5+ guests</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label for="f-name">Full Name</label><input type="text" id="f-name" placeholder="Your name" required /></div>
+          <div class="form-group"><label for="f-email">Email</label><input type="email" id="f-email" placeholder="you@email.com" required /></div>
+        </div>
+        <div class="modal__price-card">
+          <div><div class="modal__price-label">Booking Summary</div><div class="modal__price-display" id="modal-price-display">Select dates to see total</div></div>
+          <div style="text-align:right"><div class="modal__total" id="modal-total">—</div><div class="modal__total-sub">Total incl. fees</div></div>
+        </div>
+        <button type="submit" class="btn btn--accent" id="modal-submit" style="width:100%;border-radius:var(--radius-md)">Proceed to Payment →</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- ── TOAST ─────────────────────────────────────────────────── -->
+<div id="toast" class="toast" role="alert" aria-live="polite"></div>
+
+<!-- ── SCRIPTS ────────────────────────────────────────────────── -->
+<script type="module" src="/static/js/config-injector.js"></script>
+
+<script>
+/* ================================================================
+   MAIN APPLICATION SCRIPT
+================================================================ */
+
+let allProps    = [];
+let currentProp = null;
+let siteConfig  = {};
+let calYear  = new Date().getFullYear();
+let calMonth = new Date().getMonth();
+let bookedRanges = [];
+let availTimer   = null;
+
+// ── Carousel state ───────────────────────────────
+let detailImages  = [];   // [{title, url}]
+let carouselIndex = 0;
+
+// ── Currency formatter ────────────────────────────
+const CURRENCY_SYMBOLS = { NGN:'₦', USD:'$', EUR:'€', GBP:'£', GHS:'₵', KES:'KSh', ZAR:'R' };
+function fmtPrice(amount, currency = 'NGN') {
+  const sym = CURRENCY_SYMBOLS[currency] || (currency + ' ');
+  return sym + Number(amount).toLocaleString();
+}
+
+// ── Normalise property images ─────────────────────
+function getPropImages(p) {
+  if (p.images && p.images.length) return p.images;
+  if (p.image_url) return [{ title: '', url: p.image_url }];
+  return [];
+}
+
+// ── Page navigation ───────────────────────────────
+function showPage(page) {
+  document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.navbar__nav a[id^="nav-"]').forEach(a => a.classList.remove('active'));
+  const el = document.getElementById(`page-${page}`);
+  if (el) { el.classList.add('active'); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  const nav = document.getElementById(`nav-${page}`);
+  if (nav) nav.classList.add('active');
+  if (page === 'properties') renderProperties(allProps);
+  if (page === 'home' && document.getElementById('featured-grid').querySelectorAll('.property-card').length === 0) renderFeatured();
+}
+
+// ── Load config ───────────────────────────────────
+async function loadConfig() {
+  try {
+    const res = await fetch('/config');
+    siteConfig = await res.json();
+    document.querySelectorAll('[data-config]').forEach(el => {
+      const k = el.getAttribute('data-config');
+      if (siteConfig[k]) el.textContent = siteConfig[k];
+    });
+    document.querySelectorAll('[data-config-href]').forEach(el => {
+      const k = el.getAttribute('data-config-href');
+      if (siteConfig[k]) { el.href = `mailto:${siteConfig[k]}`; el.textContent = siteConfig[k]; }
+    });
+    const supEmail = document.getElementById('support-contact-email');
+    if (supEmail && siteConfig.contact_email) { supEmail.href = `mailto:${siteConfig.contact_email}`; supEmail.textContent = siteConfig.contact_email; }
+    
+    // ── NEW: Apply Hero Background Settings ──
+    const heroBgEl = document.getElementById('hero-bg-container');
+    if (heroBgEl) {
+      const type = siteConfig.hero_bg_type || 'animated-gradient';
+      const mediaStyle = 'width: 100%; height: 100%; object-fit: cover; opacity: 0.45;'; // opacity ensures white text remains readable
+
+      if (type === 'solid-color') {
+        heroBgEl.style.background = siteConfig.hero_bg_color || '#0f1923';
+        heroBgEl.style.animation = 'none'; // Stop the CSS pulse animation
+        heroBgEl.innerHTML = '';
+      } 
+      else if (type === 'image' && siteConfig.hero_bg_media_url) {
+        heroBgEl.style.background = 'var(--primary)';
+        heroBgEl.style.animation = 'none';
+        heroBgEl.innerHTML = `<img src="${siteConfig.hero_bg_media_url}" style="${mediaStyle}" alt="Hero Background">`;
+      } 
+      else if (type === 'video' && siteConfig.hero_bg_media_url) {
+        heroBgEl.style.background = 'var(--primary)';
+        heroBgEl.style.animation = 'none';
+        heroBgEl.innerHTML = `<video src="${siteConfig.hero_bg_media_url}" autoplay loop muted playsinline style="${mediaStyle}"></video>`;
+      } 
+      else {
+        // Default: Keep the animated gradient (CSS handles this by default, just clear any injected HTML)
+        heroBgEl.innerHTML = '';
+      }
+    }
+
+    document.title = siteConfig.business_name || 'Booking Site';
+  } catch (e) { console.warn('Config load failed', e); }
+}
+
+// ── Load all properties ───────────────────────────
+async function loadAllProperties() {
+  try {
+    const res = await fetch('/properties');
+    allProps = await res.json();
+    const stat = document.getElementById('stat-properties');
+    if (stat) stat.textContent = allProps.length + '+';
+    renderFeatured();
+    if (document.getElementById('page-properties').classList.contains('active')) renderProperties(allProps);
+  } catch {
+    document.getElementById('featured-grid').innerHTML = `<div class="empty-state"><div class="empty-state__icon">🏚️</div><div>Could not load properties.</div></div>`;
+    document.getElementById('properties-grid').innerHTML = `<div class="empty-state"><div class="empty-state__icon">🏚️</div><div>Could not load properties.</div></div>`;
+  }
+}
+
+function renderFeatured() {
+  const grid = document.getElementById('featured-grid');
+  if (!grid) return;
+  const items = allProps.slice(0, 3);
+  if (!items.length) { grid.innerHTML = `<div class="empty-state"><div class="empty-state__icon">🔍</div><div>No properties listed yet.</div></div>`; return; }
+  grid.innerHTML = '';
+  items.forEach((p, i) => grid.appendChild(buildCard(p, i)));
+}
+
+function renderProperties(props) {
+  const grid = document.getElementById('properties-grid');
+  if (!grid) return;
+  if (!props.length) { grid.innerHTML = `<div class="empty-state"><div class="empty-state__icon">🔍</div><div>No properties match your search.</div></div>`; return; }
+  grid.innerHTML = '';
+  props.forEach((p, i) => grid.appendChild(buildCard(p, i)));
+}
+
+function buildCard(p, i = 0) {
+  const card = document.createElement('article');
+  card.className = 'property-card';
+  card.style.animationDelay = `${i * 80}ms`;
+  const currency = p.currency || 'NGN';
+  const price = fmtPrice(p.price_per_night, currency);
+  const ams = (p.amenities || []).slice(0, 3).map(a => `<span class="amenity-tag">${a}</span>`).join('');
+  const imgs = getPropImages(p);
+  const imgSrc = imgs.length ? imgs[0].url : 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 280%22%3E%3Crect width=%22400%22 height=%22280%22 fill=%22%23d1d5db%22/%3E%3C/svg%3E';
+  // Strip HTML tags for card preview
+  const descText = p.description ? p.description.replace(/<[^>]*>/g, '') : '';
+  card.innerHTML = `
+    <div class="property-card__image-wrap">
+      <img class="property-card__image" src="${imgSrc}" alt="${p.name}" loading="lazy" />
+      <div class="property-card__badges">
+        ${(p.featured_on?.length) ? `<span class="property-card__badge">Also on ${p.featured_on[0]}</span>` : ''}
+        ${(p.amenities || []).includes('Pool') ? '<span class="property-card__badge property-card__badge--accent">Pool</span>' : ''}
+        ${imgs.length > 1 ? `<span class="property-card__badge">📷 ${imgs.length}</span>` : ''}
+      </div>
+      ${p.location ? `<div class="property-card__location">${p.location}</div>` : ''}
+    </div>
+    <div class="property-card__body">
+      <div class="property-card__meta"><span class="property-card__type">Short Let</span></div>
+      <h3 class="property-card__name">${p.name}</h3>
+      ${descText ? `<p class="property-card__desc">${descText}</p>` : ''}
+      ${ams ? `<div class="property-card__amenities">${ams}</div>` : ''}
+      <div class="property-card__footer">
+        <div class="property-card__price"><span class="property-card__price-amount">${price}</span><span class="property-card__price-unit">/night</span></div>
+        <span class="property-card__guests">👤 Up to ${p.max_guests || 2}</span>
+      </div>
+    </div>`;
+  card.addEventListener('click', () => openDetail(p));
+  requestAnimationFrame(() => card.classList.add('animate-in'));
+  return card;
+}
+
+function filterProperties() {
+  const loc  = document.getElementById('filter-location').value.toLowerCase();
+  const sort = document.getElementById('filter-sort').value;
+  let filtered = allProps.filter(p => !loc || (p.location || '').toLowerCase().includes(loc) || p.name.toLowerCase().includes(loc));
+  if (sort === 'asc') filtered.sort((a, b) => a.price_per_night - b.price_per_night);
+  if (sort === 'desc') filtered.sort((a, b) => b.price_per_night - a.price_per_night);
+  renderProperties(filtered);
+}
+
+/* ═══════════════════════════════════════════════
+   PROPERTY DETAIL + CAROUSEL
+═══════════════════════════════════════════════ */
+async function openDetail(prop) {
+  currentProp = prop;
+  const currency = prop.currency || 'NGN';
+
+  document.getElementById('detail-name').textContent = prop.name;
+  document.getElementById('detail-loc').textContent  = prop.location || 'Location not specified';
+
+  // Render formatted description via innerHTML
+  const descEl = document.getElementById('detail-desc');
+  if (prop.description) {
+    descEl.innerHTML = prop.description;
+  } else {
+    descEl.textContent = 'No description available.';
+  }
+
+  document.getElementById('sidebar-price').textContent  = fmtPrice(prop.price_per_night, currency);
+  document.getElementById('sidebar-guests').textContent = `up to ${prop.max_guests || 2} guests`;
+
+  // Amenities
+  const amenEl = document.getElementById('detail-amenities');
+  if (prop.amenities?.length) {
+    amenEl.innerHTML = prop.amenities.map(a => `<span class="detail-amenity">${a}</span>`).join('');
+    document.getElementById('detail-amenities-wrap').style.display = '';
+  } else {
+    document.getElementById('detail-amenities-wrap').style.display = 'none';
+  }
+
+  // Featured on
+  const featWrap = document.getElementById('detail-featured-wrap');
+  if (prop.featured_on?.length) {
+    document.getElementById('detail-featured').innerHTML = prop.featured_on.map(f => `<span class="featured-badge">${f}</span>`).join('');
+    featWrap.style.display = '';
+  } else {
+    featWrap.style.display = 'none';
+  }
+
+  // Reset sidebar form
+  const today = new Date().toISOString().split('T')[0];
+  const ci = document.getElementById('sb-checkin');
+  const co = document.getElementById('sb-checkout');
+  ci.value = ''; co.value = '';
+  ci.min = today; co.min = today;
+  document.getElementById('sb-avail').className = 'avail-status';
+  document.getElementById('sb-breakdown').classList.remove('show');
+
+  // Initialise carousel
+  detailImages  = getPropImages(prop);
+  carouselIndex = 0;
+  renderCarousel();
+
+  // Open overlay
+  document.getElementById('detail-overlay').classList.add('is-open');
+  document.body.style.overflow = 'hidden';
+
+  // Load async data
+  fetchAndRenderCalendar(prop.id);
+  renderMap(prop.location);
+  renderSimilar(prop);
+}
+
+function closeDetail() {
+  document.getElementById('detail-overlay').classList.remove('is-open');
+  document.body.style.overflow = '';
+  currentProp = null;
+}
+document.getElementById('detail-overlay').addEventListener('click', e => { if (e.target === e.currentTarget) closeDetail(); });
+
+/* ── Carousel rendering ─────────────────────── */
+function renderCarousel() {
+  const imgEl      = document.getElementById('detail-img');
+  const prevBtn    = document.getElementById('carousel-prev');
+  const nextBtn    = document.getElementById('carousel-next');
+  const dotsEl     = document.getElementById('carousel-dots');
+  const titleEl    = document.getElementById('carousel-img-title');
+  const counterEl  = document.getElementById('carousel-counter');
+  const total      = detailImages.length;
+
+  if (!total) {
+    imgEl.src = '';
+    imgEl.alt = '';
+    prevBtn.style.display = 'none';
+    nextBtn.style.display = 'none';
+    dotsEl.innerHTML = '';
+    titleEl.textContent  = '';
+    counterEl.textContent = '';
+    return;
+  }
+
+  const current = detailImages[carouselIndex];
+  imgEl.src = current.url || '';
+  imgEl.alt = current.title || '';
+
+  // Show/hide arrows (hide entirely if only 1 image)
+  if (total <= 1) {
+    prevBtn.style.display = 'none';
+    nextBtn.style.display = 'none';
+  } else {
+    prevBtn.style.display = '';
+    nextBtn.style.display = '';
+    prevBtn.classList.toggle('is-edge', carouselIndex === 0);
+    nextBtn.classList.toggle('is-edge', carouselIndex === total - 1);
+  }
+
+  // Dots (show for 2–12 images)
+  if (total >= 2 && total <= 12) {
+    dotsEl.innerHTML = detailImages.map((_, i) =>
+      `<button class="carousel-dot${i === carouselIndex ? ' active' : ''}" onclick="goToCarouselImage(${i})" aria-label="Image ${i+1}"></button>`
+    ).join('');
+  } else {
+    dotsEl.innerHTML = '';
+  }
+
+  // Info overlay
+  titleEl.textContent   = current.title || '';
+  counterEl.textContent = total > 1 ? `${carouselIndex + 1} / ${total}` : '';
+}
+
+/* ── Smooth Image Transition Logic ──────────────── */
+function changeCarouselImage(nextIndex) {
+  if (nextIndex === carouselIndex) return;
+  const imgEl = document.getElementById('detail-img');
+  
+  
+  imgEl.classList.add('is-fading');
+  setTimeout(() => {
+    carouselIndex = nextIndex;
+    const current = detailImages[carouselIndex];
+    const tempImg = new Image();
+    
+    tempImg.onload = () => {
+      renderCarousel(); 
+      imgEl.classList.remove('is-fading'); 
+    };
+    
+    tempImg.onerror = () => {
+      renderCarousel(); 
+      imgEl.classList.remove('is-fading');
+    };
+    
+    tempImg.src = current.url || '';
+  }, 200);
+}
+
+function navigateCarousel(delta) {
+  const total = detailImages.length;
+  if (total <= 1) return;
+  const next = carouselIndex + delta;
+  
+  
+  if (next >= 0 && next < total) {
+    changeCarouselImage(next);
+  }
+}
+
+function goToCarouselImage(index) {
+  changeCarouselImage(index);
+}
+
+// Keyboard navigation for carousel
+// Keyboard navigation for carousel
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('detail-overlay').classList.contains('is-open')) return;
+  if (e.key === 'ArrowLeft')  navigateCarousel(-1);
+  if (e.key === 'ArrowRight') navigateCarousel(1);
+  if (e.key === 'Escape')     closeDetail();
+});
+
+/* ── Mobile Touch/Swipe Support ─────────────────── */
+let touchStartX = 0;
+let touchEndX = 0;
+const carouselEl = document.getElementById('detail-carousel');
+
+carouselEl.addEventListener('touchstart', e => {
+  touchStartX = e.changedTouches[0].screenX;
+}, { passive: true });
+
+carouselEl.addEventListener('touchend', e => {
+  touchEndX = e.changedTouches[0].screenX;
+  handleSwipe();
+}, { passive: true });
+
+function handleSwipe() {
+  const swipeThreshold = 40; // Minimum distance to register a swipe
+  if (touchEndX < touchStartX - swipeThreshold) {
+    navigateCarousel(1); // Swiped left, go to next
+  }
+  if (touchEndX > touchStartX + swipeThreshold) {
+    navigateCarousel(-1); // Swiped right, go to previous
+  }
+}
+
+/* ── Availability Calendar ─────────────────── */
+async function fetchAndRenderCalendar(propId) {
+  bookedRanges = [];
+  calYear  = new Date().getFullYear();
+  calMonth = new Date().getMonth();
+  try {
+    const res = await fetch(`/properties/${propId}/booked-dates`);
+    if (res.ok) bookedRanges = await res.json();
+  } catch {}
+  renderCal();
+}
+
+function calShift(delta) {
+  calMonth += delta;
+  if (calMonth > 11) { calMonth = 0; calYear++; }
+  if (calMonth < 0)  { calMonth = 11; calYear--; }
+  renderCal();
+}
+
+function renderCal() {
+  const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const DAYS   = ['Su','Mo','Tu','We','Th','Fr','Sa'];
+  document.getElementById('cal-label').textContent = `${MONTHS[calMonth]} ${calYear}`;
+
+  const today = new Date(); today.setHours(0,0,0,0);
+  const booked = new Set();
+  bookedRanges.forEach(r => {
+    for (let d = new Date(r.check_in); d < new Date(r.check_out); d.setDate(d.getDate() + 1))
+      booked.add(d.toISOString().split('T')[0]);
+  });
+
+  let html = DAYS.map(d => `<div class="cal-head">${d}</div>`).join('');
+  const firstDay  = new Date(calYear, calMonth, 1).getDay();
+  const daysInMth = new Date(calYear, calMonth + 1, 0).getDate();
+  for (let i = 0; i < firstDay; i++) html += '<div></div>';
+  for (let d = 1; d <= daysInMth; d++) {
+    const dt = new Date(calYear, calMonth, d); dt.setHours(0,0,0,0);
+    const ds = dt.toISOString().split('T')[0];
+    let cls = 'cal-day';
+    if (dt.getTime() === today.getTime()) cls += ' today';
+    else if (dt < today) cls += ' past';
+    else if (booked.has(ds)) cls += ' booked';
+    else cls += ' avail';
+    html += `<div class="${cls}" title="${ds}">${d}</div>`;
+  }
+  document.getElementById('cal-grid').innerHTML = html;
+}
+
+/* ── Sidebar date change → availability check ── */
+async function onSidebarDateChange() {
+  if (!currentProp) return;
+  const ci = document.getElementById('sb-checkin').value;
+  const co = document.getElementById('sb-checkout').value;
+  const statusEl = document.getElementById('sb-avail');
+  const bdEl     = document.getElementById('sb-breakdown');
+  if (ci) document.getElementById('sb-checkout').min = ci;
+  if (!ci || !co) return;
+  if (ci >= co) {
+    statusEl.className = 'avail-status unavailable show';
+    statusEl.textContent = '⚠ Check-out must be after check-in.';
+    bdEl.classList.remove('show');
+    return;
+  }
+  const nights   = Math.round((new Date(co) - new Date(ci)) / 86400000);
+  const currency = currentProp.currency || 'NGN';
+  const total    = currentProp.price_per_night * nights;
+  document.getElementById('sb-pb-label').textContent = `${fmtPrice(currentProp.price_per_night, currency)} × ${nights} night${nights !== 1 ? 's' : ''}`;
+  document.getElementById('sb-pb-sub').textContent   = fmtPrice(total, currency);
+  document.getElementById('sb-pb-total').textContent = fmtPrice(total, currency);
+  statusEl.className = 'avail-status checking show';
+  statusEl.textContent = '⏳ Checking availability…';
+  clearTimeout(availTimer);
+  availTimer = setTimeout(async () => {
+    try {
+      const res = await fetch(`/bookings/check-availability?property_id=${currentProp.id}&check_in=${ci}&check_out=${co}`);
+      if (res.ok) {
+        const { available } = await res.json();
+        if (available) {
+          statusEl.className = 'avail-status available show';
+          statusEl.textContent = '✓ Available for your dates!';
+          bdEl.classList.add('show');
+        } else {
+          statusEl.className = 'avail-status unavailable show';
+          statusEl.textContent = '✗ These dates are booked. Please choose different dates.';
+          bdEl.classList.remove('show');
+        }
+        return;
+      }
+    } catch {}
+    statusEl.className = 'avail-status available show';
+    statusEl.textContent = '✓ Likely available — confirm on booking step';
+    bdEl.classList.add('show');
+  }, 600);
+}
+
+/* ── Google Map ─────────────────────────────── */
+function renderMap(location) {
+  const wrap = document.getElementById('map-wrap');
+  if (!location) { wrap.innerHTML = '<div class="map-placeholder"><div style="font-size:2rem;opacity:.4">📍</div><span>Location not specified</span></div>'; return; }
+  wrap.innerHTML = `<iframe src="https://maps.google.com/maps?q=${encodeURIComponent(location)}&output=embed&z=15&hl=en" loading="lazy" title="Property location" allowfullscreen></iframe>`;
+}
+
+/* ── Similar Properties ─────────────────────── */
+function renderSimilar(prop) {
+  const section = document.getElementById('similar-section');
+  const grid    = document.getElementById('similar-grid');
+  const similar = allProps.filter(p => {
+    if (p.id === prop.id) return false;
+    const city      = (prop.location || '').split(',')[0].toLowerCase();
+    const locMatch  = city && (p.location || '').toLowerCase().includes(city);
+    const priceMatch = prop.price_per_night && Math.abs(p.price_per_night - prop.price_per_night) / prop.price_per_night < 0.4;
+    return locMatch || priceMatch;
+  }).slice(0, 3);
+  if (!similar.length) { section.style.display = 'none'; return; }
+  section.style.display = '';
+  grid.innerHTML = '';
+  similar.forEach(p => {
+    const currency = p.currency || 'NGN';
+    const imgs = getPropImages(p);
+    const d = document.createElement('div');
+    d.className = 'similar-card';
+    d.innerHTML = `
+      <div class="similar-card__img"><img src="${imgs.length ? imgs[0].url : ''}" alt="${p.name}" loading="lazy" /></div>
+      <div class="similar-card__info">
+        <div class="similar-card__name">${p.name}</div>
+        <div class="similar-card__price">${fmtPrice(p.price_per_night, currency)}/night${p.location ? ' · ' + p.location : ''}</div>
+      </div>`;
+    d.addEventListener('click', () => openDetail(p));
+    grid.appendChild(d);
+  });
+}
+
+/* ── Open booking from detail sidebar ────────── */
+function openBookingFromDetail() {
+  if (!currentProp) return;
+  const ci = document.getElementById('sb-checkin').value;
+  const co = document.getElementById('sb-checkout').value;
+  document.getElementById('modal-prop-name').textContent = currentProp.name;
+  if (ci) document.getElementById('f-checkin').value = ci;
+  if (co) document.getElementById('f-checkout').value = co;
+  if (ci && co && ci < co) {
+    const nights   = Math.round((new Date(co) - new Date(ci)) / 86400000);
+    const currency = currentProp.currency || 'NGN';
+    const total    = currentProp.price_per_night * nights;
+    document.getElementById('modal-price-display').textContent = `${fmtPrice(currentProp.price_per_night, currency)} × ${nights} night${nights !== 1 ? 's' : ''}`;
+    document.getElementById('modal-total').textContent = fmtPrice(total, currency);
+  } else {
+    document.getElementById('modal-price-display').textContent = 'Select dates to see total';
+    document.getElementById('modal-total').textContent = '—';
+  }
+  closeDetail();
+  document.getElementById('booking-overlay').classList.add('is-open');
+  document.body.style.overflow = 'hidden';
+}
+
+/* ── Booking modal close ─────────────────────── */
+function closeBookingModal() {
+  document.getElementById('booking-overlay').classList.remove('is-open');
+  document.body.style.overflow = '';
+}
+document.getElementById('booking-close-btn').addEventListener('click', closeBookingModal);
+document.getElementById('booking-overlay').addEventListener('click', e => { if (e.target === e.currentTarget) closeBookingModal(); });
+
+['f-checkin','f-checkout'].forEach(id => {
+  document.getElementById(id).addEventListener('input', () => {
+    if (!currentProp) return;
+    const ci = document.getElementById('f-checkin').value;
+    const co = document.getElementById('f-checkout').value;
+    if (!ci || !co || ci >= co) return;
+    const nights   = Math.round((new Date(co) - new Date(ci)) / 86400000);
+    const currency = currentProp.currency || 'NGN';
+    const total    = currentProp.price_per_night * nights;
+    document.getElementById('modal-price-display').textContent = `${fmtPrice(currentProp.price_per_night, currency)} × ${nights} night${nights !== 1 ? 's' : ''}`;
+    document.getElementById('modal-total').textContent = fmtPrice(total, currency);
+    if (id === 'f-checkin') document.getElementById('f-checkout').min = ci;
+  });
+});
+
+/* ── Booking form submit ─────────────────────── */
+document.getElementById('booking-form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  if (!currentProp) return;
+  const ci     = document.getElementById('f-checkin').value;
+  const co     = document.getElementById('f-checkout').value;
+  const guests = parseInt(document.getElementById('f-guests').value);
+  const name   = document.getElementById('f-name').value.trim();
+  const email  = document.getElementById('f-email').value.trim();
+  if (!ci || !co || !name || !email) { showToast('Please fill in all required fields.', 'warn'); return; }
+  if (ci >= co) { showToast('Check-out must be after check-in.', 'warn'); return; }
+  if (guests > (currentProp.max_guests || 99)) { showToast(`Max ${currentProp.max_guests} guests for this property.`, 'warn'); return; }
+  const nights   = Math.round((new Date(co) - new Date(ci)) / 86400000);
+  const total    = currentProp.price_per_night * nights;
+  const currency = currentProp.currency || 'NGN';
+  const availEl  = document.getElementById('booking-avail');
+  availEl.className = 'avail-status checking show';
+  availEl.textContent = '⏳ Verifying availability…';
+  try {
+    const ar = await fetch(`/bookings/check-availability?property_id=${currentProp.id}&check_in=${ci}&check_out=${co}`);
+    if (ar.ok) {
+      const { available } = await ar.json();
+      if (!available) {
+        availEl.className = 'avail-status unavailable show';
+        availEl.textContent = '✗ These dates are no longer available. Please choose different dates.';
+        return;
+      }
+    }
+  } catch {}
+  availEl.className = 'avail-status';
+  const btn = document.getElementById('modal-submit');
+  btn.textContent = 'Initiating payment…'; btn.disabled = true;
+  try {
+    const paystackKey = await getPaystackPublicKey();
+    const handler = PaystackPop.setup({
+      key: paystackKey, email,
+      amount: Math.round(total * 100),
+      currency: currency === 'NGN' ? 'NGN' : 'GHS',
+      ref: `bk_${Date.now()}_${Math.random().toString(36).slice(2,7)}`,
+      metadata: {
+        custom_fields: [
+          { display_name: 'Property',  variable_name: 'property',  value: currentProp.name },
+          { display_name: 'Check-in',  variable_name: 'check_in',  value: ci },
+          { display_name: 'Check-out', variable_name: 'check_out', value: co },
+          { display_name: 'Guests',    variable_name: 'guests',    value: String(guests) },
+        ]
+      },
+      onSuccess: async tx => {
+        btn.textContent = 'Saving booking…';
+        try {
+          const res = await fetch('/bookings', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ property_id: currentProp.id, guest_name: name, guest_email: email, check_in: ci, check_out: co, num_guests: guests, total_price: total, payment_ref: tx.reference }),
+          });
+          if (!res.ok) throw new Error();
+          closeBookingModal();
+          const banner = document.getElementById('success-banner');
+          if (banner) { banner.textContent = `🎉 Booking confirmed! A confirmation has been sent to ${email}.`; banner.hidden = false; }
+          showPage('home');
+          document.getElementById('booking-form').reset();
+          document.getElementById('modal-price-display').textContent = 'Select dates to see total';
+          document.getElementById('modal-total').textContent = '—';
+        } catch {
+          showToast(`Payment received! Ref: ${tx.reference}. Contact us if you don't receive a confirmation.`, 'warn');
+        }
+      },
+      onCancel: () => showToast('Payment cancelled.', 'warn'),
+    });
+    handler.openIframe();
+  } catch {
+    showToast('Payment initiation failed. Please try again.', 'error');
+  } finally {
+    btn.textContent = 'Proceed to Payment →'; btn.disabled = false;
+  }
+});
+
+async function getPaystackPublicKey() {
+  try {
+    const r = await fetch('/config/paystack-key');
+    const d = await r.json();
+    return d.public_key || '';
+  } catch { return ''; }
+}
+
+/* ── Landlord enquiry ────────────────────────── */
+function submitLandlordEnquiry() {
+  const alertEl = document.getElementById('ll-alert');
+  const name  = document.getElementById('ll-name').value.trim();
+  const email = document.getElementById('ll-email').value.trim();
+  const loc   = document.getElementById('ll-location').value.trim();
+  if (!name || !email || !loc) {
+    alertEl.style.cssText = 'display:block;background:#fef2f2;color:#991b1b;border:1px solid #fca5a5;padding:.75rem 1rem;border-radius:8px;';
+    alertEl.textContent = '⚠ Please fill in all required fields.'; return;
+  }
+  const body = `Name: ${name}\nEmail: ${email}\nPhone: ${document.getElementById('ll-phone').value}\nLocation: ${loc}\n\n${document.getElementById('ll-message').value}`;
+  window.location.href = `mailto:${siteConfig.contact_email || 'hello@example.com'}?subject=Landlord Enquiry — ${name}&body=${encodeURIComponent(body)}`;
+}
+
+/* ── Corporate enquiry ───────────────────────── */
+function submitCorporateEnquiry() {
+  const alertEl = document.getElementById('corp-alert');
+  const company = document.getElementById('corp-company').value.trim();
+  const name    = document.getElementById('corp-name').value.trim();
+  const email   = document.getElementById('corp-email').value.trim();
+  if (!company || !name || !email) {
+    alertEl.style.cssText = 'display:block;background:#fef2f2;color:#991b1b;border:1px solid #fca5a5;padding:.75rem 1rem;border-radius:8px;';
+    alertEl.textContent = '⚠ Please fill in all required fields.'; return;
+  }
+  const body = `Company: ${company}\nContact: ${name}\nEmail: ${email}\nHeadcount: ${document.getElementById('corp-headcount').value}\nDuration: ${document.getElementById('corp-duration').value}\n\n${document.getElementById('corp-message').value}`;
+  window.location.href = `mailto:${siteConfig.contact_email || 'hello@example.com'}?subject=Corporate Enquiry — ${company}&body=${encodeURIComponent(body)}`;
+}
+
+/* ── FAQ accordion ───────────────────────────── */
+function toggleFaq(questionEl) { questionEl.closest('.faq-item').classList.toggle('open'); }
+
+/* ── Toast ───────────────────────────────────── */
+let toastTimer;
+function showToast(msg, type = '') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = `toast show${type ? ' ' + type : ''}`;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.className = 'toast', 4500);
+}
+
+/* ── Navbar scroll effect ─────────────────────── */
+window.addEventListener('scroll', () => {
+  document.getElementById('main-nav').classList.toggle('scrolled', window.scrollY > 60);
+}, { passive: true });
+
+/* ── Mobile CTA visibility ───────────────────── */
+(function() {
+  const mq = window.matchMedia('(max-width: 900px)');
+  const toggle = () => { document.getElementById('mobile-cta').style.display = mq.matches ? 'inline-flex' : 'none'; };
+  mq.addEventListener('change', toggle); toggle();
+})();
+
+/* ── Init ─────────────────────────────────────── */
+(async function init() {
+  await loadConfig();
+  await loadAllProperties();
+})();
+</script>
+</body>
+</html>
