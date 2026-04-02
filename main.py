@@ -14,6 +14,10 @@ Structure:
         properties.py
         bookings.py
         admin.py
+        booking_requests.py
+    services/
+        __init__.py
+        email.py
     static/
         index.html
         admin.html
@@ -30,12 +34,13 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 
 from config import settings
-from routers import config, properties, bookings, admin
+from routers import config, properties, bookings, admin, booking_requests, chat
+
 
 app = FastAPI(
     title=settings.app_name,
     version="1.0.0",
-    docs_url="/api/docs" if settings.debug else None,   # Hide Swagger in prod
+    docs_url="/api/docs" if settings.debug else None,
     redoc_url=None,
 )
 
@@ -53,6 +58,8 @@ app.include_router(config.router)
 app.include_router(properties.router)
 app.include_router(bookings.router)
 app.include_router(admin.router)
+app.include_router(booking_requests.router)
+app.include_router(chat.router)
 
 # ── Static files ──────────────────────────────────────────────
 app.mount("/static", StaticFiles(directory="static"), name="static")

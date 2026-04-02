@@ -33,6 +33,12 @@
       --error:         #991b1b;
       --error-bg:      #fef2f2;
       --error-border:  #fca5a5;
+      --promo:         #7c3aed;
+      --promo-bg:      #f5f3ff;
+      --promo-border:  #c4b5fd;
+      --warn:          #92400e;
+      --warn-bg:       #fffbeb;
+      --warn-border:   #fde68a;
       --sidebar-w:     260px;
       --radius:        10px;
       --radius-lg:     16px;
@@ -52,37 +58,22 @@
       min-height: 100vh; position: relative; overflow: hidden;
       background: var(--primary);
     }
-    .login-bg {
-      position: absolute; inset: 0; pointer-events: none;
-      background:
-        radial-gradient(ellipse 70% 60% at 80% 30%, rgba(201,168,76,0.07) 0%, transparent 60%),
-        radial-gradient(ellipse 60% 80% at 10% 80%, rgba(30,52,72,0.6) 0%, transparent 70%);
-    }
-    .login-bg-grid {
-      position: absolute; inset: 0; opacity: 0.03;
-      background-image:
-        linear-gradient(rgba(255,255,255,1) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px);
-      background-size: 60px 60px;
-    }
-    .login-wrap {
-      position: relative; z-index: 2;
-      display: grid; grid-template-columns: 1fr 1fr;
-      width: min(900px, 95vw); border-radius: var(--radius-xl);
-      overflow: hidden; box-shadow: var(--shadow-lg);
-    }
-    .login-panel {
-      background: var(--surface); padding: 3.5rem;
-      display: flex; flex-direction: column; justify-content: center;
-    }
+    .login-bg { position: absolute; inset: 0; pointer-events: none;
+      background: radial-gradient(ellipse 70% 60% at 80% 30%, rgba(201,168,76,0.07) 0%, transparent 60%),
+                  radial-gradient(ellipse 60% 80% at 10% 80%, rgba(30,52,72,0.6) 0%, transparent 70%); }
+    .login-bg-grid { position: absolute; inset: 0; opacity: 0.03;
+      background-image: linear-gradient(rgba(255,255,255,1) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px);
+      background-size: 60px 60px; }
+    .login-wrap { position: relative; z-index: 2; display: grid; grid-template-columns: 1fr 1fr;
+      width: min(900px, 95vw); border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow-lg); }
+    .login-panel { background: var(--surface); padding: 3.5rem;
+      display: flex; flex-direction: column; justify-content: center; }
     .login-brand { font-family: var(--font-d); font-size: 1.6rem; font-weight: 500; color: var(--primary); margin-bottom: 0.4rem; }
     .login-tagline { font-size: 0.875rem; color: var(--muted); margin-bottom: 2.5rem; font-weight: 300; }
     .login-panel h2 { font-size: 1.1rem; font-weight: 600; color: var(--text); margin-bottom: 1.75rem; }
-    .login-side {
-      background: var(--primary-mid); padding: 3.5rem;
-      display: flex; flex-direction: column; justify-content: center;
-      position: relative; overflow: hidden;
-    }
+    .login-side { background: var(--primary-mid); padding: 3.5rem;
+      display: flex; flex-direction: column; justify-content: center; position: relative; overflow: hidden; }
     .login-side::before { content: ''; position: absolute; top: -80px; right: -80px; width: 300px; height: 300px; border-radius: 50%; background: rgba(201,168,76,0.06); }
     .login-side__title { font-family: var(--font-d); font-size: 2.2rem; font-weight: 500; color: #fff; line-height: 1.2; margin-bottom: 1.5rem; }
     .login-side__title em { font-style: italic; color: var(--accent); }
@@ -93,22 +84,20 @@
 
     /* ── DASHBOARD ──────────────────────────────── */
     .dashboard { display: none; }
-    .sidebar {
-      position: fixed; top: 0; left: 0; bottom: 0; width: var(--sidebar-w);
-      background: var(--primary); display: flex; flex-direction: column;
-      z-index: 100; box-shadow: 2px 0 20px rgba(15,25,35,0.15);
-    }
+    .sidebar { position: fixed; top: 0; left: 0; bottom: 0; width: var(--sidebar-w);
+      background: var(--primary); display: flex; flex-direction: column; z-index: 100; box-shadow: 2px 0 20px rgba(15,25,35,0.15); }
     .sidebar__top { padding: 1.75rem 1.5rem 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.07); }
     .sidebar__brand { font-family: var(--font-d); font-size: 1.35rem; font-weight: 500; color: #fff; letter-spacing: 0.01em; }
     .sidebar__sub { font-size: 0.7rem; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 0.12em; margin-top: 0.2rem; }
     .sidebar__section-label { font-size: 0.64rem; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255,255,255,0.25); padding: 1.25rem 1.5rem 0.5rem; }
     .sidebar__nav { padding: 0 0.75rem; flex: 1; }
-    .nav-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.7rem 0.85rem; border-radius: var(--radius); cursor: pointer; font-size: 0.875rem; color: rgba(255,255,255,0.55); margin-bottom: 0.15rem; transition: color 0.2s, background 0.2s; user-select: none; }
+    .nav-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.7rem 0.85rem; border-radius: var(--radius); cursor: pointer; font-size: 0.875rem; color: rgba(255,255,255,0.55); margin-bottom: 0.15rem; transition: color 0.2s, background 0.2s; user-select: none; position: relative; }
     .nav-item__icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.06); font-size: 0.9rem; flex-shrink: 0; transition: background 0.2s; }
     .nav-item:hover { color: rgba(255,255,255,0.85); }
     .nav-item:hover .nav-item__icon { background: rgba(255,255,255,0.1); }
     .nav-item.active { color: #fff; }
     .nav-item.active .nav-item__icon { background: var(--accent); }
+    .nav-badge { background: var(--accent); color: var(--primary); font-size: 0.65rem; font-weight: 700; padding: 0.15rem 0.5rem; border-radius: 999px; margin-left: auto; }
     .sidebar__footer { padding: 1rem 0.75rem 1.5rem; border-top: 1px solid rgba(255,255,255,0.07); }
     .sidebar__logout { width: 100%; display: flex; align-items: center; gap: 0.75rem; padding: 0.7rem 0.85rem; border-radius: var(--radius); background: none; border: none; cursor: pointer; font-family: var(--font); font-size: 0.875rem; color: rgba(255,255,255,0.4); transition: color 0.2s, background 0.2s; }
     .sidebar__logout:hover { color: rgba(255,255,255,0.8); background: rgba(255,255,255,0.06); }
@@ -134,7 +123,7 @@
     .card__subtitle { font-size: 0.78rem; color: var(--muted); margin-top: 0.2rem; }
 
     /* ── STATS ──────────────────────────────────── */
-    .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin-bottom: 1.5rem; }
+    .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; margin-bottom: 1.5rem; }
     .stat-card { background: var(--surface); border-radius: var(--radius-lg); border: 1px solid var(--border); padding: 1.5rem; box-shadow: var(--shadow-sm); display: flex; align-items: center; gap: 1.25rem; }
     .stat-card__icon { width: 48px; height: 48px; border-radius: 12px; background: var(--accent-muted); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
     .stat-card__num { font-family: var(--font-d); font-size: 2rem; font-weight: 500; color: var(--primary); line-height: 1; }
@@ -144,39 +133,48 @@
     .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem; }
     .form-group { margin-bottom: 0; }
     .form-group.full-width { grid-column: 1/-1; }
-
+    .form-group.col-3 { grid-column: span 1; }
     label { display: block; font-size: 0.72rem; font-weight: 600; color: var(--muted); margin-bottom: 0.4rem; text-transform: uppercase; letter-spacing: 0.08em; }
-    input[type="text"], input[type="email"], input[type="number"],
+    input[type="text"], input[type="email"], input[type="number"], input[type="date"],
     input[type="url"], input[type="password"], textarea, select {
       width: 100%; border: 1.5px solid var(--border-strong); border-radius: var(--radius);
       padding: 0.68rem 0.95rem; font-family: var(--font); font-size: 0.9rem;
       color: var(--text); background: var(--surface-2);
       transition: border-color 0.2s, box-shadow 0.2s; appearance: none;
     }
-    input:focus, textarea:focus, select:focus {
-      outline: none; border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(201,168,76,0.12); background: var(--surface);
-    }
+    input:focus, textarea:focus, select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(201,168,76,0.12); background: var(--surface); }
     textarea { resize: vertical; min-height: 90px; }
 
     .color-field { display: flex; align-items: center; gap: 0.75rem; }
     .color-field input[type="color"] { width: 44px; height: 40px; padding: 2px; border: 1.5px solid var(--border-strong); border-radius: var(--radius); cursor: pointer; background: none; flex-shrink: 0; }
     .color-field input[type="text"] { flex: 1; font-family: monospace; font-size: 0.85rem; }
 
-    /* ── Platform checkboxes ───────────────── */
-    .platform-grid {
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-      gap: 0.5rem; margin-top: 0.65rem;
-    }
-    .platform-option {
-      display: flex; align-items: center; gap: 0.5rem;
-      padding: 0.55rem 0.85rem; border-radius: var(--radius);
-      border: 1.5px solid var(--border-strong);
-      background: var(--surface-2); cursor: pointer;
-      transition: border-color 0.2s, background 0.2s;
-      font-size: 0.82rem; font-weight: 400; color: var(--text-mid);
-      user-select: none;
-    }
+    /* ── TOGGLE SWITCH ──────────────────────────── */
+    .toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 1rem; background: var(--surface-2); border: 1.5px solid var(--border-strong); border-radius: var(--radius); cursor: pointer; }
+    .toggle-row__label { font-size: 0.9rem; font-weight: 500; color: var(--text); }
+    .toggle-row__sub { font-size: 0.75rem; color: var(--muted); margin-top: 0.15rem; }
+    .toggle-switch { position: relative; width: 44px; height: 24px; flex-shrink: 0; }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; position: absolute; }
+    .toggle-slider { position: absolute; inset: 0; background: var(--border-strong); border-radius: 999px; transition: background 0.2s; cursor: pointer; }
+    .toggle-slider::before { content: ''; position: absolute; width: 18px; height: 18px; left: 3px; top: 3px; border-radius: 50%; background: #fff; transition: transform 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+    .toggle-switch input:checked + .toggle-slider { background: var(--accent); }
+    .toggle-switch input:checked + .toggle-slider::before { transform: translateX(20px); }
+
+    /* ── DISCOUNT / PROMO SECTION ───────────────── */
+    .promo-section { border: 1.5px solid var(--promo-border); border-radius: var(--radius-lg); overflow: hidden; }
+    .promo-section__header { background: var(--promo-bg); padding: 1rem 1.25rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--promo-border); }
+    .promo-section__title { font-size: 0.875rem; font-weight: 600; color: var(--promo); display: flex; align-items: center; gap: 0.5rem; }
+    .promo-section__body { padding: 1.25rem; display: none; }
+    .promo-section__body.open { display: block; }
+    .discount-preview { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; background: var(--promo-bg); border: 1px solid var(--promo-border); border-radius: var(--radius); margin-top: 1rem; font-size: 0.85rem; }
+    .discount-preview__badge { background: var(--promo); color: #fff; font-size: 0.72rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 999px; white-space: nowrap; }
+    .discount-preview__price { font-family: var(--font-d); font-size: 1.1rem; font-weight: 500; color: var(--promo); }
+    .discount-preview__original { font-size: 0.875rem; color: var(--muted); text-decoration: line-through; }
+    .discount-preview__savings { font-size: 0.75rem; color: var(--promo); font-weight: 600; }
+
+    /* ── Platform checkboxes ────────────────────── */
+    .platform-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 0.5rem; margin-top: 0.65rem; }
+    .platform-option { display: flex; align-items: center; gap: 0.5rem; padding: 0.55rem 0.85rem; border-radius: var(--radius); border: 1.5px solid var(--border-strong); background: var(--surface-2); cursor: pointer; transition: border-color 0.2s, background 0.2s; font-size: 0.82rem; font-weight: 400; color: var(--text-mid); user-select: none; }
     .platform-option:hover { border-color: var(--accent); background: var(--accent-muted); color: var(--text); }
     .platform-option input[type="checkbox"] { width: 14px; height: 14px; accent-color: var(--accent); cursor: pointer; flex-shrink: 0; margin: 0; padding: 0; }
     .platform-option.checked { border-color: var(--accent); background: var(--accent-muted); color: var(--primary); font-weight: 500; }
@@ -193,11 +191,14 @@
     .btn--ghost:hover { border-color: var(--primary); color: var(--primary); }
     .btn--danger { background: var(--error-bg); color: var(--error); }
     .btn--danger:hover { background: #fca5a5; }
+    .btn--promo { background: var(--promo-bg); color: var(--promo); border: 1.5px solid var(--promo-border); padding: 0.4rem 0.85rem; font-size: 0.8rem; }
+    .btn--promo:hover { background: var(--promo); color: #fff; }
 
     /* ── ALERTS ─────────────────────────────────── */
     .alert { padding: 0.85rem 1.1rem; border-radius: var(--radius); margin-bottom: 1.25rem; font-size: 0.875rem; font-weight: 500; display: flex; align-items: center; gap: 0.6rem; }
     .alert--success { background: var(--success-bg); color: var(--success); border: 1px solid var(--success-border); }
-    .alert--error { background: var(--error-bg); color: var(--error); border: 1px solid var(--error-border); }
+    .alert--error   { background: var(--error-bg);   color: var(--error);   border: 1px solid var(--error-border); }
+    .alert--warn    { background: var(--warn-bg);     color: var(--warn);    border: 1px solid var(--warn-border); }
 
     /* ── TABLES ─────────────────────────────────── */
     .data-table { width: 100%; border-collapse: collapse; }
@@ -214,20 +215,100 @@
     .badge--green::before { background: var(--success); }
     .badge--red { background: var(--error-bg); color: var(--error); }
     .badge--red::before { background: var(--error); }
+    .badge--promo { background: var(--promo-bg); color: var(--promo); border: 1px solid var(--promo-border); }
+    .badge--promo::before { background: var(--promo); }
+    .badge--discount { background: #fff1f2; color: #be123c; border: 1px solid #fecdd3; }
+    .badge--discount::before { background: #be123c; }
 
     .status-pill { display: inline-flex; align-items: center; gap: 0.3rem; font-size: 0.7rem; font-weight: 600; padding: 0.25rem 0.7rem; border-radius: 999px; text-transform: capitalize; }
     .status-pill::before { content: ''; width: 5px; height: 5px; border-radius: 50%; }
-    .status-pill.confirmed { background: #d1fae5; color: #065f46; }
-    .status-pill.confirmed::before { background: #059669; }
-    .status-pill.pending { background: #fef3c7; color: #92400e; }
-    .status-pill.pending::before { background: #d97706; }
-    .status-pill.cancelled { background: var(--error-bg); color: var(--error); }
-    .status-pill.cancelled::before { background: var(--error); }
+    .status-pill.confirmed  { background: #d1fae5; color: #065f46; }
+    .status-pill.confirmed::before  { background: #059669; }
+    .status-pill.pending    { background: #fef3c7; color: #92400e; }
+    .status-pill.pending::before    { background: #d97706; }
+    .status-pill.cancelled  { background: var(--error-bg); color: var(--error); }
+    .status-pill.cancelled::before  { background: var(--error); }
+    .status-pill.new        { background: var(--promo-bg); color: var(--promo); }
+    .status-pill.new::before        { background: var(--promo); }
 
-    /* ── CURRENCY ───────────────────────────────── */
-    .currency-symbol { display: inline-block; font-weight: 600; color: var(--accent); font-size: 0.85rem; margin-right: 0.1rem; }
+    /* ── REQUEST DETAIL MODAL ───────────────────── */
+    .req-modal-overlay { display: none; position: fixed; inset: 0; z-index: 9000; background: rgba(10,18,28,0.72); backdrop-filter: blur(8px); align-items: center; justify-content: center; padding: 1rem; }
+    .req-modal-overlay.is-open { display: flex; }
+    .req-modal-box { background: var(--surface); border-radius: var(--radius-xl); width: min(600px, 100%); max-height: 90vh; overflow-y: auto; box-shadow: var(--shadow-lg); animation: modalPop 0.25s cubic-bezier(0.34,1.56,0.64,1) both; }
+    @keyframes modalPop { from { opacity:0; transform:scale(0.88) translateY(20px); } to { opacity:1; transform:none; } }
+    .req-modal-header { padding: 1.75rem 2rem 1.25rem; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
+    .req-modal-title { font-family: var(--font-d); font-size: 1.5rem; font-weight: 500; color: var(--text); }
+    .req-modal-ref { font-size: 0.72rem; color: var(--muted); font-family: monospace; margin-top: 0.25rem; }
+    .req-modal-close { background: var(--bg); border: none; cursor: pointer; width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; color: var(--muted); flex-shrink: 0; transition: background 0.2s; }
+    .req-modal-close:hover { background: var(--bg-warm); }
+    .req-modal-body { padding: 1.5rem 2rem 2rem; }
+    .req-detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem; }
+    .req-detail-item { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius); padding: 0.85rem 1rem; }
+    .req-detail-item__label { font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 0.3rem; }
+    .req-detail-item__val { font-size: 0.9rem; font-weight: 500; color: var(--text); }
+    .req-detail-item.full { grid-column: 1/-1; }
+    .req-price-box { background: var(--primary); color: #fff; border-radius: var(--radius); padding: 1.1rem 1.25rem; margin-bottom: 1.25rem; display: flex; justify-content: space-between; align-items: center; }
+    .req-price-box__label { font-size: 0.75rem; color: rgba(255,255,255,0.55); margin-bottom: 0.2rem; }
+    .req-price-box__val { font-family: var(--font-d); font-size: 1.6rem; font-weight: 500; color: var(--accent); }
+    .req-price-box__breakdown { font-size: 0.78rem; color: rgba(255,255,255,0.5); }
+    .req-property-link { display: inline-flex; align-items: center; gap: 0.4rem; background: var(--accent-muted); border: 1px solid rgba(201,168,76,0.25); color: var(--primary); font-size: 0.82rem; font-weight: 500; padding: 0.5rem 1rem; border-radius: 999px; text-decoration: none; margin-bottom: 1.25rem; transition: background 0.2s; }
+    .req-property-link:hover { background: var(--accent-muted); }
+    .req-special-requests { background: var(--warn-bg); border: 1px solid var(--warn-border); border-radius: var(--radius); padding: 0.85rem 1rem; margin-bottom: 1.25rem; font-size: 0.875rem; color: var(--warn); }
+    .req-special-requests__label { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.35rem; }
+    .req-promo-box { background: var(--promo-bg); border: 1px solid var(--promo-border); border-radius: var(--radius); padding: 0.85rem 1rem; margin-bottom: 1.25rem; font-size: 0.85rem; color: var(--promo); }
 
-    /* ── CHIPS ──────────────────────────────────── */
+    /* ── UPLOAD LOADING MODAL ───────────────────── */
+    .upload-modal { display: none; position: fixed; inset: 0; z-index: 9000; background: rgba(10,18,28,0.72); backdrop-filter: blur(8px); align-items: center; justify-content: center; }
+    .upload-modal.is-open { display: flex; }
+    .upload-modal__box { background: var(--surface); border-radius: var(--radius-xl); padding: 2.5rem 2.75rem; width: min(380px, 92vw); box-shadow: var(--shadow-lg); text-align: center; animation: modalPop 0.25s cubic-bezier(0.34,1.56,0.64,1) both; }
+    .upload-modal__spinner { width: 52px; height: 52px; margin: 0 auto 1.25rem; border: 3px solid var(--border-strong); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
+    .upload-modal__title { font-size: 1rem; font-weight: 600; color: var(--text); margin-bottom: 0.35rem; }
+    .upload-modal__filename { font-size: 0.78rem; color: var(--muted); margin-bottom: 1.5rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+    .upload-modal__bar-track { height: 5px; background: var(--border-strong); border-radius: 999px; overflow: hidden; }
+    .upload-modal__bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-hover)); border-radius: 999px; animation: progressAnim 2.2s ease-in-out infinite; }
+    @keyframes progressAnim { 0%{width:0%;margin-left:0} 50%{width:75%;margin-left:0} 100%{width:20%;margin-left:80%} }
+    .upload-modal__hint { font-size: 0.72rem; color: var(--muted); margin-top: 1rem; }
+
+    /* ── RICH TEXT EDITOR ───────────────────────── */
+    .rte-wrap { border: 1.5px solid var(--border-strong); border-radius: var(--radius); background: var(--surface-2); transition: border-color 0.2s, box-shadow 0.2s; overflow: hidden; }
+    .rte-wrap:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(201,168,76,0.12); background: var(--surface); }
+    .rte-toolbar { display: flex; align-items: center; gap: 0.1rem; flex-wrap: wrap; padding: 0.5rem 0.65rem; background: var(--bg); border-bottom: 1px solid var(--border); user-select: none; }
+    .rte-sep { width: 1px; height: 20px; background: var(--border-strong); margin: 0 0.25rem; flex-shrink: 0; }
+    .rte-btn { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 28px; border-radius: 6px; border: none; background: transparent; cursor: pointer; font-family: var(--font-d); font-size: 0.92rem; font-weight: 600; color: var(--text-mid); transition: background 0.15s, color 0.15s; }
+    .rte-btn:hover { background: var(--bg-warm); color: var(--text); }
+    .rte-btn.active { background: var(--accent-muted); color: var(--primary); }
+    .rte-btn--text { font-family: var(--font); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em; width: auto; padding: 0 0.5rem; }
+    .rte-body { min-height: 140px; max-height: 340px; overflow-y: auto; padding: 0.85rem 1rem; outline: none; font-size: 0.9rem; line-height: 1.7; color: var(--text); font-family: var(--font); }
+    .rte-body:empty::before { content: attr(data-placeholder); color: var(--muted); pointer-events: none; }
+    .rte-body h2 { font-family: var(--font-d); font-size: 1.35rem; font-weight: 600; margin: 0.75rem 0 0.35rem; color: var(--primary); }
+    .rte-body h3 { font-family: var(--font-d); font-size: 1.1rem; font-weight: 600; margin: 0.6rem 0 0.3rem; color: var(--primary); }
+    .rte-body p  { margin: 0 0 0.65rem; }
+    .rte-body ul, .rte-body ol { padding-left: 1.5rem; margin: 0.4rem 0 0.65rem; }
+    .rte-body li { margin-bottom: 0.2rem; }
+    .rte-footer { padding: 0.35rem 0.85rem; border-top: 1px solid var(--border); background: var(--bg); display: flex; align-items: center; justify-content: flex-end; }
+    .rte-charcount { font-size: 0.68rem; color: var(--muted); letter-spacing: 0.04em; }
+
+    /* ── MULTI-IMAGE MANAGER ────────────────────── */
+    .img-manager { display: flex; flex-direction: column; gap: 0; }
+    .img-manager__empty { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2.5rem 1rem; border: 2px dashed var(--border-strong); border-radius: var(--radius-lg); color: var(--muted); gap: 0.5rem; background: var(--surface-2); font-size: 0.875rem; }
+    .img-manager__empty-icon { font-size: 2rem; opacity: 0.5; }
+    .img-row { display: grid; grid-template-columns: 28px 72px 1fr auto auto; align-items: center; gap: 0.75rem; padding: 0.8rem 0.9rem; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface-2); margin-bottom: 0.5rem; transition: border-color 0.2s, box-shadow 0.2s; }
+    .img-row:hover { border-color: var(--accent); box-shadow: var(--shadow-sm); }
+    .img-row__index { font-size: 0.72rem; font-weight: 700; color: var(--muted); text-align: center; letter-spacing: 0.05em; }
+    .img-row__thumb { width: 72px; height: 52px; border-radius: 6px; object-fit: cover; border: 1px solid var(--border); background: var(--bg-warm); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: var(--muted); overflow: hidden; flex-shrink: 0; }
+    .img-row__thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .img-row__title input { width: 100%; border: 1.5px solid var(--border-strong); border-radius: 8px; padding: 0.5rem 0.75rem; font-family: var(--font); font-size: 0.85rem; color: var(--text); background: var(--surface); transition: border-color 0.2s; margin: 0; }
+    .img-row__title input:focus { border-color: var(--accent); outline: none; box-shadow: 0 0 0 3px rgba(201,168,76,0.12); }
+    .img-row__actions { display: flex; align-items: center; gap: 0.4rem; flex-shrink: 0; }
+    .img-row__upload-btn { display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.42rem 0.75rem; font-size: 0.78rem; font-weight: 500; border: 1.5px solid var(--border-strong); border-radius: 8px; background: var(--surface); color: var(--text-mid); cursor: pointer; font-family: var(--font); transition: border-color 0.2s, background 0.2s; white-space: nowrap; }
+    .img-row__upload-btn:hover { border-color: var(--accent); background: var(--accent-muted); color: var(--primary); }
+    .img-row__upload-btn.has-image { border-color: var(--accent); background: var(--accent-muted); color: var(--primary); }
+    .img-row__del { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; border: 1.5px solid var(--border-strong); background: var(--surface); color: var(--muted); cursor: pointer; transition: border-color 0.2s, background 0.2s, color 0.2s; font-size: 0.9rem; }
+    .img-row__del:hover { border-color: var(--error-border); background: var(--error-bg); color: var(--error); }
+    .img-manager__add { display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.7rem 1rem; border: 2px dashed var(--border-strong); border-radius: var(--radius); background: var(--surface-2); color: var(--text-mid); font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: border-color 0.2s, background 0.2s, color 0.2s; font-family: var(--font); margin-top: 0.25rem; }
+    .img-manager__add:hover { border-color: var(--accent); background: var(--accent-muted); color: var(--primary); }
+
+    /* ── AMENITY CHIPS ──────────────────────────── */
     .amenity-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.65rem; }
     .chip { display: inline-flex; align-items: center; gap: 0.35rem; background: var(--accent-muted); border: 1px solid rgba(201,168,76,0.25); color: var(--text); border-radius: 999px; padding: 0.25rem 0.75rem; font-size: 0.78rem; }
     .chip__remove { cursor: pointer; color: var(--muted); font-size: 0.85rem; line-height: 1; transition: color 0.15s; }
@@ -235,201 +316,23 @@
 
     /* ── SPINNER ────────────────────────────────── */
     .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.65s linear infinite; }
+    .spinner--dark { border-color: rgba(15,25,35,0.2); border-top-color: var(--primary); }
     @keyframes spin { to { transform: rotate(360deg); } }
 
     .section-actions { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
-
-    /* ═══════════════════════════════════════════════
-       MULTI-IMAGE MANAGER
-    ═══════════════════════════════════════════════ */
-    .img-manager { display: flex; flex-direction: column; gap: 0; }
-    .img-manager__empty {
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      padding: 2.5rem 1rem; border: 2px dashed var(--border-strong);
-      border-radius: var(--radius-lg); color: var(--muted); gap: 0.5rem;
-      background: var(--surface-2); font-size: 0.875rem;
-    }
-    .img-manager__empty-icon { font-size: 2rem; opacity: 0.5; }
-
-    .img-row {
-      display: grid;
-      grid-template-columns: 28px 72px 1fr auto auto;
-      align-items: center; gap: 0.75rem;
-      padding: 0.8rem 0.9rem;
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      background: var(--surface-2);
-      margin-bottom: 0.5rem;
-      transition: border-color 0.2s, box-shadow 0.2s;
-    }
-    .img-row:hover { border-color: var(--accent); box-shadow: var(--shadow-sm); }
-
-    .img-row__index {
-      font-size: 0.72rem; font-weight: 700; color: var(--muted);
-      text-align: center; letter-spacing: 0.05em;
-    }
-    .img-row__thumb {
-      width: 72px; height: 52px; border-radius: 6px; object-fit: cover;
-      border: 1px solid var(--border); background: var(--bg-warm);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.2rem; color: var(--muted); overflow: hidden; flex-shrink: 0;
-    }
-    .img-row__thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .img-row__thumb--placeholder::after { content: '📸'; }
-
-    .img-row__title { min-width: 0; }
-    .img-row__title input {
-      width: 100%; border: 1.5px solid var(--border-strong); border-radius: 8px;
-      padding: 0.5rem 0.75rem; font-family: var(--font); font-size: 0.85rem;
-      color: var(--text); background: var(--surface);
-      transition: border-color 0.2s; margin: 0;
-    }
-    .img-row__title input:focus { border-color: var(--accent); outline: none; box-shadow: 0 0 0 3px rgba(201,168,76,0.12); }
-
-    .img-row__actions { display: flex; align-items: center; gap: 0.4rem; flex-shrink: 0; }
-    .img-row__upload-btn {
-      display: inline-flex; align-items: center; gap: 0.3rem;
-      padding: 0.42rem 0.75rem; font-size: 0.78rem; font-weight: 500;
-      border: 1.5px solid var(--border-strong); border-radius: 8px;
-      background: var(--surface); color: var(--text-mid); cursor: pointer;
-      font-family: var(--font); transition: border-color 0.2s, background 0.2s;
-      white-space: nowrap;
-    }
-    .img-row__upload-btn:hover { border-color: var(--accent); background: var(--accent-muted); color: var(--primary); }
-    .img-row__upload-btn.has-image { border-color: var(--accent); background: var(--accent-muted); color: var(--primary); }
-
-    .img-row__del {
-      width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center;
-      justify-content: center; border: 1.5px solid var(--border-strong);
-      background: var(--surface); color: var(--muted); cursor: pointer;
-      transition: border-color 0.2s, background 0.2s, color 0.2s; font-size: 0.9rem;
-    }
-    .img-row__del:hover { border-color: var(--error-border); background: var(--error-bg); color: var(--error); }
-
-    .img-manager__add {
-      display: flex; align-items: center; justify-content: center; gap: 0.5rem;
-      padding: 0.7rem 1rem; border: 2px dashed var(--border-strong);
-      border-radius: var(--radius); background: var(--surface-2);
-      color: var(--text-mid); font-size: 0.85rem; font-weight: 500;
-      cursor: pointer; transition: border-color 0.2s, background 0.2s, color 0.2s;
-      font-family: var(--font); margin-top: 0.25rem;
-    }
-    .img-manager__add:hover { border-color: var(--accent); background: var(--accent-muted); color: var(--primary); }
-
-    /* ═══════════════════════════════════════════════
-       UPLOAD LOADING MODAL
-    ═══════════════════════════════════════════════ */
-    .upload-modal {
-      display: none; position: fixed; inset: 0; z-index: 9000;
-      background: rgba(10, 18, 28, 0.72); backdrop-filter: blur(8px);
-      align-items: center; justify-content: center;
-    }
-    .upload-modal.is-open { display: flex; }
-    .upload-modal__box {
-      background: var(--surface); border-radius: var(--radius-xl);
-      padding: 2.5rem 2.75rem; width: min(380px, 92vw);
-      box-shadow: var(--shadow-lg); text-align: center;
-      animation: modalPop 0.25s cubic-bezier(0.34,1.56,0.64,1) both;
-    }
-    @keyframes modalPop {
-      from { opacity: 0; transform: scale(0.88) translateY(20px); }
-      to   { opacity: 1; transform: none; }
-    }
-    .upload-modal__spinner {
-      width: 52px; height: 52px; margin: 0 auto 1.25rem;
-      border: 3px solid var(--border-strong);
-      border-top-color: var(--accent);
-      border-radius: 50%; animation: spin 0.8s linear infinite;
-    }
-    .upload-modal__title {
-      font-size: 1rem; font-weight: 600; color: var(--text); margin-bottom: 0.35rem;
-    }
-    .upload-modal__filename {
-      font-size: 0.78rem; color: var(--muted); margin-bottom: 1.5rem;
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%;
-    }
-    .upload-modal__bar-track {
-      height: 5px; background: var(--border-strong); border-radius: 999px; overflow: hidden;
-    }
-    .upload-modal__bar-fill {
-      height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-hover));
-      border-radius: 999px; width: 0%; transition: width 0.3s ease;
-      animation: progressAnim 2.2s ease-in-out infinite;
-    }
-    @keyframes progressAnim {
-      0%   { width: 0%; margin-left: 0; }
-      50%  { width: 75%; margin-left: 0; }
-      100% { width: 20%; margin-left: 80%; }
-    }
-    .upload-modal__hint { font-size: 0.72rem; color: var(--muted); margin-top: 1rem; }
-
-    /* ═══════════════════════════════════════════════
-       RICH TEXT EDITOR
-    ═══════════════════════════════════════════════ */
-    .rte-wrap {
-      border: 1.5px solid var(--border-strong); border-radius: var(--radius);
-      background: var(--surface-2); transition: border-color 0.2s, box-shadow 0.2s;
-      overflow: hidden;
-    }
-    .rte-wrap:focus-within {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(201,168,76,0.12);
-      background: var(--surface);
-    }
-    .rte-toolbar {
-      display: flex; align-items: center; gap: 0.1rem; flex-wrap: wrap;
-      padding: 0.5rem 0.65rem; background: var(--bg);
-      border-bottom: 1px solid var(--border); user-select: none;
-    }
-    .rte-sep {
-      width: 1px; height: 20px; background: var(--border-strong);
-      margin: 0 0.25rem; flex-shrink: 0;
-    }
-    .rte-btn {
-      display: inline-flex; align-items: center; justify-content: center;
-      width: 30px; height: 28px; border-radius: 6px; border: none;
-      background: transparent; cursor: pointer; font-family: var(--font-d);
-      font-size: 0.92rem; font-weight: 600; color: var(--text-mid);
-      transition: background 0.15s, color 0.15s;
-    }
-    .rte-btn:hover { background: var(--bg-warm); color: var(--text); }
-    .rte-btn.active { background: var(--accent-muted); color: var(--primary); }
-    .rte-btn--text { font-family: var(--font); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em; width: auto; padding: 0 0.5rem; }
-
-    .rte-body {
-      min-height: 140px; max-height: 340px; overflow-y: auto;
-      padding: 0.85rem 1rem; outline: none; font-size: 0.9rem;
-      line-height: 1.7; color: var(--text); font-family: var(--font);
-    }
-    .rte-body:empty::before {
-      content: attr(data-placeholder); color: var(--muted); pointer-events: none;
-    }
-    .rte-body h2 { font-family: var(--font-d); font-size: 1.35rem; font-weight: 600; margin: 0.75rem 0 0.35rem; color: var(--primary); }
-    .rte-body h3 { font-family: var(--font-d); font-size: 1.1rem; font-weight: 600; margin: 0.6rem 0 0.3rem; color: var(--primary); }
-    .rte-body p  { margin: 0 0 0.65rem; }
-    .rte-body ul, .rte-body ol { padding-left: 1.5rem; margin: 0.4rem 0 0.65rem; }
-    .rte-body li { margin-bottom: 0.2rem; }
-
-    .rte-footer {
-      padding: 0.35rem 0.85rem; border-top: 1px solid var(--border);
-      background: var(--bg); display: flex; align-items: center; justify-content: flex-end;
-    }
-    .rte-charcount { font-size: 0.68rem; color: var(--muted); letter-spacing: 0.04em; }
-
-    /* ── OLD upload zone (still used indirectly) ── */
-    #upload-input { display: none; }
 
     /* ── RESPONSIVE ─────────────────────────────── */
     @media (max-width: 768px) {
       .sidebar { transform: translateX(-100%); transition: transform 0.3s; }
       .main { margin-left: 0; }
-      .stats-row { grid-template-columns: 1fr; }
+      .stats-row { grid-template-columns: 1fr 1fr; }
       .form-grid { grid-template-columns: 1fr; }
       .form-group.full-width { grid-column: auto; }
       .topbar { padding: 0 1.25rem; }
       .main__content { padding: 1.5rem; }
       .img-row { grid-template-columns: 24px 56px 1fr; }
       .img-row__actions { grid-column: 1/-1; justify-content: flex-end; padding-left: 80px; }
+      .req-detail-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -441,10 +344,87 @@
     <div class="upload-modal__spinner"></div>
     <div class="upload-modal__title">Uploading Image…</div>
     <div class="upload-modal__filename" id="upload-modal-filename">—</div>
-    <div class="upload-modal__bar-track">
-      <div class="upload-modal__bar-fill" id="upload-modal-bar"></div>
-    </div>
+    <div class="upload-modal__bar-track"><div class="upload-modal__bar-fill" id="upload-modal-bar"></div></div>
     <div class="upload-modal__hint">Please wait, do not close this page</div>
+  </div>
+</div>
+
+<!-- ── REQUEST DETAIL MODAL ─────────────────────────────────── -->
+<div class="req-modal-overlay" id="req-modal-overlay">
+  <div class="req-modal-box">
+    <div class="req-modal-header">
+      <div>
+        <div class="req-modal-title" id="req-modal-guest-name">Guest Name</div>
+        <div class="req-modal-ref" id="req-modal-ref">REF-XXXXXX</div>
+      </div>
+      <button class="req-modal-close" onclick="closeReqModal()">✕</button>
+    </div>
+    <div class="req-modal-body">
+      <a class="req-property-link" id="req-modal-prop-link" href="#" target="_blank">
+        🏠 <span id="req-modal-prop-name">Property Name</span> — View on public site ↗
+      </a>
+
+      <div id="req-modal-promo-box" class="req-promo-box" style="display:none">
+        🏷️ <strong id="req-modal-promo-label"></strong>
+      </div>
+
+      <div class="req-price-box">
+        <div>
+          <div class="req-price-box__label">Estimated Total</div>
+          <div class="req-price-box__val" id="req-modal-total">—</div>
+          <div class="req-price-box__breakdown" id="req-modal-breakdown">—</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:0.75rem;color:rgba(255,255,255,0.45);margin-bottom:0.25rem">Nights</div>
+          <div style="font-family:var(--font-d);font-size:1.5rem;color:#fff" id="req-modal-nights">—</div>
+        </div>
+      </div>
+
+      <div class="req-detail-grid">
+        <div class="req-detail-item">
+          <div class="req-detail-item__label">Check-in</div>
+          <div class="req-detail-item__val" id="req-modal-checkin">—</div>
+        </div>
+        <div class="req-detail-item">
+          <div class="req-detail-item__label">Check-out</div>
+          <div class="req-detail-item__val" id="req-modal-checkout">—</div>
+        </div>
+        <div class="req-detail-item">
+          <div class="req-detail-item__label">Adults</div>
+          <div class="req-detail-item__val" id="req-modal-adults">—</div>
+        </div>
+        <div class="req-detail-item">
+          <div class="req-detail-item__label">Children · Infants</div>
+          <div class="req-detail-item__val" id="req-modal-children">—</div>
+        </div>
+        <div class="req-detail-item">
+          <div class="req-detail-item__label">Email</div>
+          <div class="req-detail-item__val" id="req-modal-email">—</div>
+        </div>
+        <div class="req-detail-item">
+          <div class="req-detail-item__label">Phone / WhatsApp</div>
+          <div class="req-detail-item__val" id="req-modal-phone">—</div>
+        </div>
+        <div class="req-detail-item">
+          <div class="req-detail-item__label">Submitted</div>
+          <div class="req-detail-item__val" id="req-modal-submitted">—</div>
+        </div>
+        <div class="req-detail-item">
+          <div class="req-detail-item__label">Status</div>
+          <div class="req-detail-item__val" id="req-modal-status-badge">—</div>
+        </div>
+      </div>
+
+      <div class="req-special-requests" id="req-modal-special-wrap" style="display:none">
+        <div class="req-special-requests__label">Special Requests</div>
+        <div id="req-modal-special"></div>
+      </div>
+
+      <div style="display:flex;gap:0.75rem;flex-wrap:wrap">
+        <a id="req-reply-btn" class="btn btn--accent" style="text-decoration:none">✉ Reply via Email</a>
+        <a id="req-whatsapp-btn" class="btn btn--ghost" target="_blank" style="text-decoration:none">💬 WhatsApp</a>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -472,10 +452,10 @@
       <h2 class="login-side__title">Manage your<br><em>properties</em><br>with ease</h2>
       <ul class="login-side__list">
         <li>Add and edit property listings</li>
-        <li>Track all bookings in real time</li>
+        <li>Set discounts and promo offers</li>
+        <li>Track booking requests in real time</li>
         <li>Upload multiple photos per property</li>
-        <li>Customise site branding and copy</li>
-        <li>Set currency and listing platforms per property</li>
+        <li>Customise site branding and colours</li>
       </ul>
     </div>
   </div>
@@ -497,8 +477,12 @@
       <div class="nav-item" data-tab="properties">
         <span class="nav-item__icon">🏠</span>Properties
       </div>
+      <div class="nav-item" data-tab="requests">
+        <span class="nav-item__icon">📩</span>Booking Requests
+        <span class="nav-badge" id="requests-badge" style="display:none">0</span>
+      </div>
       <div class="nav-item" data-tab="bookings">
-        <span class="nav-item__icon">📋</span>Bookings
+        <span class="nav-item__icon">📋</span>Confirmed Bookings
       </div>
     </div>
     <div class="sidebar__footer">
@@ -528,56 +512,36 @@
             <div><div class="stat-card__num" id="stat-props">—</div><div class="stat-card__label">Properties Listed</div></div>
           </div>
           <div class="stat-card">
-            <div class="stat-card__icon">📋</div>
-            <div><div class="stat-card__num" id="stat-bookings">—</div><div class="stat-card__label">Total Bookings</div></div>
+            <div class="stat-card__icon">📩</div>
+            <div><div class="stat-card__num" id="stat-requests">—</div><div class="stat-card__label">Booking Requests</div></div>
           </div>
           <div class="stat-card">
-            <div class="stat-card__icon">✅</div>
-            <div><div class="stat-card__num" id="stat-confirmed">—</div><div class="stat-card__label">Confirmed</div></div>
+            <div class="stat-card__icon">📋</div>
+            <div><div class="stat-card__num" id="stat-bookings">—</div><div class="stat-card__label">Confirmed Bookings</div></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card__icon">🏷️</div>
+            <div><div class="stat-card__num" id="stat-promos">—</div><div class="stat-card__label">Active Promos</div></div>
           </div>
         </div>
 
         <div class="card">
           <div class="card__header">
-            <div>
-              <div class="card__title">Branding &amp; Copy</div>
-              <div class="card__subtitle">Changes are reflected immediately on the public site</div>
-            </div>
+            <div><div class="card__title">Branding &amp; Copy</div><div class="card__subtitle">Changes are reflected immediately on the public site</div></div>
           </div>
           <div class="form-grid">
-            <div class="form-group">
-              <label>Business Name</label>
-              <input type="text" id="cfg-business-name" placeholder="My Stays" />
-            </div>
-            <div class="form-group">
-              <label>Contact Email</label>
-              <input type="email" id="cfg-contact-email" placeholder="hello@example.com" />
-            </div>
-            <div class="form-group">
-              <label>Hero Headline</label>
-              <input type="text" id="cfg-hero-text" placeholder="Find Your Perfect Stay" />
-            </div>
-            <div class="form-group">
-              <label>Hero Subtext</label>
-              <input type="text" id="cfg-hero-subtext" placeholder="Discover handpicked properties…" />
-            </div>
-            <div class="form-group">
-              <label>Footer Text</label>
-              <input type="text" id="cfg-footer-text" placeholder="© 2025. All rights reserved." />
-            </div>
-            <div class="form-group">
-              <label>Logo URL <span style="font-weight:300;text-transform:none;letter-spacing:0">(optional)</span></label>
-              <input type="url" id="cfg-logo-url" placeholder="https://…" />
-            </div>
+            <div class="form-group"><label>Business Name</label><input type="text" id="cfg-business-name" placeholder="My Stays" /></div>
+            <div class="form-group"><label>Contact Email</label><input type="email" id="cfg-contact-email" placeholder="hello@example.com" /></div>
+            <div class="form-group"><label>Hero Headline</label><input type="text" id="cfg-hero-text" placeholder="Find Your Perfect Stay" /></div>
+            <div class="form-group"><label>Hero Subtext</label><input type="text" id="cfg-hero-subtext" placeholder="Discover handpicked properties…" /></div>
+            <div class="form-group"><label>Footer Text</label><input type="text" id="cfg-footer-text" placeholder="© 2025. All rights reserved." /></div>
+            <div class="form-group"><label>Logo URL <span style="font-weight:300;text-transform:none;letter-spacing:0">(optional)</span></label><input type="url" id="cfg-logo-url" placeholder="https://…" /></div>
           </div>
         </div>
 
         <div class="card">
           <div class="card__header">
-            <div>
-              <div class="card__title">Brand Colours</div>
-              <div class="card__subtitle">All four colours update the public site on save</div>
-            </div>
+            <div><div class="card__title">Brand Colours</div><div class="card__subtitle">All four colours update the public site on save</div></div>
           </div>
           <div id="colour-preview" style="display:flex;border-radius:var(--radius);overflow:hidden;height:48px;margin-bottom:1.5rem;border:1px solid var(--border)">
             <div id="preview-primary" style="flex:1;transition:background .3s"></div>
@@ -588,41 +552,26 @@
           <div class="form-grid">
             <div class="form-group">
               <label>Primary Colour <span style="font-weight:300;text-transform:none;letter-spacing:0;margin-left:.4rem">Navbar, buttons, headings</span></label>
-              <div class="color-field">
-                <input type="color" id="cfg-primary-color-picker" />
-                <input type="text"  id="cfg-primary-color" maxlength="7" placeholder="#0f1923" />
-              </div>
+              <div class="color-field"><input type="color" id="cfg-primary-color-picker" /><input type="text" id="cfg-primary-color" maxlength="7" placeholder="#0f1923" /></div>
             </div>
             <div class="form-group">
               <label>Accent Colour <span style="font-weight:300;text-transform:none;letter-spacing:0;margin-left:.4rem">CTAs, highlights, links</span></label>
-              <div class="color-field">
-                <input type="color" id="cfg-accent-color-picker" />
-                <input type="text"  id="cfg-accent-color" maxlength="7" placeholder="#c9a84c" />
-              </div>
+              <div class="color-field"><input type="color" id="cfg-accent-color-picker" /><input type="text" id="cfg-accent-color" maxlength="7" placeholder="#c9a84c" /></div>
             </div>
             <div class="form-group">
               <label>Background Colour <span style="font-weight:300;text-transform:none;letter-spacing:0;margin-left:.4rem">Page background</span></label>
-              <div class="color-field">
-                <input type="color" id="cfg-bg-color-picker" />
-                <input type="text"  id="cfg-bg-color" maxlength="7" placeholder="#f7f4ef" />
-              </div>
+              <div class="color-field"><input type="color" id="cfg-bg-color-picker" /><input type="text" id="cfg-bg-color" maxlength="7" placeholder="#f7f4ef" /></div>
             </div>
             <div class="form-group">
               <label>Surface Colour <span style="font-weight:300;text-transform:none;letter-spacing:0;margin-left:.4rem">Cards &amp; panels</span></label>
-              <div class="color-field">
-                <input type="color" id="cfg-surface-color-picker" />
-                <input type="text"  id="cfg-surface-color" maxlength="7" placeholder="#ffffff" />
-              </div>
+              <div class="color-field"><input type="color" id="cfg-surface-color-picker" /><input type="text" id="cfg-surface-color" maxlength="7" placeholder="#ffffff" /></div>
             </div>
           </div>
         </div>
 
         <div class="card">
           <div class="card__header">
-            <div>
-              <div class="card__title">Hero Background</div>
-              <div class="card__subtitle">Customise the main background of the public landing page</div>
-            </div>
+            <div><div class="card__title">Hero Background</div><div class="card__subtitle">Customise the main background of the public landing page</div></div>
           </div>
           <div class="form-grid">
             <div class="form-group full-width">
@@ -634,15 +583,10 @@
                 <option value="video">Short Video (MP4)</option>
               </select>
             </div>
-
             <div class="form-group full-width" id="hero-bg-color-group" style="display:none;">
               <label>Solid Colour Background</label>
-              <div class="color-field">
-                <input type="color" id="cfg-hero-bg-color-picker" />
-                <input type="text" id="cfg-hero-bg-color" maxlength="7" placeholder="#0f1923" />
-              </div>
+              <div class="color-field"><input type="color" id="cfg-hero-bg-color-picker" /><input type="text" id="cfg-hero-bg-color" maxlength="7" placeholder="#0f1923" /></div>
             </div>
-
             <div class="form-group full-width" id="hero-bg-media-group" style="display:none;">
               <label id="hero-bg-media-label">Media URL</label>
               <input type="url" id="cfg-hero-bg-media-url" placeholder="https://..." />
@@ -660,34 +604,17 @@
       <div class="tab-panel" id="tab-properties">
         <div class="card">
           <div class="card__header">
-            <div>
-              <div class="card__title" id="prop-form-title">Add New Property</div>
-              <div class="card__subtitle">Fill in the details below and upload images</div>
-            </div>
+            <div><div class="card__title" id="prop-form-title">Add New Property</div><div class="card__subtitle">Fill in the details below and upload images</div></div>
             <button class="btn btn--ghost btn--sm" id="clear-prop-form-btn">Clear Form</button>
           </div>
-
           <div id="prop-alert" style="display:none"></div>
           <input type="hidden" id="prop-id" />
 
           <div class="form-grid">
-            <div class="form-group">
-              <label>Property Name *</label>
-              <input type="text" id="prop-name" placeholder="e.g. Beachfront Villa Lagos" />
-            </div>
-            <div class="form-group">
-              <label>Location</label>
-              <input type="text" id="prop-location" placeholder="e.g. Lekki, Lagos" />
-            </div>
-            <div class="form-group">
-              <label>Price Per Night *</label>
-              <input type="number" id="prop-price" min="0" step="500" placeholder="150000" />
-            </div>
-            <div class="form-group">
-              <label>Max Guests</label>
-              <input type="number" id="prop-max-guests" min="1" value="2" />
-            </div>
-
+            <div class="form-group"><label>Property Name *</label><input type="text" id="prop-name" placeholder="e.g. Beachfront Villa Lagos" /></div>
+            <div class="form-group"><label>Location</label><input type="text" id="prop-location" placeholder="e.g. Lekki, Lagos" /></div>
+            <div class="form-group"><label>Price Per Night *</label><input type="number" id="prop-price" min="0" step="500" placeholder="150000" oninput="updateDiscountPreview()" /></div>
+            <div class="form-group"><label>Max Guests</label><input type="number" id="prop-max-guests" min="1" value="2" /></div>
             <div class="form-group">
               <label>Currency</label>
               <select id="prop-currency">
@@ -700,7 +627,6 @@
                 <option value="ZAR">R ZAR — South African Rand</option>
               </select>
             </div>
-
             <div class="form-group">
               <label>Availability</label>
               <select id="prop-available">
@@ -713,46 +639,33 @@
             <div class="form-group full-width">
               <label>Description</label>
               <div class="rte-wrap" id="rte-wrap">
-                <div class="rte-toolbar" id="rte-toolbar">
+                <div class="rte-toolbar">
                   <button type="button" class="rte-btn" id="rte-bold"      onclick="rteCmd('bold')"          title="Bold"><b>B</b></button>
                   <button type="button" class="rte-btn" id="rte-italic"    onclick="rteCmd('italic')"        title="Italic"><em>I</em></button>
                   <button type="button" class="rte-btn" id="rte-underline" onclick="rteCmd('underline')"     title="Underline"><u>U</u></button>
                   <div class="rte-sep"></div>
-                  <button type="button" class="rte-btn rte-btn--text" onclick="rteBlock('H2')"  title="Heading 2">H2</button>
-                  <button type="button" class="rte-btn rte-btn--text" onclick="rteBlock('H3')"  title="Heading 3">H3</button>
-                  <button type="button" class="rte-btn rte-btn--text" onclick="rteBlock('P')"   title="Paragraph">¶</button>
+                  <button type="button" class="rte-btn rte-btn--text" onclick="rteBlock('H2')" title="Heading 2">H2</button>
+                  <button type="button" class="rte-btn rte-btn--text" onclick="rteBlock('H3')" title="Heading 3">H3</button>
+                  <button type="button" class="rte-btn rte-btn--text" onclick="rteBlock('P')"  title="Paragraph">¶</button>
                   <div class="rte-sep"></div>
                   <button type="button" class="rte-btn" onclick="rteCmd('insertUnorderedList')" title="Bullet list" style="font-size:.8rem">• List</button>
                   <button type="button" class="rte-btn" onclick="rteCmd('insertOrderedList')"   title="Numbered list" style="font-size:.8rem">1. List</button>
                   <div class="rte-sep"></div>
                   <button type="button" class="rte-btn" onclick="rteClear()" title="Clear formatting" style="font-size:.72rem;width:auto;padding:0 .5rem">✕ Clear</button>
                 </div>
-                <div
-                  class="rte-body"
-                  id="rte-body"
-                  contenteditable="true"
+                <div class="rte-body" id="rte-body" contenteditable="true"
                   data-placeholder="Describe the property, surroundings, and what makes it special…"
-                  oninput="updateRteButtons(); updateRteCharCount()"
-                  onkeyup="updateRteButtons()"
-                  onmouseup="updateRteButtons()"
-                  onselectionchange="updateRteButtons()"
-                ></div>
-                <div class="rte-footer">
-                  <span class="rte-charcount" id="rte-charcount">0 characters</span>
-                </div>
+                  oninput="updateRteButtons();updateRteCharCount()"
+                  onkeyup="updateRteButtons()" onmouseup="updateRteButtons()"></div>
+                <div class="rte-footer"><span class="rte-charcount" id="rte-charcount">0 characters</span></div>
               </div>
             </div>
 
             <!-- ── MULTI IMAGE MANAGER ── -->
             <div class="form-group full-width">
               <label>Property Images</label>
-              <div class="img-manager" id="img-manager">
-                <!-- rows injected by JS -->
-              </div>
-              <button type="button" class="img-manager__add" id="img-add-btn">
-                ＋ Add Image
-              </button>
-              <!-- hidden file inputs injected per-row -->
+              <div class="img-manager" id="img-manager"></div>
+              <button type="button" class="img-manager__add" id="img-add-btn">＋ Add Image</button>
             </div>
 
             <div class="form-group full-width">
@@ -768,7 +681,57 @@
               <label>Listed On <span style="font-weight:300;text-transform:none;letter-spacing:0;margin-left:.4rem">Tick all platforms where this property is also listed</span></label>
               <div class="platform-grid" id="platform-grid"></div>
             </div>
+          </div>
 
+          <!-- ═══════════════════════════════════════
+               DISCOUNT & PROMO SECTION
+          ═══════════════════════════════════════ -->
+          <div style="margin-top:1.5rem">
+            <div class="promo-section" id="promo-section">
+              <div class="promo-section__header">
+                <div class="promo-section__title">
+                  🏷️ Discount &amp; Promo Offer
+                  <span id="promo-active-badge" style="display:none;font-size:0.68rem;background:var(--promo);color:#fff;padding:0.15rem 0.55rem;border-radius:999px;font-weight:700">ACTIVE</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:0.75rem">
+                  <span style="font-size:0.78rem;color:var(--promo);font-weight:400" id="promo-toggle-hint">Click to expand</span>
+                  <label class="toggle-switch" id="promo-enable-toggle">
+                    <input type="checkbox" id="prop-promo-enabled" onchange="onPromoToggle()" />
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+              </div>
+              <div class="promo-section__body" id="promo-body">
+                <div class="form-grid" style="margin-bottom:0">
+                  <div class="form-group">
+                    <label>Discount Percentage <span style="font-weight:300;text-transform:none;letter-spacing:0">0 = no discount</span></label>
+                    <input type="number" id="prop-discount-percent" min="0" max="100" step="1" placeholder="e.g. 15" oninput="updateDiscountPreview()" />
+                  </div>
+                  <div class="form-group">
+                    <label>Promo Label <span style="font-weight:300;text-transform:none;letter-spacing:0">shown as badge on listing</span></label>
+                    <input type="text" id="prop-promo-label" placeholder="e.g. Early Bird, Flash Sale, Weekend Deal" />
+                  </div>
+                  <div class="form-group">
+                    <label>Promo Expiry Date <span style="font-weight:300;text-transform:none;letter-spacing:0">(optional)</span></label>
+                    <input type="date" id="prop-promo-expires" />
+                  </div>
+                  <div class="form-group">
+                    <label>Internal Note <span style="font-weight:300;text-transform:none;letter-spacing:0">visible to admin only</span></label>
+                    <input type="text" id="prop-promo-note" placeholder="e.g. Running until end of month" />
+                  </div>
+                  <div class="form-group full-width">
+                    <div class="discount-preview" id="discount-preview" style="display:none">
+                      <span class="discount-preview__badge" id="dp-badge">15% OFF</span>
+                      <span>
+                        <span class="discount-preview__price" id="dp-discounted">₦127,500</span>
+                        <span class="discount-preview__original" id="dp-original"> ₦150,000</span>
+                      </span>
+                      <span class="discount-preview__savings" id="dp-savings">Saving ₦22,500 per night</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div class="section-actions" style="margin-top:1.5rem">
@@ -779,10 +742,7 @@
 
         <div class="card">
           <div class="card__header">
-            <div>
-              <div class="card__title">All Properties</div>
-              <div class="card__subtitle">Click Edit to modify a listing</div>
-            </div>
+            <div><div class="card__title">All Properties</div><div class="card__subtitle">Click Edit to modify a listing</div></div>
             <button class="btn btn--ghost btn--sm" onclick="loadProperties()">↻ Refresh</button>
           </div>
           <div style="overflow-x:auto">
@@ -793,13 +753,50 @@
                   <th>Name</th>
                   <th>Location</th>
                   <th>Price / night</th>
+                  <th>Promo / Discount</th>
                   <th>Platforms</th>
                   <th>Status</th>
                   <th>Actions</th>
                 </tr>
               </thead>
               <tbody id="properties-tbody">
-                <tr><td colspan="7" style="text-align:center;color:var(--muted);padding:3rem">Loading…</td></tr>
+                <tr><td colspan="8" style="text-align:center;color:var(--muted);padding:3rem">Loading…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ────────────────── BOOKING REQUESTS TAB ── -->
+      <div class="tab-panel" id="tab-requests">
+        <div class="card">
+          <div class="card__header">
+            <div><div class="card__title">Booking Requests</div><div class="card__subtitle">Guest requests awaiting your review and confirmation</div></div>
+            <div style="display:flex;gap:.6rem;align-items:center">
+              <select id="requests-filter" style="font-size:.82rem;padding:.4rem .8rem;width:auto;border-radius:999px">
+                <option value="">All requests</option>
+                <option value="new">New</option>
+                <option value="reviewed">Reviewed</option>
+              </select>
+              <button class="btn btn--ghost btn--sm" id="refresh-requests-btn">↻ Refresh</button>
+            </div>
+          </div>
+          <div style="overflow-x:auto">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Guest</th>
+                  <th>Property</th>
+                  <th>Dates</th>
+                  <th>Guests</th>
+                  <th>Est. Total</th>
+                  <th>Promo</th>
+                  <th>Submitted</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="requests-tbody">
+                <tr><td colspan="8" style="text-align:center;color:var(--muted);padding:3rem">Loading…</td></tr>
               </tbody>
             </table>
           </div>
@@ -810,10 +807,7 @@
       <div class="tab-panel" id="tab-bookings">
         <div class="card">
           <div class="card__header">
-            <div>
-              <div class="card__title">All Bookings</div>
-              <div class="card__subtitle">Filter by status or refresh to see latest</div>
-            </div>
+            <div><div class="card__title">Confirmed Bookings</div><div class="card__subtitle">Filter by status or refresh to see latest</div></div>
             <div style="display:flex;gap:.6rem;align-items:center">
               <select id="bookings-filter-status" style="font-size:.82rem;padding:.4rem .8rem;width:auto;border-radius:999px">
                 <option value="">All statuses</option>
@@ -850,23 +844,31 @@
 </div>
 
 <script>
+/* ================================================================
+   ADMIN SCRIPT
+================================================================ */
 const TOKEN_KEY = "admin_jwt";
 function getToken() { return sessionStorage.getItem(TOKEN_KEY); }
 function authHeaders() { return { "Authorization": `Bearer ${getToken()}`, "Content-Type": "application/json" }; }
 
 const TAB_META = {
-  settings:   { title: "General Settings",   sub: "Manage branding and site configuration" },
-  properties: { title: "Property Manager",   sub: "Add, edit and manage listings" },
-  bookings:   { title: "Bookings",            sub: "View and filter all guest bookings" },
+  settings:   { title: "General Settings",       sub: "Manage branding and site configuration" },
+  properties: { title: "Property Manager",        sub: "Add, edit and manage listings" },
+  requests:   { title: "Booking Requests",         sub: "Review and respond to guest booking requests" },
+  bookings:   { title: "Confirmed Bookings",       sub: "View and filter all confirmed guest bookings" },
 };
 
-const CURRENCY_SYMBOLS = { NGN: '₦', USD: '$', EUR: '€', GBP: '£', GHS: '₵', KES: 'KSh', ZAR: 'R' };
+const CURRENCY_SYMBOLS = { NGN:'₦', USD:'$', EUR:'€', GBP:'£', GHS:'₵', KES:'KSh', ZAR:'R' };
 function fmtPrice(amount, currency = 'NGN') {
   const sym = CURRENCY_SYMBOLS[currency] || (currency + ' ');
   return sym + Number(amount).toLocaleString();
 }
 function escapeHtml(str) {
   return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function fmtDate(d) {
+  if (!d) return '—';
+  return new Date(d).toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' });
 }
 
 const PLATFORMS = ["Airbnb","Booking.com","Expedia","VRBO","Hotels.ng","Jumia Travel","Tripadvisor","Agoda"];
@@ -877,20 +879,12 @@ function buildPlatformGrid() {
     <label class="platform-option" id="plat-label-${CSS.escape(p)}">
       <input type="checkbox" class="platform-cb" value="${p}" onchange="syncPlatformLabel(this)" />
       ${p}
-    </label>
-  `).join("");
+    </label>`).join("");
 }
-function syncPlatformLabel(cb) {
-  cb.closest(".platform-option").classList.toggle("checked", cb.checked);
-}
-function getSelectedPlatforms() {
-  return [...document.querySelectorAll(".platform-cb:checked")].map(c => c.value);
-}
+function syncPlatformLabel(cb) { cb.closest(".platform-option").classList.toggle("checked", cb.checked); }
+function getSelectedPlatforms() { return [...document.querySelectorAll(".platform-cb:checked")].map(c => c.value); }
 function setSelectedPlatforms(arr = []) {
-  document.querySelectorAll(".platform-cb").forEach(cb => {
-    cb.checked = arr.includes(cb.value);
-    syncPlatformLabel(cb);
-  });
+  document.querySelectorAll(".platform-cb").forEach(cb => { cb.checked = arr.includes(cb.value); syncPlatformLabel(cb); });
 }
 
 /* ═══════════════════════════════════════════════
@@ -900,62 +894,73 @@ function showUploadModal(filename) {
   document.getElementById('upload-modal-filename').textContent = filename || 'Uploading…';
   document.getElementById('upload-loading-modal').classList.add('is-open');
 }
-function hideUploadModal() {
-  document.getElementById('upload-loading-modal').classList.remove('is-open');
+function hideUploadModal() { document.getElementById('upload-loading-modal').classList.remove('is-open'); }
+
+/* ═══════════════════════════════════════════════
+   PROMO / DISCOUNT SECTION
+═══════════════════════════════════════════════ */
+function onPromoToggle() {
+  const enabled = document.getElementById('prop-promo-enabled').checked;
+  const body    = document.getElementById('promo-body');
+  const hint    = document.getElementById('promo-toggle-hint');
+  const badge   = document.getElementById('promo-active-badge');
+  body.classList.toggle('open', enabled);
+  hint.textContent = enabled ? 'Enabled — click toggle to disable' : 'Click to expand';
+  badge.style.display = enabled ? '' : 'none';
+  document.getElementById('promo-section').style.borderColor = enabled ? 'var(--promo)' : '';
+  if (enabled) updateDiscountPreview();
+  else document.getElementById('discount-preview').style.display = 'none';
+}
+
+function updateDiscountPreview() {
+  const priceInput = parseFloat(document.getElementById('prop-price').value);
+  const pctInput   = parseFloat(document.getElementById('prop-discount-percent').value);
+  const currency   = document.getElementById('prop-currency').value;
+  const preview    = document.getElementById('discount-preview');
+
+  if (!priceInput || !pctInput || pctInput <= 0 || pctInput >= 100) {
+    preview.style.display = 'none'; return;
+  }
+  const discounted = Math.round(priceInput * (1 - pctInput / 100));
+  const saved      = priceInput - discounted;
+  const sym        = CURRENCY_SYMBOLS[currency] || (currency + ' ');
+  document.getElementById('dp-badge').textContent      = `${pctInput}% OFF`;
+  document.getElementById('dp-discounted').textContent  = fmtPrice(discounted, currency);
+  document.getElementById('dp-original').textContent    = ` ${fmtPrice(priceInput, currency)}`;
+  document.getElementById('dp-savings').textContent     = `Saving ${fmtPrice(saved, currency)} per night`;
+  preview.style.display = '';
 }
 
 /* ═══════════════════════════════════════════════
    MULTI-IMAGE MANAGER
 ═══════════════════════════════════════════════ */
-let propImages  = [];   // [{uid, title, url}]
-let imgCounter  = 0;
+let propImages = [];
+let imgCounter = 0;
 
 function renderImageRows() {
   const mgr = document.getElementById('img-manager');
-
   if (!propImages.length) {
-    mgr.innerHTML = `
-      <div class="img-manager__empty" id="img-empty">
-        <div class="img-manager__empty-icon">📷</div>
-        <span>No images added yet — click "Add Image" below</span>
-      </div>`;
+    mgr.innerHTML = `<div class="img-manager__empty"><div class="img-manager__empty-icon">📷</div><span>No images added yet — click "Add Image" below</span></div>`;
     return;
   }
-
   mgr.innerHTML = propImages.map((img, idx) => {
     const hasUrl = !!img.url;
-    const thumbHtml = hasUrl
-      ? `<img src="${escapeHtml(img.url)}" alt="" />`
-      : '';
     return `
       <div class="img-row" data-uid="${img.uid}">
         <div class="img-row__index">${idx + 1}</div>
         <div class="img-row__thumb ${hasUrl ? '' : 'img-row__thumb--placeholder'}" id="thumb-${img.uid}">
-          ${thumbHtml}
+          ${hasUrl ? `<img src="${escapeHtml(img.url)}" alt="" />` : ''}
         </div>
         <div class="img-row__title">
-          <input
-            type="text"
-            placeholder="Image title (e.g. Living Room)"
-            value="${escapeHtml(img.title)}"
-            oninput="updateImageTitle('${img.uid}', this.value)"
-          />
+          <input type="text" placeholder="Image title (e.g. Living Room)" value="${escapeHtml(img.title)}"
+            oninput="updateImageTitle('${img.uid}', this.value)" />
         </div>
         <div class="img-row__actions">
-          <button
-            type="button"
-            class="img-row__upload-btn ${hasUrl ? 'has-image' : ''}"
-            onclick="triggerImageUpload('${img.uid}')"
-          >${hasUrl ? '↺ Replace' : '⬆ Upload'}</button>
-          <button
-            type="button"
-            class="img-row__del"
-            onclick="deleteImageRow('${img.uid}')"
-            title="Delete image"
-          >🗑</button>
+          <button type="button" class="img-row__upload-btn ${hasUrl ? 'has-image' : ''}"
+            onclick="triggerImageUpload('${img.uid}')">${hasUrl ? '↺ Replace' : '⬆ Upload'}</button>
+          <button type="button" class="img-row__del" onclick="deleteImageRow('${img.uid}')" title="Delete">🗑</button>
         </div>
-      </div>
-    `;
+      </div>`;
   }).join('');
 }
 
@@ -963,138 +968,69 @@ function addImageRow() {
   const uid = 'img_' + (++imgCounter);
   propImages.push({ uid, title: '', url: '' });
   renderImageRows();
-  // Focus the new row's title input
   const rows = document.querySelectorAll('.img-row');
-  if (rows.length) {
-    const last = rows[rows.length - 1];
-    const input = last.querySelector('input[type="text"]');
-    if (input) input.focus();
-  }
+  if (rows.length) rows[rows.length - 1].querySelector('input[type="text"]')?.focus();
 }
-
-function updateImageTitle(uid, val) {
-  const img = propImages.find(i => i.uid === uid);
-  if (img) img.title = val;
-}
-
-function deleteImageRow(uid) {
-  propImages = propImages.filter(i => i.uid !== uid);
-  renderImageRows();
-}
+function updateImageTitle(uid, val) { const img = propImages.find(i => i.uid === uid); if (img) img.title = val; }
+function deleteImageRow(uid) { propImages = propImages.filter(i => i.uid !== uid); renderImageRows(); }
 
 function triggerImageUpload(uid) {
-  // Create / reuse a hidden file input for this uid
   let input = document.getElementById('file-input-' + uid);
   if (!input) {
     input = document.createElement('input');
-    input.type = 'file';
-    input.id   = 'file-input-' + uid;
-    input.accept = 'image/jpeg,image/png,image/webp';
-    input.style.display = 'none';
+    input.type = 'file'; input.id = 'file-input-' + uid;
+    input.accept = 'image/jpeg,image/png,image/webp'; input.style.display = 'none';
     input.addEventListener('change', e => handleRowUpload(uid, e.target.files[0]));
     document.body.appendChild(input);
   }
-  input.value = ''; // reset so same file can be re-chosen
-  input.click();
+  input.value = ''; input.click();
 }
 
 async function handleRowUpload(uid, file) {
   if (!file) return;
   const img = propImages.find(i => i.uid === uid);
   if (!img) return;
-
   showUploadModal(file.name);
-
   const form = new FormData();
   form.append("file", file);
-
   try {
-    const res = await fetch("/admin/upload-image", {
-      method: "POST",
-      headers: { "Authorization": `Bearer ${getToken()}` },
-      body: form,
-    });
-    if (!res.ok) throw new Error("Upload failed");
+    const res = await fetch("/admin/upload-image", { method: "POST", headers: { "Authorization": `Bearer ${getToken()}` }, body: form });
+    if (!res.ok) throw new Error();
     const { url } = await res.json();
     img.url = url;
-    // Auto-fill title from filename if empty
     if (!img.title) img.title = file.name.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ');
     renderImageRows();
-  } catch {
-    alert('Upload failed — please try again.');
-  } finally {
-    hideUploadModal();
-  }
+  } catch { alert('Upload failed — please try again.'); }
+  finally { hideUploadModal(); }
 }
 
-function clearImageRows() {
-  propImages = [];
-  imgCounter = 0;
-  renderImageRows();
-}
+function clearImageRows() { propImages = []; imgCounter = 0; renderImageRows(); }
 
 /* ═══════════════════════════════════════════════
    RICH TEXT EDITOR
 ═══════════════════════════════════════════════ */
-function rteCmd(cmd) {
-  document.getElementById('rte-body').focus();
-  document.execCommand(cmd, false, null);
-  updateRteButtons();
-  updateRteCharCount();
-}
-
-function rteBlock(tag) {
-  document.getElementById('rte-body').focus();
-  document.execCommand('formatBlock', false, tag);
-  updateRteButtons();
-}
-
-function rteClear() {
-  document.getElementById('rte-body').focus();
-  document.execCommand('removeFormat', false, null);
-  document.execCommand('formatBlock', false, 'p');
-  updateRteButtons();
-}
-
-function getRteHtml() {
-  const body = document.getElementById('rte-body');
-  const html = body.innerHTML.trim();
-  // Return null if essentially empty
-  if (!html || html === '<br>' || html === '<p><br></p>') return null;
-  return html;
-}
-
-function setRteHtml(html) {
-  const body = document.getElementById('rte-body');
-  body.innerHTML = html || '';
-  updateRteButtons();
-  updateRteCharCount();
-}
-
+function rteCmd(cmd) { document.getElementById('rte-body').focus(); document.execCommand(cmd, false, null); updateRteButtons(); updateRteCharCount(); }
+function rteBlock(tag) { document.getElementById('rte-body').focus(); document.execCommand('formatBlock', false, tag); updateRteButtons(); }
+function rteClear() { document.getElementById('rte-body').focus(); document.execCommand('removeFormat', false, null); document.execCommand('formatBlock', false, 'p'); updateRteButtons(); }
+function getRteHtml() { const b = document.getElementById('rte-body'); const h = b.innerHTML.trim(); if (!h || h === '<br>' || h === '<p><br></p>') return null; return h; }
+function setRteHtml(html) { document.getElementById('rte-body').innerHTML = html || ''; updateRteButtons(); updateRteCharCount(); }
 function updateRteButtons() {
   ['bold','italic','underline'].forEach(cmd => {
     const btn = document.getElementById('rte-' + cmd);
     if (btn) btn.classList.toggle('active', document.queryCommandState(cmd));
   });
 }
-
 function updateRteCharCount() {
   const body = document.getElementById('rte-body');
-  const text = body.innerText || body.textContent || '';
-  const count = text.replace(/\s+/g,'').length;
+  const count = (body.innerText || body.textContent || '').replace(/\s+/g,'').length;
   document.getElementById('rte-charcount').textContent = count.toLocaleString() + ' character' + (count !== 1 ? 's' : '');
 }
-
-// Strip formatting on paste — plain text only
 document.addEventListener('DOMContentLoaded', () => {
   const body = document.getElementById('rte-body');
-  if (body) {
-    body.addEventListener('paste', e => {
-      e.preventDefault();
-      const text = (e.clipboardData || window.clipboardData).getData('text/plain');
-      document.execCommand('insertText', false, text);
-    });
-  }
+  if (body) body.addEventListener('paste', e => {
+    e.preventDefault();
+    document.execCommand('insertText', false, (e.clipboardData || window.clipboardData).getData('text/plain'));
+  });
 });
 
 /* ── Login ──────────────────────────────────────── */
@@ -1105,47 +1041,45 @@ async function login() {
   alertEl.style.display = "none";
   try {
     const res = await fetch("/admin/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        username: document.getElementById("auth-user").value,
-        password: document.getElementById("auth-pass").value,
-      }),
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username: document.getElementById("auth-user").value, password: document.getElementById("auth-pass").value }),
     });
     if (!res.ok) throw new Error("Invalid credentials. Please try again.");
     const { access_token } = await res.json();
     sessionStorage.setItem(TOKEN_KEY, access_token);
     showDashboard();
   } catch (e) {
-    alertEl.textContent = e.message;
-    alertEl.style.display = "flex";
-  } finally {
-    btn.innerHTML = "Sign In →"; btn.disabled = false;
-  }
+    alertEl.textContent = e.message; alertEl.style.display = "flex";
+  } finally { btn.innerHTML = "Sign In →"; btn.disabled = false; }
 }
 
 function showDashboard() {
   document.getElementById("login-screen").style.display = "none";
   document.getElementById("dashboard").style.display = "block";
-  loadSettings();
-  loadProperties();
-  loadBookings();
-  updateStats();
+  loadSettings(); loadProperties(); loadBookings(); loadBookingRequests(); updateStats();
 }
 function logout() { sessionStorage.removeItem(TOKEN_KEY); location.reload(); }
 
 /* ── Stats ──────────────────────────────────────── */
 async function updateStats() {
   try {
-    const [propsRes, bookRes] = await Promise.all([
+    const [propsRes, bookRes, reqRes] = await Promise.all([
       fetch("/admin/properties", { headers: authHeaders() }),
       fetch("/admin/bookings",   { headers: authHeaders() }),
+      fetch("/admin/booking-requests", { headers: authHeaders() }).catch(() => ({ json: () => [] })),
     ]);
     const props    = await propsRes.json();
     const bookings = await bookRes.json();
+    const requests = reqRes.ok ? await reqRes.json() : [];
     document.getElementById("stat-props").textContent     = props.length;
     document.getElementById("stat-bookings").textContent  = bookings.length;
-    document.getElementById("stat-confirmed").textContent = bookings.filter(b => b.status === "confirmed").length;
+    document.getElementById("stat-requests").textContent  = requests.length;
+    const activePromos = props.filter(p => p.promo_label || parseFloat(p.discount_percent || 0) > 0).length;
+    document.getElementById("stat-promos").textContent    = activePromos;
+    const newReqs = requests.filter(r => r.status === 'new' || !r.status).length;
+    const badge = document.getElementById('requests-badge');
+    if (newReqs > 0) { badge.textContent = newReqs; badge.style.display = ''; }
+    else { badge.style.display = 'none'; }
   } catch {}
 }
 
@@ -1159,6 +1093,7 @@ document.querySelectorAll(".nav-item[data-tab]").forEach(item => {
     const meta = TAB_META[item.dataset.tab];
     document.getElementById("dashboard-tab-title").textContent = meta.title;
     document.getElementById("dashboard-tab-sub").textContent   = meta.sub;
+    if (item.dataset.tab === 'requests') loadBookingRequests();
   });
 });
 
@@ -1166,9 +1101,9 @@ document.querySelectorAll(".nav-item[data-tab]").forEach(item => {
 function showAlert(id, msg, type = "success") {
   const el = document.getElementById(id);
   el.className = `alert alert--${type}`;
-  el.innerHTML = (type === "success" ? "✓ " : "⚠ ") + msg;
+  el.innerHTML = (type === "success" ? "✓ " : type === "warn" ? "⚠ " : "⚠ ") + msg;
   el.style.display = "flex";
-  setTimeout(() => el.style.display = "none", 4000);
+  setTimeout(() => el.style.display = "none", 5000);
 }
 
 /* ── Colour pickers ─────────────────────────────── */
@@ -1188,9 +1123,7 @@ function updateColourPreview() {
   const picker = document.getElementById(`cfg-${key}-color-picker`);
   const text   = document.getElementById(`cfg-${key}-color`);
   picker.addEventListener("input", () => { text.value = picker.value; updateColourPreview(); });
-  text.addEventListener("input", () => {
-    if (/^#[0-9a-f]{6}$/i.test(text.value)) { picker.value = text.value; updateColourPreview(); }
-  });
+  text.addEventListener("input", () => { if (/^#[0-9a-f]{6}$/i.test(text.value)) { picker.value = text.value; updateColourPreview(); } });
 });
 
 /* ── Hero Background Toggle ─────────────────────── */
@@ -1198,48 +1131,41 @@ function toggleHeroBgFields() {
   const type = document.getElementById("cfg-hero-bg-type").value;
   document.getElementById("hero-bg-color-group").style.display = type === 'solid-color' ? 'block' : 'none';
   document.getElementById("hero-bg-media-group").style.display = (type === 'image' || type === 'video') ? 'block' : 'none';
-
   if (type === 'image') document.getElementById("hero-bg-media-label").textContent = "Image URL";
   if (type === 'video') document.getElementById("hero-bg-media-label").textContent = "Video URL (MP4)";
 }
-
-// Sync the hex input and the color picker for the custom background color
-document.getElementById("cfg-hero-bg-color-picker").addEventListener("input", function() {
-  document.getElementById("cfg-hero-bg-color").value = this.value;
-});
-document.getElementById("cfg-hero-bg-color").addEventListener("input", function() {
-  if (/^#[0-9a-f]{6}$/i.test(this.value)) {
-    document.getElementById("cfg-hero-bg-color-picker").value = this.value;
-  }
-});
+document.getElementById("cfg-hero-bg-color-picker").addEventListener("input", function() { document.getElementById("cfg-hero-bg-color").value = this.value; });
+document.getElementById("cfg-hero-bg-color").addEventListener("input", function() { if (/^#[0-9a-f]{6}$/i.test(this.value)) document.getElementById("cfg-hero-bg-color-picker").value = this.value; });
 
 /* ── Settings ───────────────────────────────────── */
 async function loadSettings() {
-  const res = await fetch("/admin/config", { headers: authHeaders() });
-  const cfg = await res.json();
-  document.getElementById("cfg-business-name").value = cfg.business_name || "";
-  document.getElementById("cfg-contact-email").value = cfg.contact_email || "";
-  document.getElementById("cfg-hero-text").value     = cfg.hero_text     || "";
-  document.getElementById("cfg-hero-subtext").value  = cfg.hero_subtext  || "";
-  document.getElementById("cfg-footer-text").value   = cfg.footer_text   || "";
-  document.getElementById("cfg-logo-url").value      = cfg.logo_url      || "";
-  document.getElementById("cfg-primary-color").value        = cfg.primary_color || "#0f1923";
-  document.getElementById("cfg-accent-color").value         = cfg.accent_color  || "#c9a84c";
-  document.getElementById("cfg-bg-color").value             = cfg.bg_color      || "#f7f4ef";
-  document.getElementById("cfg-surface-color").value        = cfg.surface_color || "#ffffff";
-  document.getElementById("cfg-primary-color-picker").value = cfg.primary_color || "#0f1923";
-  document.getElementById("cfg-accent-color-picker").value  = cfg.accent_color  || "#c9a84c";
-  document.getElementById("cfg-bg-color-picker").value      = cfg.bg_color      || "#f7f4ef";
-  document.getElementById("cfg-surface-color-picker").value = cfg.surface_color || "#ffffff";
-  document.getElementById("cfg-hero-bg-type").value = cfg.hero_bg_type || "animated-gradient";
-  document.getElementById("cfg-hero-bg-color").value = cfg.hero_bg_color || "#0f1923";
-  document.getElementById("cfg-hero-bg-color-picker").value = cfg.hero_bg_color || "#0f1923";
-  document.getElementById("cfg-hero-bg-media-url").value = cfg.hero_bg_media_url || "";
-  updateColourPreview();
-  const brand = document.getElementById("login-brand");
-  if (brand) brand.textContent = cfg.business_name || "Admin";
-  const sidebarBrand = document.querySelector(".sidebar__brand");
-  if (sidebarBrand) sidebarBrand.textContent = cfg.business_name || "Admin";
+  try {
+    const res = await fetch("/admin/config", { headers: authHeaders() });
+    const cfg = await res.json();
+    document.getElementById("cfg-business-name").value = cfg.business_name || "";
+    document.getElementById("cfg-contact-email").value = cfg.contact_email || "";
+    document.getElementById("cfg-hero-text").value     = cfg.hero_text     || "";
+    document.getElementById("cfg-hero-subtext").value  = cfg.hero_subtext  || "";
+    document.getElementById("cfg-footer-text").value   = cfg.footer_text   || "";
+    document.getElementById("cfg-logo-url").value      = cfg.logo_url      || "";
+    document.getElementById("cfg-primary-color").value        = cfg.primary_color || "#0f1923";
+    document.getElementById("cfg-accent-color").value         = cfg.accent_color  || "#c9a84c";
+    document.getElementById("cfg-bg-color").value             = cfg.bg_color      || "#f7f4ef";
+    document.getElementById("cfg-surface-color").value        = cfg.surface_color || "#ffffff";
+    document.getElementById("cfg-primary-color-picker").value = cfg.primary_color || "#0f1923";
+    document.getElementById("cfg-accent-color-picker").value  = cfg.accent_color  || "#c9a84c";
+    document.getElementById("cfg-bg-color-picker").value      = cfg.bg_color      || "#f7f4ef";
+    document.getElementById("cfg-surface-color-picker").value = cfg.surface_color || "#ffffff";
+    document.getElementById("cfg-hero-bg-type").value      = cfg.hero_bg_type      || "animated-gradient";
+    document.getElementById("cfg-hero-bg-color").value     = cfg.hero_bg_color     || "#0f1923";
+    document.getElementById("cfg-hero-bg-color-picker").value = cfg.hero_bg_color  || "#0f1923";
+    document.getElementById("cfg-hero-bg-media-url").value = cfg.hero_bg_media_url || "";
+    updateColourPreview();
+    const brand = document.getElementById("login-brand");
+    if (brand) brand.textContent = cfg.business_name || "Admin";
+    const sidebarBrand = document.querySelector(".sidebar__brand");
+    if (sidebarBrand) sidebarBrand.textContent = cfg.business_name || "Admin";
+  } catch {}
 }
 
 async function saveSettings() {
@@ -1259,18 +1185,15 @@ async function saveSettings() {
         accent_color:  document.getElementById("cfg-accent-color").value,
         bg_color:      document.getElementById("cfg-bg-color").value,
         surface_color: document.getElementById("cfg-surface-color").value,
-        hero_bg_type: document.getElementById("cfg-hero-bg-type").value,
-        hero_bg_color: document.getElementById("cfg-hero-bg-color").value,
-        hero_bg_media_url: document.getElementById("cfg-hero-bg-media-url").value
+        hero_bg_type:      document.getElementById("cfg-hero-bg-type").value,
+        hero_bg_color:     document.getElementById("cfg-hero-bg-color").value,
+        hero_bg_media_url: document.getElementById("cfg-hero-bg-media-url").value,
       }),
     });
     if (!res.ok) throw new Error("Save failed");
     showAlert("settings-alert", "Settings saved! Changes are live on the public site.");
-  } catch (e) {
-    showAlert("settings-alert", e.message, "error");
-  } finally {
-    btn.innerHTML = "Save Settings"; btn.disabled = false;
-  }
+  } catch (e) { showAlert("settings-alert", e.message, "error"); }
+  finally { btn.innerHTML = "Save Settings"; btn.disabled = false; }
 }
 
 /* ── Properties ─────────────────────────────────── */
@@ -1278,8 +1201,7 @@ let amenities = [];
 
 function renderAmenityChips() {
   document.getElementById("amenity-chips").innerHTML = amenities
-    .map((a, i) => `<span class="chip">${a}<span class="chip__remove" data-idx="${i}">×</span></span>`)
-    .join("");
+    .map((a, i) => `<span class="chip">${a}<span class="chip__remove" data-idx="${i}">×</span></span>`).join("");
   document.querySelectorAll(".chip__remove").forEach(el => {
     el.addEventListener("click", () => { amenities.splice(+el.dataset.idx, 1); renderAmenityChips(); });
   });
@@ -1293,6 +1215,17 @@ function clearPropertyForm() {
   document.getElementById("prop-max-guests").value  = "2";
   document.getElementById("prop-available").value   = "true";
   document.getElementById("prop-currency").value    = "NGN";
+  // Promo fields
+  document.getElementById("prop-promo-enabled").checked  = false;
+  document.getElementById("prop-discount-percent").value = "";
+  document.getElementById("prop-promo-label").value      = "";
+  document.getElementById("prop-promo-expires").value    = "";
+  document.getElementById("prop-promo-note").value       = "";
+  document.getElementById('promo-body').classList.remove('open');
+  document.getElementById('promo-active-badge').style.display = 'none';
+  document.getElementById('promo-toggle-hint').textContent = 'Click to expand';
+  document.getElementById('promo-section').style.borderColor = '';
+  document.getElementById('discount-preview').style.display = 'none';
   setSelectedPlatforms([]);
   setRteHtml('');
   clearImageRows();
@@ -1319,88 +1252,121 @@ function fillPropertyForm(prop) {
   document.getElementById("prop-form-title").textContent = "Editing: " + prop.name;
   amenities = prop.amenities || []; renderAmenityChips();
 
-  // Populate image rows
+  // Promo fields
+  const discountPct = parseFloat(prop.discount_percent || 0);
+  const hasPromo = !!(prop.promo_label || discountPct > 0);
+  document.getElementById("prop-promo-enabled").checked  = hasPromo;
+  document.getElementById("prop-discount-percent").value = prop.discount_percent || "";
+  document.getElementById("prop-promo-label").value      = prop.promo_label      || "";
+  document.getElementById("prop-promo-expires").value    = prop.promo_expires    || "";
+  document.getElementById("prop-promo-note").value       = prop.promo_note       || "";
+  // Trigger UI update
+  onPromoToggle();
+  if (hasPromo) updateDiscountPreview();
+
+  // Images
   const imgs = getPropImages(prop);
-  propImages = imgs.map((img, i) => ({ uid: 'img_' + (++imgCounter), title: img.title || '', url: img.url || '' }));
+  propImages = imgs.map(img => ({ uid: 'img_' + (++imgCounter), title: img.title || '', url: img.url || '' }));
   renderImageRows();
 
   document.querySelector(".nav-item[data-tab='properties']").click();
-  document.getElementById("tab-properties").scrollIntoView({ behavior: "smooth" });
+  setTimeout(() => document.getElementById("tab-properties").scrollIntoView({ behavior: "smooth" }), 100);
 }
 
 async function loadProperties() {
   const tbody = document.getElementById("properties-tbody");
-  const res = await fetch("/admin/properties", { headers: authHeaders() });
-  const props = await res.json();
-  if (!props.length) {
-    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:3rem">No properties yet. Add one above.</td></tr>`;
-    return;
-  }
-  tbody.innerHTML = props.map(p => {
-    const currency = p.currency || 'NGN';
-    const priceStr = fmtPrice(p.price_per_night, currency);
-    const platforms = (p.featured_on || []);
-    const platformStr = platforms.length
-      ? platforms.slice(0, 2).join(', ') + (platforms.length > 2 ? ` +${platforms.length - 2}` : '')
-      : '<span style="color:var(--muted)">—</span>';
-    const imgs = getPropImages(p);
-    const thumbSrc = imgs.length ? imgs[0].url : '';
-    const imgCount = imgs.length;
-    return `
-      <tr>
-        <td>
-          <div style="display:flex;align-items:center;gap:.5rem">
-            ${thumbSrc ? `<img src="${escapeHtml(thumbSrc)}" class="prop-thumb" onerror="this.style.display='none'" />` : '<div style="width:48px;height:38px;background:var(--bg-warm);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.8rem;color:var(--muted)">📷</div>'}
-            ${imgCount > 1 ? `<span style="font-size:.72rem;color:var(--muted);font-weight:600">+${imgCount - 1}</span>` : ''}
-          </div>
-        </td>
-        <td><strong style="font-size:.9rem">${escapeHtml(p.name)}</strong></td>
-        <td style="color:var(--muted)">${p.location ? escapeHtml(p.location) : "–"}</td>
-        <td style="font-weight:600">${priceStr}</td>
-        <td style="font-size:.8rem;color:var(--text-mid)">${platformStr}</td>
-        <td><span class="badge ${p.is_available ? 'badge--green' : 'badge--red'}">${p.is_available ? 'Live' : 'Hidden'}</span></td>
-        <td>
-          <div style="display:flex;gap:.4rem">
-            <button class="btn btn--ghost btn--sm" onclick='fillPropertyForm(${JSON.stringify(p).replace(/'/g, "&#39;")})'>Edit</button>
-            <button class="btn btn--danger btn--sm" onclick="hideProperty('${p.id}')">Hide</button>
-          </div>
-        </td>
-      </tr>
-    `;
-  }).join("");
+  try {
+    const res   = await fetch("/admin/properties", { headers: authHeaders() });
+    const props = await res.json();
+    if (!props.length) {
+      tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:3rem">No properties yet. Add one above.</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = props.map(p => {
+      const currency    = p.currency || 'NGN';
+      const discountPct = parseFloat(p.discount_percent || 0);
+      const discounted  = discountPct ? Math.round(p.price_per_night * (1 - discountPct / 100)) : p.price_per_night;
+      const platforms   = p.featured_on || [];
+      const platformStr = platforms.length
+        ? platforms.slice(0,2).join(', ') + (platforms.length > 2 ? ` +${platforms.length-2}` : '')
+        : '<span style="color:var(--muted)">—</span>';
+      const imgs      = getPropImages(p);
+      const thumbSrc  = imgs.length ? imgs[0].url : '';
+      const imgCount  = imgs.length;
+      const hasPromo  = !!(p.promo_label || discountPct > 0);
+
+      let promoCells = '<span style="color:var(--muted);font-size:.78rem">—</span>';
+      if (hasPromo) {
+        const parts = [];
+        if (p.promo_label) parts.push(`<span class="badge badge--promo">🏷️ ${escapeHtml(p.promo_label)}</span>`);
+        if (discountPct)   parts.push(`<span class="badge badge--discount">${discountPct}% off</span>`);
+        promoCells = `<div style="display:flex;flex-direction:column;gap:0.3rem">${parts.join('')}</div>`;
+      }
+
+      const priceStr = discountPct
+        ? `<div style="font-weight:600;color:#be123c">${fmtPrice(discounted, currency)}</div>
+           <div style="font-size:.75rem;color:var(--muted);text-decoration:line-through">${fmtPrice(p.price_per_night, currency)}</div>`
+        : `<span style="font-weight:600">${fmtPrice(p.price_per_night, currency)}</span>`;
+
+      return `
+        <tr>
+          <td>
+            <div style="display:flex;align-items:center;gap:.5rem">
+              ${thumbSrc
+                ? `<img src="${escapeHtml(thumbSrc)}" class="prop-thumb" onerror="this.style.display='none'" />`
+                : '<div style="width:48px;height:38px;background:var(--bg-warm);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.8rem;color:var(--muted)">📷</div>'}
+              ${imgCount > 1 ? `<span style="font-size:.72rem;color:var(--muted);font-weight:600">+${imgCount-1}</span>` : ''}
+            </div>
+          </td>
+          <td><strong style="font-size:.9rem">${escapeHtml(p.name)}</strong></td>
+          <td style="color:var(--muted)">${p.location ? escapeHtml(p.location) : '–'}</td>
+          <td>${priceStr}</td>
+          <td>${promoCells}</td>
+          <td style="font-size:.8rem;color:var(--text-mid)">${platformStr}</td>
+          <td><span class="badge ${p.is_available ? 'badge--green' : 'badge--red'}">${p.is_available ? 'Live' : 'Hidden'}</span></td>
+          <td>
+            <div style="display:flex;gap:.4rem">
+              <button class="btn btn--ghost btn--sm" onclick='fillPropertyForm(${JSON.stringify(p).replace(/'/g,"&#39;")})'>Edit</button>
+              <button class="btn btn--danger btn--sm" onclick="hideProperty('${p.id}')">Hide</button>
+            </div>
+          </td>
+        </tr>`;
+    }).join("");
+  } catch { tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;color:var(--error);padding:2rem">Failed to load properties.</td></tr>`; }
 }
 
 async function hideProperty(id) {
   if (!confirm("Hide this property from the public site?")) return;
   await fetch(`/admin/properties/${id}`, { method: "DELETE", headers: authHeaders() });
-  loadProperties();
+  loadProperties(); updateStats();
 }
 
 async function saveProperty() {
   const btn = document.getElementById("save-property-btn");
   btn.innerHTML = '<span class="spinner"></span> Saving…'; btn.disabled = true;
-  const id = document.getElementById("prop-id").value;
-  const featuredOn = getSelectedPlatforms();
-  const descHtml = getRteHtml();
-
-  // Build images array — only rows that have a URL
-  const images = propImages
-    .filter(img => img.url)
-    .map(img => ({ title: img.title || 'Image', url: img.url }));
+  const id          = document.getElementById("prop-id").value;
+  const promoEnabled = document.getElementById("prop-promo-enabled").checked;
+  const images = propImages.filter(img => img.url).map(img => ({ title: img.title || 'Image', url: img.url }));
 
   const payload = {
-      name:            document.getElementById("prop-name").value,
-      location:        document.getElementById("prop-location").value || null,
-      price_per_night: parseFloat(document.getElementById("prop-price").value),
-      max_guests:      parseInt(document.getElementById("prop-max-guests").value),
-      description:     descHtml,
-      image_url:       images.length ? images[0].url : null,  // backwards compat
-      images:          images,           // ← always an array, never null
-      is_available:    document.getElementById("prop-available").value === "true",
-      amenities:       amenities,        // ← always an array
-      currency:        document.getElementById("prop-currency").value,
-      featured_on:     featuredOn,       // ← always an array
+    name:             document.getElementById("prop-name").value,
+    location:         document.getElementById("prop-location").value || null,
+    price_per_night:  parseFloat(document.getElementById("prop-price").value),
+    max_guests:       parseInt(document.getElementById("prop-max-guests").value),
+    description:      getRteHtml(),
+    image_url:        images.length ? images[0].url : null,
+    images:           images,
+    is_available:     document.getElementById("prop-available").value === "true",
+    amenities:        amenities,
+    currency:         document.getElementById("prop-currency").value,
+    featured_on:      getSelectedPlatforms(),
+    // Promo / Discount fields
+    discount_percent: promoEnabled ? (parseFloat(document.getElementById("prop-discount-percent").value) || 0) : 0,
+    promo_label:      promoEnabled ? (document.getElementById("prop-promo-label").value.trim() || null) : null,
+    promo_expires:    promoEnabled ? (document.getElementById("prop-promo-expires").value || null) : null,
+    promo_note:       promoEnabled ? (document.getElementById("prop-promo-note").value.trim() || null) : null,
   };
+
   try {
     const url    = id ? `/admin/properties/${id}` : "/admin/properties";
     const method = id ? "PUT" : "POST";
@@ -1408,41 +1374,172 @@ async function saveProperty() {
     if (!res.ok) { const e = await res.json(); throw new Error(e.detail || "Save failed"); }
     showAlert("prop-alert", id ? "Property updated successfully!" : "Property created and is now live!");
     clearPropertyForm(); loadProperties(); updateStats();
-  } catch (e) {
-    showAlert("prop-alert", e.message, "error");
-  } finally {
-    btn.innerHTML = "Save Property"; btn.disabled = false;
+  } catch (e) { showAlert("prop-alert", e.message, "error"); }
+  finally { btn.innerHTML = "Save Property"; btn.disabled = false; }
+}
+
+/* ── Booking Requests ───────────────────────────── */
+let currentRequest = null;
+
+async function loadBookingRequests() {
+  const tbody = document.getElementById("requests-tbody");
+  const filter = document.getElementById("requests-filter").value;
+  const url = "/admin/booking-requests" + (filter ? `?status=${filter}` : "");
+  try {
+    const res  = await fetch(url, { headers: authHeaders() });
+    const reqs = res.ok ? await res.json() : [];
+    if (!reqs.length) {
+      tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:3rem">No booking requests found.</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = reqs.map(r => {
+      const currency    = r.currency || 'NGN';
+      const discountPct = parseFloat(r.discount_percent || 0);
+      const hasPromo    = !!(r.promo_label || discountPct > 0);
+      const totalStr    = r.estimated_total ? fmtPrice(r.estimated_total, currency) : '—';
+      const guestStr    = `${r.adults || '?'} adult${(r.adults||1)!==1?'s':''}${r.children ? `, ${r.children} child${r.children!==1?'ren':''}` : ''}${r.infants ? `, ${r.infants} infant${r.infants!==1?'s':''}` : ''}`;
+      const status      = r.status || 'new';
+      const submittedAt = r.submitted_at ? new Date(r.submitted_at).toLocaleDateString('en-GB', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' }) : '—';
+
+      const promoCell = hasPromo
+        ? `<div style="display:flex;flex-direction:column;gap:.2rem">
+            ${r.promo_label ? `<span class="badge badge--promo" style="font-size:.65rem">🏷️ ${escapeHtml(r.promo_label)}</span>` : ''}
+            ${discountPct   ? `<span class="badge badge--discount" style="font-size:.65rem">${discountPct}% off</span>` : ''}
+           </div>`
+        : '<span style="color:var(--muted);font-size:.78rem">—</span>';
+
+      return `
+        <tr>
+          <td>
+            <strong style="font-size:.875rem">${escapeHtml(r.guest_name)}</strong><br>
+            <small style="color:var(--muted);font-size:.75rem">${escapeHtml(r.guest_email)}</small><br>
+            <small style="color:var(--muted);font-size:.73rem">${escapeHtml(r.guest_phone||'')}</small>
+          </td>
+          <td style="font-size:.875rem;font-weight:500">${escapeHtml(r.property_name || '—')}</td>
+          <td style="font-size:.82rem">
+            <div>${fmtDate(r.check_in)}</div>
+            <div style="color:var(--muted);font-size:.75rem">→ ${fmtDate(r.check_out)}</div>
+            <div style="color:var(--muted);font-size:.72rem">${r.nights || '?'} night${(r.nights||1)!==1?'s':''}</div>
+          </td>
+          <td style="font-size:.82rem;color:var(--text-mid)">${guestStr}</td>
+          <td style="font-weight:600;font-size:.875rem">${totalStr}</td>
+          <td>${promoCell}</td>
+          <td style="font-size:.78rem;color:var(--muted)">${submittedAt}</td>
+          <td>
+            <div style="display:flex;gap:.35rem;flex-wrap:wrap">
+              <button class="btn btn--ghost btn--sm" onclick='openReqModal(${JSON.stringify(r).replace(/'/g,"&#39;")})'>View</button>
+              <a class="btn btn--accent btn--sm" href="mailto:${escapeHtml(r.guest_email)}?subject=Re: Booking Request — ${encodeURIComponent(r.property_name||'Property')}&body=${encodeURIComponent(buildReplyEmail(r))}" style="text-decoration:none">Reply</a>
+            </div>
+          </td>
+        </tr>`;
+    }).join("");
+  } catch {
+    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;color:var(--error);padding:2rem">Failed to load requests. Make sure the /admin/booking-requests endpoint exists.</td></tr>`;
   }
 }
+
+function buildReplyEmail(r) {
+  const currency = r.currency || 'NGN';
+  const sym = CURRENCY_SYMBOLS[currency] || '';
+  return `Hi ${r.guest_name},\n\nThank you for your booking request for ${r.property_name || 'the property'}.\n\nBooking Details:\n• Check-in: ${r.check_in}\n• Check-out: ${r.check_out}\n• Nights: ${r.nights}\n• Adults: ${r.adults}, Children: ${r.children||0}, Infants: ${r.infants||0}\n• Estimated Total: ${r.estimated_total ? fmtPrice(r.estimated_total, currency) : '—'}${r.discount_percent ? ` (includes ${r.discount_percent}% discount)` : ''}\n• Reference: ${r.reference}\n\n[YOUR MESSAGE HERE]\n\nPayment instructions:\n[ADD PAYMENT DETAILS]\n\nKind regards,\nThe Team`;
+}
+
+function openReqModal(r) {
+  currentRequest = r;
+  const currency    = r.currency || 'NGN';
+  const discountPct = parseFloat(r.discount_percent || 0);
+  const hasPromo    = !!(r.promo_label || discountPct > 0);
+
+  document.getElementById('req-modal-guest-name').textContent = r.guest_name;
+  document.getElementById('req-modal-ref').textContent        = `Ref: ${r.reference || '—'}`;
+  document.getElementById('req-modal-prop-name').textContent  = r.property_name || '—';
+  document.getElementById('req-modal-prop-link').href         = r.property_url || '/';
+  document.getElementById('req-modal-checkin').textContent    = fmtDate(r.check_in);
+  document.getElementById('req-modal-checkout').textContent   = fmtDate(r.check_out);
+  document.getElementById('req-modal-nights').textContent     = `${r.nights || '?'}`;
+  document.getElementById('req-modal-adults').textContent     = `${r.adults || '?'} adult${(r.adults||1)!==1?'s':''}`;
+  document.getElementById('req-modal-children').textContent   = `${r.children||0} child${(r.children||0)!==1?'ren':''} · ${r.infants||0} infant${(r.infants||0)!==1?'s':''}`;
+  document.getElementById('req-modal-email').textContent      = r.guest_email;
+  document.getElementById('req-modal-phone').textContent      = r.guest_phone || '—';
+  document.getElementById('req-modal-submitted').textContent  = r.submitted_at ? new Date(r.submitted_at).toLocaleString('en-GB') : '—';
+
+  const status = r.status || 'new';
+  document.getElementById('req-modal-status-badge').innerHTML = `<span class="status-pill ${status}">${status}</span>`;
+
+  // Price
+  document.getElementById('req-modal-total').textContent = r.estimated_total ? fmtPrice(r.estimated_total, currency) : '—';
+  const baseTotal = (r.price_per_night || 0) * (r.nights || 0);
+  const discAmt   = discountPct ? Math.round(baseTotal * discountPct / 100) : 0;
+  let bkdStr = r.price_per_night ? `${fmtPrice(r.price_per_night, currency)} × ${r.nights} nights` : '—';
+  if (discountPct) bkdStr += ` · ${discountPct}% off (saving ${fmtPrice(discAmt, currency)})`;
+  document.getElementById('req-modal-breakdown').textContent = bkdStr;
+
+  // Promo
+  const promoBox = document.getElementById('req-modal-promo-box');
+  if (hasPromo) {
+    const parts = [];
+    if (r.promo_label)  parts.push(r.promo_label);
+    if (discountPct)    parts.push(`${discountPct}% discount`);
+    document.getElementById('req-modal-promo-label').textContent = parts.join(' · ');
+    promoBox.style.display = '';
+  } else { promoBox.style.display = 'none'; }
+
+  // Special requests
+  const specialWrap = document.getElementById('req-modal-special-wrap');
+  if (r.special_requests) {
+    document.getElementById('req-modal-special').textContent = r.special_requests;
+    specialWrap.style.display = '';
+  } else { specialWrap.style.display = 'none'; }
+
+  // Action buttons
+  const replyBody = encodeURIComponent(buildReplyEmail(r));
+  const replySubj = encodeURIComponent(`Re: Booking Request — ${r.property_name || 'Property'} (${r.reference || ''})`);
+  document.getElementById('req-reply-btn').href = `mailto:${r.guest_email}?subject=${replySubj}&body=${replyBody}`;
+
+  const phone = (r.guest_phone || '').replace(/\D/g, '');
+  if (phone) {
+    const waMsg = encodeURIComponent(`Hi ${r.guest_name}, thanks for your booking request for ${r.property_name || 'the property'} (${r.check_in} → ${r.check_out}). Ref: ${r.reference}. We're reviewing your request and will be in touch shortly!`);
+    document.getElementById('req-whatsapp-btn').href = `https://wa.me/${phone}?text=${waMsg}`;
+    document.getElementById('req-whatsapp-btn').style.display = '';
+  } else {
+    document.getElementById('req-whatsapp-btn').style.display = 'none';
+  }
+
+  document.getElementById('req-modal-overlay').classList.add('is-open');
+}
+
+function closeReqModal() { document.getElementById('req-modal-overlay').classList.remove('is-open'); currentRequest = null; }
+document.getElementById('req-modal-overlay').addEventListener('click', e => { if (e.target === e.currentTarget) closeReqModal(); });
 
 /* ── Bookings ───────────────────────────────────── */
 async function loadBookings() {
   const status = document.getElementById("bookings-filter-status").value;
-  const url = "/admin/bookings" + (status ? `?status=${status}` : "");
-  const res = await fetch(url, { headers: authHeaders() });
-  const bookings = await res.json();
-  const tbody = document.getElementById("bookings-tbody");
-  if (!bookings.length) {
-    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:3rem">No bookings found.</td></tr>`;
-    return;
-  }
-  tbody.innerHTML = bookings.map(b => {
-    const currency = b.properties?.currency || 'NGN';
-    return `
-      <tr>
-        <td>
-          <strong style="font-size:.875rem">${escapeHtml(b.guest_name)}</strong><br>
-          <small style="color:var(--muted);font-size:.78rem">${escapeHtml(b.guest_email)}</small>
-        </td>
-        <td style="font-size:.875rem">${b.properties?.name ? escapeHtml(b.properties.name) : "–"}</td>
-        <td style="font-size:.875rem">${b.check_in}</td>
-        <td style="font-size:.875rem">${b.check_out}</td>
-        <td style="font-weight:600;font-size:.875rem">${fmtPrice(b.total_price, currency)}</td>
-        <td><span class="status-pill ${b.status}">${b.status}</span></td>
-        <td><code style="font-size:.72rem;color:var(--muted)">${(b.payment_ref || "–").slice(0, 14)}</code></td>
-      </tr>
-    `;
-  }).join("");
+  const url    = "/admin/bookings" + (status ? `?status=${status}` : "");
+  const tbody  = document.getElementById("bookings-tbody");
+  try {
+    const res      = await fetch(url, { headers: authHeaders() });
+    const bookings = await res.json();
+    if (!bookings.length) {
+      tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:3rem">No bookings found.</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = bookings.map(b => {
+      const currency = b.properties?.currency || 'NGN';
+      return `
+        <tr>
+          <td>
+            <strong style="font-size:.875rem">${escapeHtml(b.guest_name)}</strong><br>
+            <small style="color:var(--muted);font-size:.78rem">${escapeHtml(b.guest_email)}</small>
+          </td>
+          <td style="font-size:.875rem">${b.properties?.name ? escapeHtml(b.properties.name) : '–'}</td>
+          <td style="font-size:.875rem">${b.check_in}</td>
+          <td style="font-size:.875rem">${b.check_out}</td>
+          <td style="font-weight:600;font-size:.875rem">${fmtPrice(b.total_price, currency)}</td>
+          <td><span class="status-pill ${b.status}">${b.status}</span></td>
+          <td><code style="font-size:.72rem;color:var(--muted)">${(b.payment_ref || '–').slice(0,14)}</code></td>
+        </tr>`;
+    }).join("");
+  } catch { tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--error);padding:2rem">Failed to load bookings.</td></tr>`; }
 }
 
 /* ── Event bindings ─────────────────────────────── */
@@ -1454,8 +1551,18 @@ document.getElementById("save-property-btn").addEventListener("click", savePrope
 document.getElementById("clear-prop-form-btn").addEventListener("click", clearPropertyForm);
 document.getElementById("clear-prop-form-btn2").addEventListener("click", clearPropertyForm);
 document.getElementById("refresh-bookings-btn").addEventListener("click", loadBookings);
+document.getElementById("refresh-requests-btn").addEventListener("click", loadBookingRequests);
 document.getElementById("bookings-filter-status").addEventListener("change", loadBookings);
+document.getElementById("requests-filter").addEventListener("change", loadBookingRequests);
 document.getElementById("img-add-btn").addEventListener("click", addImageRow);
+
+// Make promo section header clickable to expand
+document.querySelector('.promo-section__header').addEventListener('click', e => {
+  if (e.target.closest('.toggle-switch')) return; // let the toggle handle its own click
+  const enabled = document.getElementById('prop-promo-enabled');
+  enabled.checked = !enabled.checked;
+  onPromoToggle();
+});
 
 document.getElementById("add-amenity-btn").addEventListener("click", () => {
   const input = document.getElementById("amenity-input");
@@ -1467,9 +1574,12 @@ document.getElementById("amenity-input").addEventListener("keydown", e => {
   if (e.key === "Enter") { e.preventDefault(); document.getElementById("add-amenity-btn").click(); }
 });
 
+/* ── Currency change updates preview ─────────────── */
+document.getElementById("prop-currency").addEventListener("change", updateDiscountPreview);
+
 /* ── Init ───────────────────────────────────────── */
 buildPlatformGrid();
-renderImageRows();  // show empty state
+renderImageRows();
 if (getToken()) showDashboard();
 </script>
 </body>
